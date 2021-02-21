@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ENGINE">
+      <UniqueIdentifier>{b1be6508-782e-4198-b148-874087066d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LEVELS">
+      <UniqueIdentifier>{364ccd84-68f2-4a7e-837c-83070f277e1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OBJECTS">
+      <UniqueIdentifier>{a2cccefb-a0e9-42d9-9298-4b81c508d7a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MAP">
+      <UniqueIdentifier>{4701852f-4acd-4abb-b6d7-8f30c4d7eada}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineInput.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineUpdate.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="LanGame.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseLevel.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectLevel.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuLevel.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticObject.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="MovebleObject.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyObject.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\MAP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Levels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
