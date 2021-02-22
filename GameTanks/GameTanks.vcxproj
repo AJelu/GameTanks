@@ -142,19 +142,23 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseLevel.cpp" />
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="ConnectLevel.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineInput.cpp" />
     <ClCompile Include="EngineUpdate.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="LanGame.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MenuLevel.cpp" />
     <ClCompile Include="MovebleObject.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="UiObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collisions.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Map.h" />
