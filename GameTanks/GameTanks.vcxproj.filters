@@ -22,9 +22,6 @@
     <Filter Include="Source Files\OBJECTS">
       <UniqueIdentifier>{a2cccefb-a0e9-42d9-9298-4b81c508d7a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MAP">
-      <UniqueIdentifier>{4701852f-4acd-4abb-b6d7-8f30c4d7eada}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -66,9 +63,6 @@
     <ClCompile Include="EnemyObject.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files\MAP</Filter>
-    </ClCompile>
     <ClCompile Include="GameLevel.cpp">
       <Filter>Source Files\LEVELS</Filter>
     </ClCompile>
@@ -87,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Levels.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collisions.h">

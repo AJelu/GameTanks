@@ -151,7 +151,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="LanGame.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MenuLevel.cpp" />
     <ClCompile Include="MovebleObject.cpp" />
     <ClCompile Include="StaticObject.cpp" />
@@ -161,7 +160,6 @@
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Levels.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Objects.h" />
   </ItemGroup>
   <ItemGroup>
