@@ -2,6 +2,8 @@
 #include "Collisions.h"
 #include <string>
 
+/* Jelu. line 69: int SendAndProcessingMessage(int mess)+ override; */
+
 using namespace std;
 
 //this objects using in levels to create game expiriens: game menu, game levels
@@ -18,7 +20,7 @@ public:
 	virtual int /*returm message*/ SendAndProcessingMessage(/*mess*/);
 	virtual void /*returm message*/ GetMassages();
 
-	bool Get
+	bool Get;
 };
 
 class VisibleObject : BaseObjects
@@ -29,6 +31,7 @@ protected:
 	int layer_;
 	int height_, width_;
 	//texture;
+
 public:
 	VisibleObject(int x, int y, int h, int w, /*texture,*/ int layer);
 
@@ -65,7 +68,7 @@ class Button : UiObject
 protected:
 	
 public:
-	int SendAndProcessingMessage(int mess);
+	int SendAndProcessingMessage(int mess) override; /* +"override" for accurate virtualization */
 };
 
 //others ui objects, and camera

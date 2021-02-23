@@ -161,6 +161,8 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Objects.h" />
+    <ClInclude Include="RunGame.h" />
+    <ClInclude Include="Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
