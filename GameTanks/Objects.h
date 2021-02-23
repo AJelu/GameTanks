@@ -1,56 +1,54 @@
 #pragma once
 #include "Collisions.h"
+#include <SFML/Graphics.hpp>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-//this objects using in levels to create game expiriens: game menu, game levels
+//this objects using in levels to create game experience: game menu, game levels
 
-class BaseObjects 
+class BaseObject
 {
 protected:
-	//BaseObjects * parent_ = nullptr;
+	////BaseObjects * parent_ = nullptr;
 	int x_, y_;
-	bool start_point_level_; //use level start point or screen start point
 
 public:
-	//using for identity daughter classes
-	virtual string GetClassName();
 	//send to object information or query and recv answer
 	virtual int /*returm message*/ SendAndProcessingMessage(/*mess*/);
-	virtual void /*returm message*/ GetMassages();
-
-	bool StartPointLevel();
-	void SetStartPointLevel();
 };
 
-class VisibleObject : BaseObjects
+class VisibleObject : BaseObject
 {
 protected:
-	bool need_redraw_image_;
-	bool visible_;
-	int layer_;
-	int height_, width_;
-	//texture;
-public:
-	VisibleObject(int x, int y, int h, int w, /*texture,*/ int layer);
+	bool need_redraw_image_; //using for redraw screen. if have changing - true
+	bool visible_; //hidden or visible this object
+	int height_, width_; //object params
+	//texture; //object image
 
-	int GetLayer();
+	//calculate if this object is within the range of the rectangle
+	bool ObjectInRectangle(int x1, int y1, int x2, int y2, bool all_in_rect = false);
+public:
+	VisibleObject(int x, int y, int h, int w/*, texture*/);
+
+	//get object parameters
 	int GetCoordinateX();
 	int GetCoordinateY();
 	int GetHeight();
 	int GetWidth();
-	bool NeedRedrawImage();
+
+	bool NeedRedrawImage(); //return true if need update image
 	bool Visible();
 
-	int SetLayer(int layer);
+	//set object parameters
 	int SetCoordinate(int x_coordinate, int y_coordinate);
 	int SetSize(int height, int width);
 	int SetTexture(/*texture*/);
 
 	bool Hide();
 	bool Show();
-	bool Draw(/*canvas,*/ int offset_screen_x, int offset_screen_y);
+	bool Draw(sf::RenderWindow* window, int offset_screen_x, int offset_screen_y);
 };
 
 
@@ -60,7 +58,7 @@ class UiObject : VisibleObject
 protected:
 	bool focus_on_this_;
 public:
-	virtual int SendAndProcessingMessage(int mess);
+	virtual int /*returm message*/ SendAndProcessingMessage(/*mess*/) override;
 };
 
 class Button : UiObject
@@ -68,16 +66,21 @@ class Button : UiObject
 protected:
 	
 public:
-	int SendAndProcessingMessage(int mess);
+	virtual int /*returm message*/ SendAndProcessingMessage(/*mess*/) override;
 };
 
 //others ui objects, and camera
 
 
 
-class GameObject : BaseObjects
+class GameObject : VisibleObject
 {
-	//add colisions
+private:
+	int life;
+	vector <RoundCollision>* collisions_;
+
+public:
+	float DistanceToCollision(GameObject* game_object);
 };
 
 
@@ -92,10 +95,15 @@ class StaticObject : GameObject
 
 class MovebleObject : GameObject
 {
-
+private:
+	float vector_x, vector_y, speed;
+	//game timer;
+	////
 };
+
+//bang class
 
 class TankObject : MovebleObject
 {
-
+	//+create bang
 };
