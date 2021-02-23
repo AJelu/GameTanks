@@ -11,14 +11,17 @@ class BaseObjects
 protected:
 	//BaseObjects * parent_ = nullptr;
 	int x_, y_;
-	bool level_position; //use level coordinate or screen coordinate
+	bool start_point_level_; //use level start point or screen start point
 
 public:
+	//using for identity daughter classes
 	virtual string GetClassName();
+	//send to object information or query and recv answer
 	virtual int /*returm message*/ SendAndProcessingMessage(/*mess*/);
 	virtual void /*returm message*/ GetMassages();
 
-	bool Get
+	bool StartPointLevel();
+	void SetStartPointLevel();
 };
 
 class VisibleObject : BaseObjects
@@ -47,7 +50,7 @@ public:
 
 	bool Hide();
 	bool Show();
-	bool Draw(/*canvas,*/ int offset_level_x, int offset_level_y);
+	bool Draw(/*canvas,*/ int offset_screen_x, int offset_screen_y);
 };
 
 
