@@ -4,6 +4,8 @@
 #include "RunGame.h"
 #include "Levels.h"
 
+#include "TestUnitController.h" /* TESTING MODULE! */
+
 /*
 	Engine includes the following files :
 		Engine.cpp
@@ -30,6 +32,8 @@ private:
 
 	bool LanGame();
 	void Audio();
+
+	Unit TestUnit{ FloatRect(300, 300, 64, 64) }; /* TESTING UNIT! */
 
 public:
 	Engine();

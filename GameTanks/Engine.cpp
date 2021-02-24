@@ -11,7 +11,7 @@ void Engine::CreateResolutionWindowMode()
     resolution.x = 1024;
     resolution.y = 768;
 
-    mainWindow.create(VideoMode(resolution.x, resolution.y), "TANKS", Style::Default);
+    mainWindow.create(VideoMode(int(resolution.x), int(resolution.y)), "TANKS", Style::Default);
     mainWindow.setFramerateLimit(60);
 }
 
@@ -36,8 +36,10 @@ bool Engine::Start()
         EngineInpute();
         EngineUpdate();
         */
+        mainWindow.clear(Color::Black);
 
-        mainWindow.clear(sf::Color::Black); //temporarily paint the main window with color
+        TestUnit.UnitUpdateWithDrawWithInput(mainWindow, game_time);
+        
         mainWindow.display(); //end the current frame
     }
     return false;
@@ -47,7 +49,7 @@ void Engine::Stop() { mainWindow.close(); }
 
 void Engine::GameTimer(float& timer)
 {
-    float game_time = static_cast<float>(GameClock.getElapsedTime().asMicroseconds());
+    timer = static_cast<float>(GameClock.getElapsedTime().asMicroseconds());
     GameClock.restart(); //update the game logic
 }
 

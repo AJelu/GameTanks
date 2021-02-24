@@ -3,7 +3,7 @@
 /* The file contains the basic settings of the game */
 
 /* ENGINE: */
-static const int GAME_SPEED_CONTROLLER = 1;
+static const int GAME_SPEED_CONTROLLER = 1000;
 static const int GAME_TIMER_LIMIT = 1;
 
 

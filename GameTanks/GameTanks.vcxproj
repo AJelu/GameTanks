@@ -154,6 +154,7 @@
     <ClCompile Include="MenuLevel.cpp" />
     <ClCompile Include="MovebleObject.cpp" />
     <ClCompile Include="StaticObject.cpp" />
+    <ClCompile Include="TestUnitController.cpp" />
     <ClCompile Include="UiObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="Objects.h" />
     <ClInclude Include="RunGame.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="TestUnitController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
