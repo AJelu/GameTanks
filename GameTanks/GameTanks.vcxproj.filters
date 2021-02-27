@@ -22,6 +22,9 @@
     <Filter Include="Source Files\OBJECTS">
       <UniqueIdentifier>{a2cccefb-a0e9-42d9-9298-4b81c508d7a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ACTIONS">
+      <UniqueIdentifier>{72285115-7797-4427-947e-f32e8a2eb67c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -51,26 +54,35 @@
     <ClCompile Include="MenuLevel.cpp">
       <Filter>Source Files\LEVELS</Filter>
     </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticObject.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
-    <ClCompile Include="MovebleObject.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyObject.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
     <ClCompile Include="GameLevel.cpp">
       <Filter>Source Files\LEVELS</Filter>
     </ClCompile>
-    <ClCompile Include="UiObjects.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
     <ClCompile Include="Collisions.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="actions_menu_level.cpp">
+      <Filter>Source Files\ACTIONS</Filter>
+    </ClCompile>
+    <ClCompile Include="actions_game_level.cpp">
+      <Filter>Source Files\ACTIONS</Filter>
+    </ClCompile>
+    <ClCompile Include="actions_connect_level.cpp">
+      <Filter>Source Files\ACTIONS</Filter>
+    </ClCompile>
+    <ClCompile Include="base_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="moveble_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="audio_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="visible_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collisions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

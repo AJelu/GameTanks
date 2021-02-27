@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="actions_connect_level.cpp" />
+    <ClCompile Include="actions_game_level.cpp" />
+    <ClCompile Include="actions_menu_level.cpp" />
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="audio_object.cpp" />
     <ClCompile Include="BaseLevel.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="base_object.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="ConnectLevel.cpp" />
-    <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineInput.cpp" />
     <ClCompile Include="EngineUpdate.cpp" />
@@ -152,11 +155,12 @@
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="LanGame.cpp" />
     <ClCompile Include="MenuLevel.cpp" />
-    <ClCompile Include="MovebleObject.cpp" />
-    <ClCompile Include="StaticObject.cpp" />
-    <ClCompile Include="UiObjects.cpp" />
+    <ClCompile Include="moveble_object.cpp" />
+    <ClCompile Include="ui_object.cpp" />
+    <ClCompile Include="visible_object.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="Collisions.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Levels.h" />

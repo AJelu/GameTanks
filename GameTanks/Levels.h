@@ -5,37 +5,55 @@
 class BaseLevel
 {
 private:
-	std::vector <UiObject>* ui_objects_;
-	std::vector <GameObject>* game_objects_;
-	std::vector <TankObject>* enemy_objects_;
-	std::vector <MovebleObject>* shot_objects_;
+	//all level objects:
+	std::vector <UiObject*> Ui_objects_;
+	std::vector <GameObject*> Statis_objects_;
+	std::vector <TankObject*> Enemy_objects_;
+	std::vector <MovebleObject*> Shot_objects_;
+
+	//die game objects (exist in other vectors).
+	std::vector <MovebleObject*> Dies_objects_;
+
+	std::vector <BaseObject*> Need_sync_with_client_objects_;
+
+	//list game  die objects
 	int size_level_height, size_level_width;
 
+	TankObject Player_server;
+	TankObject Player_client;
+
+	Texture Texture_background_;
+	Sprite Sprite_background_;
+	Texture Texture_border_;
+	Sprite Sprite_border_;
+
+	bool CalculateCollisionOnLevel(); 
 public:
-	void Draw(sf::RenderWindow* window);
+	void Draw(sf::RenderWindow& window); ////////////////
 
-	void AddUiObject(UiObject ui_object);
-	void AddUiObject(GameObject game_objects);
-	void AddUiObject(TankObject enemy_objects);
-	void AddUiObject(MovebleObject shot_objects);
+	void AddUiObject(UiObject Ui_object);
+	void AddStatisObject(GameObject Static_objects);
+	void AddEnemyObject(TankObject Enemy_objects);
+	void AddShotObject(MovebleObject Shot_objects);
 
-	UiObject* GetUiObjects();
-	GameObject* GetGameObjects();
-	TankObject* GetEnemyObjects();
-	MovebleObject* GetTempObjects();
+	BaseObject* GetObjectToSendClient();
 
-	bool Input(/**/);
+	void RecvObjectFromServer();
+
+	bool InputKeyboard(bool for_client, sf::Keyboard::Key Key); //////////////
+	bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mpuse_position); ////////////////
 
 	void InputEnemy();
 
-	bool CalculateCollisionOnLevel();
+	bool UpdateState(float& game_timer); ////////////////
 
-	bool /*message*/ EndLevel();
+	int NextLevel();
+	bool ExitGame();
 };
 
 class MenuLevel : BaseLevel
 {
-
+	
 };
 
 class ConnectLevel : BaseLevel
@@ -45,7 +63,5 @@ class ConnectLevel : BaseLevel
 
 class GameLevel : BaseLevel
 {
-private:
-	TankObject watching_object;
-	TankObject oponent_object;
+
 };
