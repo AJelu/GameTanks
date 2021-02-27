@@ -27,36 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Source Files\ENGINE</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineInput.cpp">
-      <Filter>Source Files\ENGINE</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineUpdate.cpp">
-      <Filter>Source Files\ENGINE</Filter>
-    </ClCompile>
-    <ClCompile Include="LanGame.cpp">
-      <Filter>Source Files\ENGINE</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseLevel.cpp">
-      <Filter>Source Files\LEVELS</Filter>
-    </ClCompile>
-    <ClCompile Include="ConnectLevel.cpp">
-      <Filter>Source Files\LEVELS</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuLevel.cpp">
-      <Filter>Source Files\LEVELS</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLevel.cpp">
-      <Filter>Source Files\LEVELS</Filter>
-    </ClCompile>
-    <ClCompile Include="Collisions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="actions_menu_level.cpp">
       <Filter>Source Files\ACTIONS</Filter>
     </ClCompile>
@@ -87,33 +57,63 @@
     <ClCompile Include="TestUnitController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EngineDraw.cpp">
+    <ClCompile Include="engine.cpp">
       <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="engine_draw.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="engine_input.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="engine_update.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="lan_game.cpp">
+      <Filter>Source Files\ENGINE</Filter>
+    </ClCompile>
+    <ClCompile Include="base_level.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="connect_level.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="game_level.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="menu_level.cpp">
+      <Filter>Source Files\LEVELS</Filter>
+    </ClCompile>
+    <ClCompile Include="collisions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="run_game.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Levels.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Collisions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Actions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RunGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TestUnitController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="collisions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="levels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="run_game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

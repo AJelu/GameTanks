@@ -3,8 +3,8 @@
 #include <SFML/Audio.hpp>
 #include <string>
 #include <vector>
-#include "Collisions.h"
-#include "Actions.h"
+#include "collisions.h"
+#include "actions.h"
 
 /* Jelu. line 69: int SendAndProcessingMessage(int mess)+ override; */
 

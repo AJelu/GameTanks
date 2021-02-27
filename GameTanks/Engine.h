@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Settings.h"
-#include "RunGame.h"
-#include "Levels.h"
+#include "settings.h"
+#include "run_game.h"
+#include "levels.h"
 
 #include "TestUnitController.h" /* TESTING MODULE! */
 
