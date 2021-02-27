@@ -30,9 +30,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files\ENGINE</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
-      <Filter>Source Files\ENGINE</Filter>
-    </ClCompile>
     <ClCompile Include="EngineInput.cpp">
       <Filter>Source Files\ENGINE</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="TestUnitController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDraw.cpp">
+      <Filter>Source Files\ENGINE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

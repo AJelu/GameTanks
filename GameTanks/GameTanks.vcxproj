@@ -139,13 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseLevel.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Collisions.cpp" />
     <ClCompile Include="ConnectLevel.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="EngineDraw.cpp" />
     <ClCompile Include="EngineInput.cpp" />
     <ClCompile Include="EngineUpdate.cpp" />
     <ClCompile Include="Game.cpp" />
