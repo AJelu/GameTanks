@@ -4,7 +4,10 @@ class BaseCollision
 {
 private:
 	int x_, y_;
-	float rotation_by_gradus_;
+	float rotation_vector_x_, rotation_vector_y_;
+	//for optimisation:
+	bool set_new_vector;
+	int temp_x_, temp_y_;
 public:
 	BaseCollision();
 	BaseCollision(int x_coordinate, int y_coordinate);
@@ -13,13 +16,12 @@ public:
 	int GetCoordinateY();
 	int GetCoordinateByRotateX();
 	int GetCoordinateByRotateY();
-	void SetCoordinate(int x_coordinate, int y_coordinate);
 
-	virtual void SetRotation(float rotation_by_gradus);
+	void SetCoordinate(int x_coordinate, int y_coordinate);
+	virtual void SetRotation(float rotation_vector_x, float rotation_vector_y);
 
 	//check if coordinate is in figure
 	virtual bool CoordinatesInFigure(int x_coordinate, int y_coordinate) = 0;
-	//virtual float DistanceToCollision(int x_coordinate, int y_coordinate);
 };
 
 class RoundCollision : public BaseCollision
@@ -35,6 +37,4 @@ public:
 	void SetRadius(int radius);
 
 	bool CoordinatesInFigure(int x_coordinate, int y_coordinate) override;
-	//virtual float DistanceToCollision(int x_coordinate, int y_coordinate) override;
-	float DistanceToCollision(RoundCollision collision);
 };

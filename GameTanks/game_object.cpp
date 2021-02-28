@@ -1,14 +1,15 @@
 #include "objects.h"
 
-GameObject::GameObject() : VisibleObject() {}
+GameObject::GameObject() : VisibleObject() 
+{ SetLifeLevel(1); }
 
 GameObject::GameObject(int id_object,
 	sf::Vector2f coordinate_centre,
 	sf::Vector2f offset_sprite_coordinate,
-	string texture, int frame_size_x, int frame_size_y,
+	string texture, int frame_count_x, int frame_count_y,
 	int life_level) 
 	: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_size_x, frame_size_y)
+		texture, frame_count_x, frame_count_y)
 {
 	SetLifeLevel(life_level);
 }
@@ -16,21 +17,22 @@ GameObject::GameObject(int id_object,
 void GameObject::SetLifeLevel(int life_level)
 { life_level_ = life_level; }
 
-int GameObject::GetLifeLevel() { return life_level_; }
+int GameObject::GetLifeLevel() 
+{ return life_level_; }
 
 void GameObject::AddCollision(RoundCollision* new_colision)
-{
-	// add to vector <RoundCollision*> collisions_;
-}
+{ collisions_.push_back(new_colision); }
 
 float GameObject::DistanceToCollision(GameObject* game_object)
 {
-	// calculate all to all
+	// calculate all to all <---------------------------------------
 	return 0;
 }
 
 
 GameObject::~GameObject() 
 {
-	//delete vector <RoundCollision*> collisions_;
+	for (int i = 0; i < collisions_.size(); i++) {
+		delete collisions_[i];
+	}
 }

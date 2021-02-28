@@ -4,9 +4,9 @@ UiObject::UiObject() : VisibleObject() {}
 UiObject::UiObject(int id_object,
 	sf::Vector2f coordinate_centre,
 	sf::Vector2f offset_sprite_coordinate,
-	string texture, int frame_size_x, int frame_size_y)
+	string texture, int frame_count_x, int frame_count_y)
 	: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_size_x, frame_size_y)
+		texture, frame_count_x, frame_count_y)
 {
 	//On_mouse_up_action_ = On_mouse_up_action;
 }

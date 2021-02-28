@@ -1,17 +1,20 @@
 #include "objects.h"
-TankObject::TankObject() : MovebleObject()
-{
 
+TankObject::TankObject() : MovebleObject() { }
+
+MovebleObject* TankObject::Shot()
+{
+	return nullptr;
 }
 
 TankObject::TankObject(int id_object,
 	sf::Vector2f coordinate_centre,
 	sf::Vector2f offset_sprite_coordinate,
-	string texture, int frame_size_x, int frame_size_y,
+	string texture, int frame_count_x, int frame_count_y,
 	int life_level, float speed, float freeze_time,
 	float speed_shot, float shot_distance, float time_freeze_shot)
 	: MovebleObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_size_x, frame_size_y,
+		texture, frame_count_x, frame_count_y,
 		life_level, speed, freeze_time)
 {
 	speed_shot_ = speed_shot;
@@ -20,19 +23,49 @@ TankObject::TankObject(int id_object,
 	time_to_next_shot_ = 0;
 }
 
+bool TankObject::CanCreateShot()
+{
+	return (time_to_next_shot_ > 0) ? false : true;
+}
+
 //return null. no shot. overriding in daughter classes
-//MovebleObject* TankObject::CreateShot() { return nullptr; }
+MovebleObject* TankObject::CreateShot(bool forcibly_shot)
+{ 
+	if (time_to_next_shot_ <= 0 || forcibly_shot) {
+		time_to_next_shot_ = time_freeze_shot_;
+		MovebleObject* shot;
+		shot = Shot();
+		if (shot != nullptr) {
+			shot->SetSpeed(speed_shot_);
+			shot->SetDistance(shot_distance_);
+			shot->SetRotationVector(GetVectorX(), GetVectorY());
+			return shot;
+		}
+	}
+	return nullptr; 
+}
+
 
 void TankObject::RecalculateState(float& game_time) //+recalculate time_to_next_shot
 {
-	//MovebleObject::RecalculateState(game_time);
-	//recalculate time_to_next_shot
+	MovebleObject::RecalculateState(game_time);
+	
+	if (time_to_next_shot_ < 0.0f) {
+		time_to_next_shot_ = 0.0f;
+	}
+	else if (time_to_next_shot_ > 0.0f) {
+		time_to_next_shot_ -= game_time;
+	}
 }
 
-float TankObject::GetSpeedShot() { return speed_shot_; }
-float TankObject::GetShotDistance() { return shot_distance_; }
-float TankObject::GetTimeToNextShot() { return time_to_next_shot_; }
-float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
+float TankObject::GetSpeedShot() 
+{ return speed_shot_; }
+float TankObject::GetShotDistance() 
+{ return shot_distance_; }
+float TankObject::GetTimeToNextShot() 
+{ return time_to_next_shot_; }
+float TankObject::GetTimeFreezeShot() 
+{ return time_freeze_shot_; }
 
 void TankObject::SetSpeedShot(float speed_shot)
 { speed_shot_ = speed_shot; }
@@ -45,7 +78,3 @@ void TankObject::SetTimeToNextShot(float time_to_next_shot)
 
 void TankObject::SetTimeFreezeShot(float time_freeze_shot)
 { time_freeze_shot_ = time_freeze_shot; }
-
-TankObject::~TankObject()
-{
-}
