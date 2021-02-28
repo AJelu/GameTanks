@@ -47,6 +47,10 @@ int Engine::Start()
 
 void Engine::Stop() { mainWindow.close(); }
 
+void Engine::ChangeLevel(BaseLevel level)
+{
+}
+
 void Engine::GameTimer(float& timer)
 {
     timer = static_cast<float>(GameClock.getElapsedTime().asMicroseconds());

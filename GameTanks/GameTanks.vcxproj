@@ -139,9 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="actions_connect_level.cpp" />
-    <ClCompile Include="actions_game_level.cpp" />
-    <ClCompile Include="actions_menu_level.cpp" />
     <ClCompile Include="audio_object.cpp" />
     <ClCompile Include="base_level.cpp" />
     <ClCompile Include="base_object.cpp" />
@@ -151,17 +148,18 @@
     <ClCompile Include="engine_draw.cpp" />
     <ClCompile Include="engine_input.cpp" />
     <ClCompile Include="engine_update.cpp" />
+    <ClCompile Include="game_object.cpp" />
     <ClCompile Include="run_game.cpp" />
     <ClCompile Include="game_level.cpp" />
     <ClCompile Include="lan_game.cpp" />
     <ClCompile Include="menu_level.cpp" />
     <ClCompile Include="moveble_object.cpp" />
+    <ClCompile Include="tank_object.cpp" />
     <ClCompile Include="ui_object.cpp" />
     <ClCompile Include="visible_object.cpp" />
     <ClCompile Include="TestUnitController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="actions.h" />
     <ClInclude Include="collisions.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="levels.h" />

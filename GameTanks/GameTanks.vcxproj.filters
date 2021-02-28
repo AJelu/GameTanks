@@ -22,20 +22,8 @@
     <Filter Include="Source Files\OBJECTS">
       <UniqueIdentifier>{a2cccefb-a0e9-42d9-9298-4b81c508d7a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ACTIONS">
-      <UniqueIdentifier>{72285115-7797-4427-947e-f32e8a2eb67c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="actions_menu_level.cpp">
-      <Filter>Source Files\ACTIONS</Filter>
-    </ClCompile>
-    <ClCompile Include="actions_game_level.cpp">
-      <Filter>Source Files\ACTIONS</Filter>
-    </ClCompile>
-    <ClCompile Include="actions_connect_level.cpp">
-      <Filter>Source Files\ACTIONS</Filter>
-    </ClCompile>
     <ClCompile Include="base_object.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
@@ -90,12 +78,15 @@
     <ClCompile Include="run_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="tank_object.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestUnitController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="collisions.h">
@@ -107,13 +98,13 @@
     <ClInclude Include="levels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="run_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

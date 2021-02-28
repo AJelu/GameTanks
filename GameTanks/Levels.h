@@ -1,6 +1,9 @@
 #pragma once
-#include "objects.h"
+#include <SFML/Graphics.hpp>
 #include <vector>
+#include "objects.h"
+
+using namespace sf;
 
 class BaseLevel
 {
@@ -22,22 +25,23 @@ private:
 	TankObject Player_server;
 	TankObject Player_client;
 
-	Texture Texture_background_;
-	Sprite Sprite_background_;
-	Texture Texture_border_;
-	Sprite Sprite_border_;
+	sf::Texture Texture_background_;
+	sf::Sprite Sprite_background_;
+	sf::Texture Texture_border_;
+	sf::Sprite Sprite_border_;
 
 	bool CalculateCollisionOnLevel(); 
 public:
+	BaseLevel();
 	void Draw(sf::RenderWindow& window); ////////////////
-
+	
 	void AddUiObject(UiObject Ui_object);
 	void AddStatisObject(GameObject Static_objects);
 	void AddEnemyObject(TankObject Enemy_objects);
 	void AddShotObject(MovebleObject Shot_objects);
 
 	BaseObject* GetObjectToSendClient();
-
+	
 	void RecvObjectFromServer();
 
 	bool InputKeyboard(bool for_client, sf::Keyboard::Key Key); //////////////
@@ -49,19 +53,5 @@ public:
 
 	int NextLevel();
 	bool ExitGame();
-};
-
-class MenuLevel : BaseLevel
-{
-	
-};
-
-class ConnectLevel : BaseLevel
-{
-
-};
-
-class GameLevel : BaseLevel
-{
-
+	~BaseLevel();
 };

@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "run_game.h"
 #include "levels.h"
+#include "objects.h"
 
 #include "TestUnitController.h" /* TESTING MODULE! */
 

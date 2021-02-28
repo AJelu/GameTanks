@@ -4,31 +4,31 @@
 #include <string>
 #include <vector>
 #include "collisions.h"
-#include "actions.h"
-
-/* Jelu. line 69: int SendAndProcessingMessage(int mess)+ override; */
 
 using namespace std;
 using namespace sf;
 
 //this objects using in levels to create game experience: game menu, game levels
 
-class BaseObject
+
+
+
+class BaseObject 
 {
 private:
-	int id_object; //for synchronize by lan
+	int id_object_; //for synchronize by lan
 
 public:
-	BaseObject(int id_object, int x, int y);	
+	BaseObject();
+	BaseObject(int id_object);
 
 	//get object parameters
 	int GetIdObject();
-	//set object parameters
-	virtual void SetCoordinate(int x_coordinate, int y_coordinate);
+
 	virtual ~BaseObject() = 0;
 };
 
-class AudioObject : BaseObject 
+class AudioObject : public BaseObject
 {
 private:
 	vector <string> audio_action_name_;
@@ -36,18 +36,20 @@ private:
 	vector <SoundBuffer*> sounds_buffer_;
 	vector <int> sounds_volume_;
 public:
+	AudioObject();
+	AudioObject(int id_object);
 	void AddAudioAction(string audio_action, string audio_file, int volume);
 	bool StartAudioAction(string audio_action, bool looped);
 	bool StopAudioAction(string audio_action);
 	~AudioObject() override;
 };
 
-class VisibleObject : AudioObject
+class VisibleObject : public AudioObject
 {
 private:
 	bool need_redraw_image_; //using for redraw screen. if have changing - true
-	
-	int offset_sprite_coordinate_x_, offset_sprite_coordinate_y;
+
+	sf::Vector2f offset_sprite_coordinate_;
 
 	//for animates
 	int frame_size_x_, frame_size_y_;
@@ -57,13 +59,14 @@ private:
 
 	Texture Texture_object_;
 	Sprite Sprite_object_;
-protected:
 	//calculate if this object is within the range of the rectangle
 	void SetNeedRedrawImage();
+	void SetTile(int tile_level, int tile_number); //show choosed frame
 public:
-	VisibleObject(int id_object, 
-		int x, int y,
-		int offset_sprite_coordinate_x, int offset_sprite_coordinate_y,
+	VisibleObject();
+	VisibleObject(int id_object,
+		sf::Vector2f coordinate_centre,
+		sf::Vector2f offset_sprite_coordinate,
 		string texture, int frame_size_x, int frame_size_y);
 
 	void StartPlayAnimate(int tile_level, int frame_start, int frame_end, bool looped);
@@ -72,33 +75,37 @@ public:
 
 	//get object parameters
 	bool GetNeedRedrawImage(); //return true if need update image
-	int GetCoordinateX();
-	int GetCoordinateY();
+	sf::Vector2f GetCoordinateCentre();
+	int GetHeight();
+	int GetWidth();
+	sf::Vector2f GetOffsetSprite();
 
 	//set object parameters
-	void SetCoordinate(int x_coordinate, int y_coordinate);
+	void SetCoordinate(sf::Vector2f coordinate_centre);
+	virtual void SetRotation(float rotation_by_gradus);
 	void SetTexture(string texture, int frame_size_x, int frame_size_y);
-	void SetOffsetSpriteCoordinate(int offset_sprite_coordinate_x, int offset_sprite_coordinate_y);
+	void SetOffsetSprite(sf::Vector2f offset_sprite_coordinate);
 
-	bool Draw(sf::RenderWindow& window, View& Player_camera, bool plus_offset_camera = false);
+	void Draw(sf::RenderWindow& window, View& Player_camera, bool plus_offset_camera = false);
 };
 
+enum GetActions
+{
+	CreateNewGame, ConnectTo
+};
 
-
-class UiObject : VisibleObject
+class UiObject : public VisibleObject
 {
 private:
 	bool focus_on_this_, down_on_this_, up_on_this_;
 	string text_;
 
-	BaseAction* On_mouse_up_action_; /////////////////////////////////////
-
 public:
+	UiObject();
 	UiObject(int id_object,
-		int x, int y,
-		int offset_sprite_coordinate_x, int offset_sprite_coordinate_y,
-		string texture, int frame_size_x, int frame_size_y,
-		BaseAction* On_mouse_up_action);
+		sf::Vector2f coordinate_centre,
+		sf::Vector2f offset_sprite_coordinate,
+		string texture, int frame_size_x, int frame_size_y);
 	bool IsFocusOnThis(int x, int y);
 	bool IsDownOnThis(int x, int y);
 	bool IsUpOnThis(int x, int y);
@@ -106,15 +113,15 @@ public:
 	void SetText(string text);
 
 
-	bool FocusOnThis();
-	bool DownOnThis();
-	bool UpOnThis();
+	bool GetFocusOnThis();
+	bool GetDownOnThis();
+	bool GetUpOnThis();
 	string GetText();
 
 	~UiObject() override;
 };
 
-class Button : UiObject
+class Button : public UiObject
 {
 public:
 
@@ -124,27 +131,29 @@ public:
 
 
 
-class GameObject : VisibleObject
+class GameObject : public VisibleObject
 {
 private:
 	int life_level_;
-	vector <RoundCollision> collisions_;
+	vector <RoundCollision*> collisions_;
 
 public:
-	GameObject(int id_object, 
-		int x, int y,
-		int offset_sprite_coordinate_x, int offset_sprite_coordinate_y,
+	GameObject();
+	GameObject(int id_object,
+		sf::Vector2f coordinate_centre,
+		sf::Vector2f offset_sprite_coordinate,
 		string texture, int frame_size_x, int frame_size_y,
 		int life_level);
 
-	void SetLifeLevel();
+	void SetLifeLevel(int life_level);
 	int GetLifeLevel();
-	void AddCollision(RoundCollision& new_colision);
-	float DistanceToCollision(GameObject& game_object);
+	void AddCollision(RoundCollision* new_colision);
+	float DistanceToCollision(GameObject* game_object);
+	~GameObject() override;
 };
 
 
-class MovebleObject : GameObject
+class MovebleObject : public GameObject
 {
 private:
 	float vector_x_, vector_y_, speed_, distance_, freeze_time_;
@@ -153,11 +162,12 @@ private:
 	void RecalculateVector();
 
 public:
-	MovebleObject(int id_object, 
-		int x, int y,
-		int offset_sprite_coordinate_x, int offset_sprite_coordinate_y,
+	MovebleObject();
+	MovebleObject(int id_object,
+		sf::Vector2f coordinate_centre,
+		sf::Vector2f offset_sprite_coordinate,
 		string texture, int frame_size_x, int frame_size_y,
-		int life_level, float speed);
+		int life_level, float speed, float freeze_time);
 
 	//set object parameters
 	void SetVector(float vector_x, float vector_y);
@@ -183,18 +193,20 @@ public:
 	void TerminateCollision(MovebleObject& moveble_object);
 };
 
-class TankObject : MovebleObject
+class TankObject : public MovebleObject
 {
 private:
 	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_;
 public:
-	TankObject(int id_object, 
-		int x, int y,
-		int offset_sprite_coordinate_x, int offset_sprite_coordinate_y,
+	TankObject();
+	TankObject(int id_object,
+		sf::Vector2f coordinate_centre,
+		sf::Vector2f offset_sprite_coordinate,
 		string texture, int frame_size_x, int frame_size_y,
-		int life_level, float speed, float speed_shot, float shot_distance);
+		int life_level, float speed, float freeze_time,
+		float speed_shot, float shot_distance, float time_freeze_shot);
 
-	virtual MovebleObject* CreateShot();
+	MovebleObject* CreateShot();
 	void RecalculateState(float& game_time) override; //+recalculate time_to_next_shot
 
 	float GetSpeedShot();
@@ -205,5 +217,6 @@ public:
 	void SetSpeedShot(float speed_shot);
 	void SetShotDistance(float shot_distance);
 	void SetTimeToNextShot(float time_to_next_shot);
-	void GetTimeFreezeShot(float time_freeze_shot);
+	void SetTimeFreezeShot(float time_freeze_shot);
+	~TankObject();
 };
