@@ -1,33 +1,33 @@
 #include "objects.h"
 
 UiObject::UiObject() : VisibleObject() {}
-UiObject::UiObject(int id_object,
-	sf::Vector2f coordinate_centre,
-	sf::Vector2f offset_sprite_coordinate,
-	string texture, int frame_count_x, int frame_count_y)
+UiObject::UiObject(int const& id_object,
+	sf::Vector2f const& coordinate_centre,
+	sf::Vector2f const& offset_sprite_coordinate,
+	string const& texture, int const& frame_count_x, int const& frame_count_y)
 	: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y)
 {
-	//On_mouse_up_action_ = On_mouse_up_action;
+
 }
 
-bool UiObject::IsFocusOnThis(int x, int y)
+bool UiObject::IsFocusOnThis(int const& x, int const& y)
 {
 	return false;
 }
 
-bool UiObject::IsDownOnThis(int x, int y)
+bool UiObject::IsDownOnThis(int const& x, int const& y)
 {
 	return false;
 }
 
-bool UiObject::IsUpOnThis(int x, int y)
+bool UiObject::IsUpOnThis(int const& x, int const& y)
 {
 	return false;
 }
 
-void UiObject::AddInputText(string text) { text_ += text; }
-void UiObject::SetText(string text) { text_ = text; }
+void UiObject::AddInputText(string const& text) { text_ += text; }
+void UiObject::SetText(string const& text) { text_ = text; }
 
 
 bool UiObject::GetFocusOnThis() 
@@ -53,9 +53,4 @@ string UiObject::GetText()
 	string b = text_;
 	text_ = "";
 	return b;
-}
-
-UiObject::~UiObject()
-{
-	// delete BaseAction* On_mouse_up_action_;
 }

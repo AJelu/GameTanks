@@ -4,7 +4,7 @@
 BaseObject::BaseObject()
 { id_object_ = 0; }
 
-BaseObject::BaseObject(int id_object)
+BaseObject::BaseObject(int const& id_object)
 { id_object_ = id_object; }
 
 

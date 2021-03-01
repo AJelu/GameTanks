@@ -1,5 +1,6 @@
-#include "objects.h"
+#define _USE_MATH_DEFINES
 #include <cmath>
+#include "objects.h"
 
 VisibleObject::VisibleObject() : AudioObject() 
 {
@@ -8,10 +9,11 @@ VisibleObject::VisibleObject() : AudioObject()
 	SetTexture("", 0, 0);
 }
 
-VisibleObject::VisibleObject(int id_object,
-	sf::Vector2f coordinate_centre,
-	sf::Vector2f offset_sprite_coordinate,
-	string texture, int frame_count_x, int frame_count_y) : AudioObject(id_object)
+VisibleObject::VisibleObject(int const& id_object,
+	sf::Vector2f const& coordinate_centre,
+	sf::Vector2f const& offset_sprite_coordinate,
+	string const& texture, int const& frame_count_x, 
+	int const& frame_count_y) : AudioObject(id_object)
 {
 	SetCoordinate(coordinate_centre);
 	SetOffsetSprite(offset_sprite_coordinate);
@@ -50,7 +52,7 @@ bool VisibleObject::ShowTile()
 }
 
 //set position (choosed frame texture) and show choosed frame; return true if chenge position
-bool VisibleObject::SetTile(int tile_level, int tile_number)
+bool VisibleObject::SetTile(int const& tile_level, int const& tile_number)
 {
 	if (tile_level > frame_count_y_ || tile_level < 1) { return false; }
 	if (tile_number > frame_count_x_ || tile_number < 1) { return false; }
@@ -62,8 +64,9 @@ bool VisibleObject::SetTile(int tile_level, int tile_number)
 	return true;
 }
 
-void VisibleObject::StartPlayAnimation(int tile_level, int frame_start, int frame_end,
-	float animation_speed_for_frame, bool looped)
+void VisibleObject::StartPlayAnimation(int const& tile_level,
+	int const& frame_start, int const& frame_end,
+	float const& animation_speed_for_frame, bool const& looped)
 {
 	//check is no out of range and write new parameter for animate
 	if (tile_level > frame_count_y_) { tile_level_ = frame_count_y_; }
@@ -92,7 +95,7 @@ bool VisibleObject::AnimationEnd()
 	return false;
 }
 
-void VisibleObject::ForAnimation(float& game_time) //counting current frame
+void VisibleObject::ForAnimation(float const& game_time) //counting current frame
 {
 	if (animation_frame_end_ != animation_frame_start_) {
 		current_frame_animation_time_ += game_time; // add time "one screen frame"
@@ -133,38 +136,62 @@ sf::Vector2f VisibleObject::GetOffsetSprite()
 { return offset_sprite_coordinate_; }
 
 //set object parameters
-void VisibleObject::SetCoordinate(sf::Vector2f coordinate_centre)
+void VisibleObject::SetCoordinate(sf::Vector2f const& coordinate_centre)
 {
 	Sprite_object_.setPosition(coordinate_centre);
 	SetNeedRedrawImage();
 }
 
-void VisibleObject::SetRotationVector(float vector_x, float vector_y)
+void VisibleObject::SetRotationVector(float const& vector_x, float const& vector_y)
 {
 	vector_rotate_x_ = vector_x;
 	vector_rotate_y_ = vector_y;
 	RecalculateVector();
-	float rotation_by_gradus;
-	//calculate rotation_by_gradus <-----------------------------------------------
+
+	float temp_vector_x = 0.0f;//create and set temp vector
+	float temp_vector_y = 1.0f;
+	float rotation_by_gradus = 
+		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
+		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+			sqrtf(vector_x * vector_x + vector_y * vector_y)));
+	rotation_by_gradus = (rotation_by_gradus * 180) / M_PI; //calculate temp gradus
+
+	temp_vector_x = 1.0f;//set temp vector
+	temp_vector_y = 0.0f;
+	float rotation_by_gradus_buffer = 
+		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
+		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+			sqrtf(vector_x * vector_x + vector_y * vector_y)));
+	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180) / M_PI;//calculate temp gradus
+
+	if (rotation_by_gradus_buffer > 90.0f) { //calculete new gradus
+		rotation_by_gradus = 360 - rotation_by_gradus;
+	}
+
 	Sprite_object_.setRotation(rotation_by_gradus);
 	SetNeedRedrawImage();
 }
 
-void VisibleObject::RotationVector(int rotation_degree)
+void VisibleObject::RotationVector(int const& rotation_degree)
 {
 	float new_vector_x, new_vector_y;
-	//rotate vector <------------------------------------------------
+	float to_radian = rotation_degree * M_PI / 180.0f;
+	new_vector_x = vector_rotate_x_ * cos(to_radian) + 
+					vector_rotate_y_ * sin(to_radian);
+	new_vector_y = vector_rotate_x_ * sin(to_radian) + 
+					vector_rotate_y_ * cos(to_radian);
 	SetRotationVector (new_vector_x, new_vector_y);
 }
 
-void VisibleObject::SetRotation(float rotation_by_gradus)
+void VisibleObject::SetRotation(float const& rotation_by_gradus)
 {
-	float new_vector_x, new_vector_y;
-	//rotate vector <--------------------------------------------------
-	SetRotationVector(new_vector_x, new_vector_y);
+	vector_rotate_x_ = 0.0f;
+	vector_rotate_y_ = 1.0f;
+	RotationVector(rotation_by_gradus);
 }
 ;
-void VisibleObject::SetTexture(string texture, int frame_count_x, int frame_count_y)
+void VisibleObject::SetTexture(string const& texture, 
+							int const& frame_count_x, int const& frame_count_y)
 {
 	frame_count_x_ = frame_count_x;
 	frame_count_y_ = frame_count_y;
@@ -175,14 +202,15 @@ void VisibleObject::SetTexture(string texture, int frame_count_x, int frame_coun
 	SetOffsetSprite(offset_sprite_coordinate_);
 	SetNeedRedrawImage();
 }
-void VisibleObject::SetOffsetSprite(sf::Vector2f offset_sprite_coordinate)
+void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate)
 {
 	offset_sprite_coordinate_ = offset_sprite_coordinate;
 	Sprite_object_.setOrigin(offset_sprite_coordinate_);
 	SetNeedRedrawImage();
 }
 
-void VisibleObject::Draw(sf::RenderWindow& window, View& Player_camera, bool plus_offset_camera)
+void VisibleObject::Draw(sf::RenderWindow& window, 
+					View const& Player_camera, bool const& plus_offset_camera)
 {
 	if (plus_offset_camera) {
 		// +offset camera????????? <----------------------------------------------
