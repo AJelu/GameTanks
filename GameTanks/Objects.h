@@ -37,11 +37,11 @@ private:
 	vector <int> sounds_volume_;
 public:
 	AudioObject();
-	AudioObject(int& id_object);
-	void AddAudioAction(const string& audio_action, 
-						const string& audio_file, const int& volume = 100);
-	bool StartAudioAction(const string& audio_action, bool looped = false);
-	bool StopAudioAction(const string& audio_action);
+	AudioObject(int const& id_object);
+	void AddAudioAction(string const& audio_action,
+						string const& audio_file, int const& volume = 100);
+	bool StartAudioAction(string const& audio_action, bool looped = false);
+	bool StopAudioAction(string const& audio_action);
 	~AudioObject() override;
 };
 

@@ -2,10 +2,10 @@
 #include "objects.h"
 
 AudioObject::AudioObject() : BaseObject() { }
-AudioObject::AudioObject(int& id_object) : BaseObject(id_object) { }
+AudioObject::AudioObject(int const& id_object) : BaseObject(id_object) { }
 
-void AudioObject::AddAudioAction(const string& audio_action, 
-									const string& audio_file, const int& volume)
+void AudioObject::AddAudioAction(string const& audio_action,
+									string const& audio_file, int const& volume)
 {
 	if (!audio_action.empty() && !audio_file.empty()) {
 		audio_action_name_.push_back(audio_action);
@@ -24,20 +24,9 @@ void AudioObject::AddAudioAction(const string& audio_action,
 		sound = nullptr;
 	}	
 	else std::cout << "Variables: audio_action or audio_file is empty!" << std::endl;
-	
-	/* -> temporarily previous code:
-	audio_action_name_.push_back(audio_action);
-	sf::Sound* sound = new sf::Sound();
-	/// <--------------------------------------------------
-	sounds_file_.push_back(sound);
-	sf::SoundBuffer* sound_buffer = new sf::SoundBuffer();
-	/// <--------------------------------------------------
-	sounds_buffer_.push_back(sound_buffer);
-	sounds_volume_.push_back(volume);
-	*/
 }
 
-bool AudioObject::StartAudioAction(const string& audio_action, bool looped)
+bool AudioObject::StartAudioAction(string const& audio_action, bool looped)
 {
 	for (int i = 0; i < audio_action_name_.size(); i++) {
 		if (audio_action_name_[i] == audio_action) {
@@ -47,7 +36,7 @@ bool AudioObject::StartAudioAction(const string& audio_action, bool looped)
 	}
 }
 
-bool AudioObject::StopAudioAction(const string& audio_action)
+bool AudioObject::StopAudioAction(string const& audio_action)
 {
 	for (int i = 0; i < audio_action_name_.size(); i++)
 		if (audio_action_name_[i] == audio_action) {
