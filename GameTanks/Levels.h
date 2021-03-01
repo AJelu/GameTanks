@@ -45,7 +45,7 @@ public:
 	void RecvObjectFromServer();
 
 	bool InputKeyboard(bool for_client, sf::Keyboard::Key Key); //////////////
-	bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mpuse_position); ////////////////
+	bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); ////////////////
 
 	void InputEnemy();
 

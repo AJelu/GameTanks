@@ -28,7 +28,7 @@ public:
 	virtual ~BaseObject();
 };
 
-class AudioObject : public BaseObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class AudioObject : public BaseObject //Ready
 {
 private:
 	vector <string> audio_action_name_;
@@ -37,10 +37,11 @@ private:
 	vector <int> sounds_volume_;
 public:
 	AudioObject();
-	AudioObject(int id_object);
-	void AddAudioAction(string audio_action, string audio_file, int volume);
-	bool StartAudioAction(string audio_action, bool looped);
-	bool StopAudioAction(string audio_action);
+	AudioObject(int& id_object);
+	void AddAudioAction(const string& audio_action, 
+						const string& audio_file, const int& volume = 100);
+	bool StartAudioAction(const string& audio_action, bool looped = false);
+	bool StopAudioAction(const string& audio_action);
 	~AudioObject() override;
 };
 

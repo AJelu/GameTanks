@@ -2,6 +2,5 @@
 
 void Engine::EngineDraw()
 {
-	//Draw_level->...
-	
+	Point_level->Draw(Main_window);
 }

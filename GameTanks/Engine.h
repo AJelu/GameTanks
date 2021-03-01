@@ -20,9 +20,10 @@ using namespace sf;
 
 class Engine {
 private:
-	Clock GameClock;
-	RenderWindow mainWindow; // this object is responsible for all render
-	BaseLevel *Draw_level;
+	Clock Game_clock;
+	RenderWindow Main_window; // this object is responsible for all render
+	BaseLevel *Point_level;
+	Font Main_font;
 
 	bool im_server;
 
