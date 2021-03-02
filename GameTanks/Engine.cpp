@@ -34,13 +34,8 @@ int Engine::Start()
         EngineInpute();
         EngineUpdate(game_time);
         LanGame();
-        EngineDraw();
+        EngineDraw(game_time);
 
-        Main_window.clear(Color::Black);
-
-        TestUnit.UnitUpdateWithDrawWithInput(Main_window, game_time); /*test*/
-
-        Main_window.display(); //end the current frame
         return 0;
     }
     return 1;

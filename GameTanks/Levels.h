@@ -25,15 +25,15 @@ private:
 	TankObject Player_server;
 	TankObject Player_client;
 
-	sf::Texture Texture_background_;
-	sf::Sprite Sprite_background_;
-	sf::Texture Texture_border_;
-	sf::Sprite Sprite_border_;
+	Texture Texture_background_;
+	Sprite Sprite_background_;
+	Texture Texture_border_;
+	Sprite Sprite_border_;
 
 	bool CalculateCollisionOnLevel(); 
 public:
 	BaseLevel();
-	void Draw(sf::RenderWindow& window); ////////////////
+	void Draw(RenderWindow& window); ////////////////
 	
 	void AddUiObject(UiObject Ui_object);
 	void AddStatisObject(GameObject Static_objects);

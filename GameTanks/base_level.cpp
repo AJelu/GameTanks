@@ -7,11 +7,17 @@ bool BaseLevel::CalculateCollisionOnLevel()
 
 BaseLevel::BaseLevel()
 {
+	/* Initialization tile map: */
+	Texture_background_.loadFromFile("Data/Map.png");
+	Sprite_background_.setTexture(Texture_background_);
+	Sprite_background_.setPosition(0, 0);
+
 	Player_client = TankObject(1, sf::Vector2f(0, 0), sf::Vector2f(0, 0), "1", 1, 1, 1, 1, 1, 0, 0, 0);
 }
 
-void BaseLevel::Draw(sf::RenderWindow& window)
+void BaseLevel::Draw(RenderWindow& window)
 {
+	window.draw(Sprite_background_);
 }
 
 void BaseLevel::AddUiObject(UiObject Ui_object)

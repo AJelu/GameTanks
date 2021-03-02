@@ -64,29 +64,28 @@ void Unit::CreateMoveUnit()
 		speed_y_ = -0.1f;
 		//unitSprite.move(0, -1);
 		//change direction of the sprite picture to UP
-		//unitSprite.setTextureRect(IntRect(0, 0, 124, 233)); 
+		unitSprite.setTextureRect(IntRect(0, 0, 124, 233)); 
 	}
 	if (pressed_Left_) {
-		//speed_x_ = -0.1f;
-		unitSprite.rotate(rotation_x += 1);
+		speed_x_ = -0.1f;
+		//unitSprite.rotate(rotation_x += 1);
 		//change direction of the sprite picture to LEFT
-		//unitSprite.setTextureRect(IntRect(476, 112, 224, 114)); 
+		unitSprite.setTextureRect(IntRect(476, 112, 224, 116)); 
 	}
 	if (pressed_Right_) {
-		
-		//speed_x_ = 0.1f;
-		unitSprite.rotate(rotation_x -= 1);
+		speed_x_ = 0.1f;
+		//unitSprite.rotate(rotation_x -= 1);
 		//change direction of the sprite picture to RIGTH
-		//unitSprite.setTextureRect(IntRect(250, 112, 224, 114)); 
+		unitSprite.setTextureRect(IntRect(250, 112, 224, 116)); 
 	}
 	if (pressed_Down_) {
 		speed_y_ = 0.1f;
 		//unitSprite.move(0, 1);
 		//change direction of the sprite picture to DOWN
-		//unitSprite.setTextureRect(IntRect(125, 0, 124, 233));
+		unitSprite.setTextureRect(IntRect(125, 0, 124, 233));
 	}
-	unitSprite.setOrigin(unitSprite.getTextureRect().width / 2, unitSprite.getTextureRect().height / 2);
-	unitSprite.setRotation(rotation_x);
+	//unitSprite.setOrigin(unitSprite.getTextureRect().width / 2, unitSprite.getTextureRect().height / 2);
+	//unitSprite.setRotation(rotation_x);
 	//unitSprite.setPosition(unitRectangle.left / 2, unitRectangle.top / 2);
 }
 
@@ -95,7 +94,7 @@ void Unit::ControlMoveUnit(float& game_time)
 	//change position taking into speed and playing time
 	unitRectangle.left += speed_x_ * game_time; 
 	unitRectangle.top += speed_y_ * game_time;
-	//unitSprite.setPosition(unitRectangle.left, unitRectangle.top); //fixed position unit
+	unitSprite.setPosition(unitRectangle.left, unitRectangle.top);
 	speed_x_ = 0;
 	speed_y_ = 0;
 }

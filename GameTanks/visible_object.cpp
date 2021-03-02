@@ -121,10 +121,16 @@ sf::Vector2f VisibleObject::GetCoordinateCentre()
 { return Sprite_object_.getPosition(); }
 
 int VisibleObject::GetHeightSprite()
-{ return Texture_object_.getSize().y / frame_count_y_; }
+{
+	//avoid the division by zero (if frame = 0 we will receive critical error)
+	if(frame_count_y_) return Texture_object_.getSize().y / frame_count_y_;
+}
 
 int VisibleObject::GetWidthSprite()
-{ return Texture_object_.getSize().x / frame_count_x_; }
+{ 
+	//avoid the division by zero (if frame = 0 we will receive critical error)
+	if(frame_count_x_) return Texture_object_.getSize().x / frame_count_x_;
+}
 
 float VisibleObject::GetVectorX()
 { return vector_rotate_x_; }

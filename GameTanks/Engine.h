@@ -22,7 +22,7 @@ class Engine {
 private:
 	Clock Game_clock;
 	RenderWindow Main_window; // this object is responsible for all render
-	BaseLevel *Point_level;
+	BaseLevel Point_level;
 	Font Main_font;
 
 	bool im_server;
@@ -35,7 +35,7 @@ private:
 
 	void EngineInpute();
 	void EngineUpdate(float& timer);
-	void EngineDraw();
+	void EngineDraw(float& timer);
 
 	bool LanGame();
 
