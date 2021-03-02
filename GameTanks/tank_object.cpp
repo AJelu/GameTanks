@@ -1,27 +1,35 @@
 #include "objects.h"
 
-TankObject::TankObject() : MovebleObject() { }
-
-MovebleObject* TankObject::Shot()
+TankObject::TankObject() : MovebleObject() 
 {
-	return nullptr;
+	SetSpeedShot(1000);
+	SetShotDistance(1000);
+	SetTimeFreezeShot(1000);
+	SetTimeToNextShot(0);
 }
+
 
 TankObject::TankObject(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate,
 	string const& texture, int const& frame_count_x, int const& frame_count_y,
 	int const& life_level, float const& speed, float const& freeze_time,
+	float const& rotation_speed,
 	float const& speed_shot, float const& shot_distance, 
 	float const& time_freeze_shot)
 	: MovebleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y,
-		life_level, speed, freeze_time)
+		life_level, speed, freeze_time, rotation_speed)
 {
-	speed_shot_ = speed_shot;
-	shot_distance_ = shot_distance;
-	time_freeze_shot_ = time_freeze_shot;
-	time_to_next_shot_ = 0;
+	SetSpeedShot(speed_shot);
+	SetShotDistance(shot_distance);
+	SetTimeFreezeShot(time_freeze_shot);
+	SetTimeToNextShot(0);
+}
+
+MovebleObject* TankObject::Shot()
+{
+	return nullptr;
 }
 
 bool TankObject::CanCreateShot()
@@ -37,10 +45,10 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot)
 		MovebleObject* shot;
 		shot = Shot();
 		if (shot != nullptr) {
-			shot->SetSpeed(speed_shot_);
-			shot->SetDistance(shot_distance_);
+			shot->SetSpeedMove(speed_shot_);
+			shot->SetDistanceMove(shot_distance_);
 			shot->SetRotationVector(GetVectorX(), GetVectorY());
-			StartAudioAction("shot", false);
+			this->StartAudioAction("shot", false);
 			return shot;
 		}
 	}
@@ -58,6 +66,26 @@ void TankObject::RecalculateState(float const& game_time) //+recalculate time_to
 	else if (time_to_next_shot_ > 0.0f) {
 		time_to_next_shot_ -= game_time;
 	}
+}
+
+void TankObject::MoveUp()
+{
+	SetDistanceMove(10);
+}
+
+void TankObject::MoveDown()
+{
+	SetDistanceMove(-10);
+}
+
+void TankObject::MoveRight()
+{
+	SetRotationDegree(10);
+}
+
+void TankObject::MoveLeft()
+{
+	SetRotationDegree(-10);
 }
 
 float TankObject::GetSpeedShot() 

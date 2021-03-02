@@ -1,7 +1,7 @@
 #include "objects.h"
 
 GameObject::GameObject() : VisibleObject() 
-{ SetLifeLevel(1); }
+{ this->SetLifeLevel(1); }
 
 GameObject::GameObject(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
@@ -11,7 +11,7 @@ GameObject::GameObject(int const& id_object,
 	: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y)
 {
-	SetLifeLevel(life_level);
+	this->SetLifeLevel(life_level);
 }
 
 void GameObject::SetLifeLevel(int const& life_level)

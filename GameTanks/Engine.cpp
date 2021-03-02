@@ -3,6 +3,7 @@
 
 Engine::Engine() 
 {
+    im_server = true;
     CreateResolutionWindowMode();
 }
 

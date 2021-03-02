@@ -12,12 +12,19 @@ BaseLevel::BaseLevel()
 	Sprite_background_.setTexture(Texture_background_);
 	Sprite_background_.setPosition(0, 0);
 
-	Player_client = TankObject(1, sf::Vector2f(0, 0), sf::Vector2f(0, 0), "1", 1, 1, 1, 1, 1, 0, 0, 0);
+	Player_client = TankObject(1, 
+		sf::Vector2f(200, 200), sf::Vector2f(60, 157), 
+		"Data/Tank1.png", 
+		6, 1, 1,   200  , 0, 20 , 1000, 200, 500);
 }
 
 void BaseLevel::Draw(RenderWindow& window)
 {
 	window.draw(Sprite_background_);
+	Player_client.Draw(window, nullptr);
+	//Player_client.MoveRight();
+	//Player_client.MoveUp();
+	Player_client.SetTexture("Data/Tank1.png", 3, 1);
 }
 
 void BaseLevel::AddUiObject(UiObject Ui_object)
@@ -47,6 +54,18 @@ void BaseLevel::RecvObjectFromServer()
 
 bool BaseLevel::InputKeyboard(bool for_client, sf::Keyboard::Key Key)
 {
+	if (Key == Keyboard::Up) {
+		Player_client.MoveUp();
+	}
+	if (Key == Keyboard::Down) {
+		Player_client.MoveDown();
+	}
+	if (Key == Keyboard::Left) {
+		Player_client.MoveLeft();
+	}
+	if (Key == Keyboard::Right) {
+		Player_client.MoveRight();
+	}
 	return false;
 }
 
@@ -61,6 +80,7 @@ void BaseLevel::InputEnemy()
 
 bool BaseLevel::UpdateState(float& game_timer)
 {
+	Player_client.RecalculateState(game_timer);
 	return false;
 }
 

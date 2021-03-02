@@ -3,6 +3,7 @@
 #include <SFML/Audio.hpp>
 #include <string>
 #include <vector>
+#include <iostream>
 #include "collisions.h"
 
 using namespace std;
@@ -59,9 +60,6 @@ private:
 	float animation_speed_for_frame_; // time for one frame; 1000 = 1s
 	float current_frame_animation_time_; // time for current frame
 
-
-	//float current_frame_; /////////////
-
 	int frame_count_x_, frame_count_y_; // count frame on texture 1..x
 	Texture Texture_object_;
 	Sprite Sprite_object_;
@@ -96,16 +94,17 @@ public:
 
 	//set object parameters
 	void SetRotationVector(float const& vector_x, float const& vector_y);
-	void RotationVector(int const& rotation_degree);
+	void VectorRotation(float const& rotation_degree);
 	void SetRotation(float const& rotation_by_gradus);
 
 	void SetCoordinate(sf::Vector2f const& coordinate_centre);
-	void SetTexture(string const& texture, 
+	void MoveByVector(float const& length_move);
+	bool SetTexture(string const& texture, 
 						int const& frame_count_x, int const& frame_count_y);
 	void SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate);
 
 	void Draw(sf::RenderWindow& window, 
-				View const& Player_camera, bool const& plus_offset_camera = false);
+				View* const& Player_camera, bool const& plus_offset_camera = false);
 };
 
 class UiObject : public VisibleObject
@@ -161,6 +160,8 @@ public:
 	int GetLifeLevel();
 	void AddCollision(RoundCollision* const& new_colision);
 	float DistanceToCollision(GameObject* const& game_object);
+	/////////??????????
+	/////////??????????
 	~GameObject() override;
 };
 
@@ -168,34 +169,39 @@ public:
 class MovebleObject : public GameObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 {
 private:
-	float speed_, distance_, freeze_time_;
-	int rotation_degree_;
+	float speed_/*px by sec*/, distance_, freeze_time_;
+	float rotation_speed_/*gradus by sec*/, rotation_degree_;
 public:
 	MovebleObject();
 	MovebleObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		string const& texture, int const& frame_count_x, int const& frame_count_y,
-		int const& life_level, float const& speed, float const& freeze_time);
+		int const& life_level, float const& speed, float const& freeze_time, 
+		float const& rotation_speed);
 
 	//set object parameters
-	void SetSpeed(float const& speed);
-	void SetFreezeTime(float const& freeze_time);
-	void SetDistance(float const& distance, bool const& add_to_previous = false);
+	void SetSpeedMove(float const& speed); //px by sec
+	void SetFreezeTime(float const& freeze_time); //sec
+	void SetDistanceMove(float const& distance, 
+		bool const& add_to_previous = false);//px
+	void SetRotationDegree(float const& rotation_degree, 
+		bool const& add_to_previous = false);
+	void SetRotationSpeed(float const& rotation_speed); // gradus by sec
 
 	//get object parameters
-	float GetSpeed();
-	float GetDistance();
-	float GetFreezeTime();
+	float GetSpeedMove(); //px by sec
+	float GetDistanceMove(); //px
+	float GetFreezeTime(); //sec
 
-	void MoveTo(int const& move_to_x, int const& move_to_y);
+	void MoveTo(float const& move_to_x, float const& move_to_y);
 
 	//for recalculate position ((vector+speed+distance)*timer), vector rotate
 	virtual void RecalculateState(float const& game_time);
 
 	//for heal collisions
-	void TerminateCollision(GameObject const& game_object);
-	void TerminateCollision(MovebleObject const& moveble_object);
+	void TerminateCollision(GameObject& game_object); /////////????????????
+	void TerminateCollision(MovebleObject& moveble_object); /////////??????????
 };
 
 class TankObject : public MovebleObject //++++++++++++++++++++++++++++++++++++
@@ -212,12 +218,18 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& life_level, float const& speed, float const& freeze_time,
+		float const& rotation_speed,
 		float const& speed_shot, float const& shot_distance, 
 		float const& time_freeze_shot);
 
 	bool CanCreateShot();
 	MovebleObject* CreateShot(bool const& forcibly_shot = false);
 	void RecalculateState(float const& game_time) override; //+recalculate time_to_next_shot
+
+	void MoveUp();
+	void MoveDown();
+	void MoveRight();
+	void MoveLeft();
 
 	float GetSpeedShot();
 	float GetShotDistance();
