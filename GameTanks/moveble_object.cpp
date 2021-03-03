@@ -5,6 +5,8 @@ MovebleObject::MovebleObject() : GameObject()
 	this->SetSpeedMove(50);
 	this->SetFreezeTime(0);
 	this->SetRotationSpeed(360);
+	distance_ = 0;
+	rotation_degree_ = 0;
 }
 
 MovebleObject::MovebleObject(int const& id_object,
@@ -19,6 +21,8 @@ MovebleObject::MovebleObject(int const& id_object,
 	this->SetSpeedMove(speed);
 	this->SetFreezeTime(freeze_time);
 	this->SetRotationSpeed(rotation_speed);
+	distance_ = 0;
+	rotation_degree_ = 0;
 }
 
 //set object parameters
@@ -104,7 +108,7 @@ void MovebleObject::RecalculateState(float const& game_time)
 
 		if (rotation_degree_ < 0) {
 			rotation_degree_ += size;
-			if (distance_ > 0) {
+			if (rotation_degree_ > 0) {
 				size -= rotation_degree_;
 				rotation_degree_ = 0;
 			}

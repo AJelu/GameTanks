@@ -4,7 +4,7 @@
 
 VisibleObject::VisibleObject() : AudioObject() 
 {
-	this->SetRotationVector(1, 1);
+	this->SetRotationVector(0, 1);
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
 	this->SetTexture("", 1, 1);
@@ -43,10 +43,9 @@ bool VisibleObject::ShowTile()
 {
 	int x1, y1, x2, y2;
 	x1 = this->GetWidthSprite() * (tile_frame_current_ - 1);
-	x2 = this->GetWidthSprite() * (tile_frame_current_) - 1;
-
+	x2 = this->GetWidthSprite();
 	y1 = this->GetHeightSprite() * (tile_level_ - 1);
-	y2 = this->GetHeightSprite() * (tile_level_) - 1;
+	y2 = this->GetHeightSprite();
 
 	Sprite_object_.setTextureRect(IntRect(x1, y1, x2, y2));
 
@@ -58,7 +57,7 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number)
 {
 	if (tile_level > frame_count_y_ || tile_level < 1) { return false; }
 	if (tile_number > frame_count_x_ || tile_number < 1) { return false; }
-	if (tile_level == tile_level_ && tile_number == tile_frame_current_) { return false; }
+	//if (tile_level == tile_level_ && tile_number == tile_frame_current_) { return false; }
 	tile_level_ = tile_level;
 	tile_frame_current_ = tile_number;
 	this->ShowTile();
@@ -70,7 +69,13 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 	int const& frame_start, int const& frame_end,
 	float const& animation_speed_for_frame, bool const& looped)
 {
+	bool need_restart_animation = true;
+	if ((tile_level == tile_level_) &&
+		(frame_start == animation_frame_start_) &&
+		(frame_end == animation_frame_end_)) need_restart_animation = false;
+
 	//check is no out of range and write new parameter for animate
+
 	if (tile_level > frame_count_y_) { tile_level_ = frame_count_y_; }
 	else if (tile_level < 1) { tile_level_ = 1; }
 	else { tile_level_ = tile_level; }
@@ -87,8 +92,10 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 	looped_ = looped and (frame_start != frame_end);
 
 	//set start parameters
-	current_frame_animation_time_ = 0;
-	this->SetTile(tile_level_, animation_frame_start_);
+	if (need_restart_animation) {
+		current_frame_animation_time_ = 0;
+		this->SetTile(tile_level_, animation_frame_start_);
+	}
 }
 
 bool VisibleObject::AnimationEnd()
@@ -125,14 +132,14 @@ sf::Vector2f VisibleObject::GetCoordinateCentre()
 int VisibleObject::GetHeightSprite()
 {
 	//avoid the division by zero (if frame = 0 we will receive critical error)
-	if(frame_count_y_) return Texture_object_.getSize().y / frame_count_y_;
+	if (frame_count_y_) return Texture_object_.getSize().y / frame_count_y_;
 	return 0;
 }
 
 int VisibleObject::GetWidthSprite()
 { 
 	//avoid the division by zero (if frame = 0 we will receive critical error)
-	if(frame_count_x_) return Texture_object_.getSize().x / frame_count_x_;
+	if (frame_count_x_) return Texture_object_.getSize().x / frame_count_x_;
 	return 0;
 }
 
@@ -212,11 +219,13 @@ bool VisibleObject::SetTexture(string const& texture,
 							int const& frame_count_x, int const& frame_count_y)
 {
 	if (Texture_object_.loadFromFile(texture)) {
+		Texture_object_.setSmooth(true);
 		Sprite_object_.setTexture(Texture_object_);
 		frame_count_x_ = frame_count_x;
 		if (frame_count_x_ < 1) frame_count_x_ = 1;
 		frame_count_y_ = frame_count_y;
 		if (frame_count_y_ < 1) frame_count_y_ = 1;
+		this->StartPlayAnimation(1, 1, 1);
 		this->SetTile(1, 1);
 		this->SetOffsetSprite(offset_sprite_coordinate_);
 		return true;
@@ -233,6 +242,9 @@ void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate
 void VisibleObject::Draw(sf::RenderWindow& window, 
 					View* const& Player_camera, bool const& plus_offset_camera)
 {
+	if ((Sprite_object_.getTexture()) != &Texture_object_) {
+		Sprite_object_.setTexture(Texture_object_);
+	}
 	if (plus_offset_camera) {
 		// +offset camera????????? <----------------------------------------------
 		window.draw(Sprite_object_);
@@ -240,6 +252,6 @@ void VisibleObject::Draw(sf::RenderWindow& window,
 	else {
 		window.draw(Sprite_object_);
 	}
-	SetOffsetSprite(offset_sprite_coordinate_);
+	//SetOffsetSprite(offset_sprite_coordinate_);
 	need_redraw_image_ = false;
 }

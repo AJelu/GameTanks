@@ -32,17 +32,22 @@ bool AudioObject::StartAudioAction(string const& audio_action, bool looped)
 		if (audio_action_name_[i] == audio_action) {
 			(*sounds_file_[i]).play();
 			(*sounds_file_[i]).setLoop(looped);
+			return true;
 		}
 	}
+	return false;
 }
 
 bool AudioObject::StopAudioAction(string const& audio_action)
 {
-	for (int i = 0; i < audio_action_name_.size(); i++)
+	for (int i = 0; i < audio_action_name_.size(); i++) {
 		if (audio_action_name_[i] == audio_action) {
 			(*sounds_file_[i]).setLoop(false);
 			(*sounds_file_[i]).stop();
+			return true;
 		}
+	}
+	return false;
 }
 
 AudioObject::~AudioObject()
