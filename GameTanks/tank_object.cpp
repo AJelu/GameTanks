@@ -47,7 +47,7 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot)
 		if (shot != nullptr) {
 			shot->SetSpeedMove(speed_shot_);
 			shot->SetDistanceMove(shot_distance_);
-			shot->SetRotationVector(GetVectorX(), GetVectorY());
+			shot->SetRotationVector(this->GetVectorX(), this->GetVectorY());
 			this->StartAudioAction("shot", false);
 			return shot;
 		}
@@ -69,24 +69,16 @@ void TankObject::RecalculateState(float const& game_time) //+recalculate time_to
 }
 
 void TankObject::MoveUp()
-{
-	SetDistanceMove(10);
-}
+{ SetDistanceMove(5); }
 
 void TankObject::MoveDown()
-{
-	SetDistanceMove(-10);
-}
+{ SetDistanceMove(-5); }
 
 void TankObject::MoveRight()
-{
-	SetRotationDegree(10);
-}
+{ SetRotationDegree(5); }
 
 void TankObject::MoveLeft()
-{
-	SetRotationDegree(-10);
-}
+{ SetRotationDegree(-5); }
 
 float TankObject::GetSpeedShot() 
 { return speed_shot_; }

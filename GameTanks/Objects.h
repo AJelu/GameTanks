@@ -14,7 +14,7 @@ using namespace sf;
 
 
 
-class BaseObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class BaseObject
 {
 private:
 	int id_object_; //for synchronize by lan
@@ -29,7 +29,7 @@ public:
 	virtual ~BaseObject();
 };
 
-class AudioObject : public BaseObject //Ready
+class AudioObject : public BaseObject
 {
 private:
 	vector <string> audio_action_name_;
@@ -46,7 +46,7 @@ public:
 	~AudioObject() override;
 };
 
-class VisibleObject : public AudioObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class VisibleObject : public AudioObject
 {
 private:
 	bool need_redraw_image_; //using for redraw screen. if have changing - true
@@ -66,10 +66,15 @@ private:
 
 	float vector_rotate_x_, vector_rotate_y_;
 
+	//for return previous state
+	float previous_vector_rotate_x_, previous_vector_rotate_y_;
+	Vector2f previous_position_centre_;
+
 	void SetNeedRedrawImage();
 	bool RecalculateVector();
 	bool ShowTile(); //show current frame texture
 	bool SetTile(int const& tile_level, int const& tile_number); //set show choosed frame texture
+	float CalculateGradus();
 public:
 	VisibleObject();
 	VisibleObject(int const& id_object,
@@ -77,6 +82,7 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		string const& texture, int const& frame_count_x, int const& frame_count_y);
 
+	//animatinos
 	void StartPlayAnimation(int const& tile_level, 
 		int const& frame_start, int const& frame_end,
 		float const& animation_speed_for_frame = 1000, bool const& looped = false);
@@ -92,13 +98,22 @@ public:
 	float GetVectorX();
 	float GetVectorY();
 
-	//set object parameters
+	//for return previous state
+	void RestorePreviousState(); 
+	void SafeState();
+
+	//set vector...
 	void SetRotationVector(float const& vector_x, float const& vector_y);
 	void VectorRotation(float const& rotation_degree);
 	void SetRotation(float const& rotation_by_gradus);
+	Vector2f ChangeVectorByDirection(Vector2f const& vector);
 
+	//for move
 	void SetCoordinate(sf::Vector2f const& coordinate_centre);
 	void MoveByVector(float const& length_move);
+	float GetDistanceToPoint(sf::Vector2f const& point);
+
+	//view`s part
 	bool SetTexture(string const& texture, 
 						int const& frame_count_x, int const& frame_count_y);
 	void SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate);
@@ -142,12 +157,14 @@ public:
 
 
 
-class GameObject : public VisibleObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class GameObject : public VisibleObject
 {
 private:
 	int life_level_;
-	vector <RoundCollision*> collisions_;
+	float max_collision_distance;
+	bool collision_off;
 
+	vector <RoundCollision*> collisions_;
 public:
 	GameObject();
 	GameObject(int const& id_object,
@@ -158,15 +175,23 @@ public:
 
 	void SetLifeLevel(int const& life_level);
 	int GetLifeLevel();
-	void AddCollision(RoundCollision* const& new_colision);
-	float DistanceToCollision(GameObject* const& game_object);
-	/////////??????????
-	/////////??????????
+
+	//for collisions
+	void AddCollision(RoundCollision* new_colision);
+	float SafeDistanceToCollision(GameObject* game_object);
+	bool Collision(GameObject* Game_object, bool healt = false);
+
+	void CollisionOff();//ignore all collisions
+	void CollisionOn();
+
+	//for animation
+	virtual void PlayAnimateDie(); ///need override in daughter
+
 	~GameObject() override;
 };
 
 
-class MovebleObject : public GameObject //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class MovebleObject : public GameObject
 {
 private:
 	float speed_/*px by sec*/, distance_, freeze_time_;
@@ -199,12 +224,14 @@ public:
 	//for recalculate position ((vector+speed+distance)*timer), vector rotate
 	virtual void RecalculateState(float const& game_time);
 
-	//for heal collisions
-	void TerminateCollision(GameObject& game_object); /////////????????????
-	void TerminateCollision(MovebleObject& moveble_object); /////////??????????
+	//for animation
+	virtual void PlayAnimateMovePlus(); ///need override in daughter
+	virtual void PlayAnimateMoveMinus(); ///need override in daughter
+	virtual void PlayAnimateRotate—lockwise(); ///need override in daughter
+	virtual void PlayAnimateRotate—ounterclockwise(); ///need override in daughter
 };
 
-class TankObject : public MovebleObject //++++++++++++++++++++++++++++++++++++
+class TankObject : public MovebleObject
 {
 private:
 	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_;

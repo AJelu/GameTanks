@@ -8,6 +8,7 @@ VisibleObject::VisibleObject() : AudioObject()
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
 	this->SetTexture("", 1, 1);
+	this->SafeState();
 }
 
 VisibleObject::VisibleObject(int const& id_object,
@@ -20,6 +21,7 @@ VisibleObject::VisibleObject(int const& id_object,
 	this->SetCoordinate(coordinate_centre);
 	this->SetOffsetSprite(offset_sprite_coordinate);
 	this->SetTexture(texture, frame_count_x, frame_count_y);
+	this->SafeState();
 }
 
 void VisibleObject::SetNeedRedrawImage() 
@@ -65,6 +67,30 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number)
 	return true;
 }
 
+float VisibleObject::CalculateGradus()
+{
+	float temp_vector_x = 0.0f;//create and set temp vector
+	float temp_vector_y = 1.0f;
+	float rotation_by_gradus =
+		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
+			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+	rotation_by_gradus = (rotation_by_gradus * 180) / M_PI; //calculate temp gradus
+
+	temp_vector_x = 1.0f;//set temp vector
+	temp_vector_y = 0.0f;
+	float rotation_by_gradus_buffer =
+		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
+			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180) / M_PI;//calculate temp gradus
+
+	if (rotation_by_gradus_buffer > 90.0f) { //calculete new gradus
+		rotation_by_gradus = 360 - rotation_by_gradus;
+	}
+	return rotation_by_gradus;
+}
+
 void VisibleObject::StartPlayAnimation(int const& tile_level,
 	int const& frame_start, int const& frame_end,
 	float const& animation_speed_for_frame, bool const& looped)
@@ -92,7 +118,7 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 	looped_ = looped and (frame_start != frame_end);
 
 	//set start parameters
-	if (need_restart_animation) {
+	if (need_restart_animation || AnimationEnd()) {
 		current_frame_animation_time_ = 0;
 		this->SetTile(tile_level_, animation_frame_start_);
 	}
@@ -149,6 +175,23 @@ float VisibleObject::GetVectorX()
 float VisibleObject::GetVectorY()
 { return vector_rotate_y_; }
 
+void VisibleObject::RestorePreviousState()
+{
+	Sprite_object_.setPosition(previous_position_centre_);
+	vector_rotate_x_ = previous_vector_rotate_x_;
+	vector_rotate_y_ = previous_vector_rotate_y_;
+	this->RecalculateVector();
+	Sprite_object_.setRotation(this->CalculateGradus());
+	this->SetNeedRedrawImage();
+}
+
+void VisibleObject::SafeState()
+{
+	previous_position_centre_ = this->GetCoordinateCentre();
+	previous_vector_rotate_x_ = vector_rotate_x_;
+	previous_vector_rotate_y_ = vector_rotate_y_;
+}
+
 sf::Vector2f VisibleObject::GetOffsetSprite()
 { return offset_sprite_coordinate_; }
 
@@ -166,33 +209,18 @@ void VisibleObject::MoveByVector(float const& length_move)
 		this->GetCoordinateCentre().y + length_move * -vector_rotate_y_));
 }
 
+float VisibleObject::GetDistanceToPoint(sf::Vector2f const& point)
+{	
+	return sqrtf(powf(GetCoordinateCentre().x - point.x, 2) +
+		powf(GetCoordinateCentre().y - point.y, 2));
+}
+
 void VisibleObject::SetRotationVector(float const& vector_x, float const& vector_y)
 {
 	vector_rotate_x_ = vector_x;
 	vector_rotate_y_ = vector_y;
 	this->RecalculateVector();
-
-	float temp_vector_x = 0.0f;//create and set temp vector
-	float temp_vector_y = 1.0f;
-	float rotation_by_gradus = 
-		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
-		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-			sqrtf(vector_x * vector_x + vector_y * vector_y)));
-	rotation_by_gradus = (rotation_by_gradus * 180) / M_PI; //calculate temp gradus
-
-	temp_vector_x = 1.0f;//set temp vector
-	temp_vector_y = 0.0f;
-	float rotation_by_gradus_buffer = 
-		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
-		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-			sqrtf(vector_x * vector_x + vector_y * vector_y)));
-	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180) / M_PI;//calculate temp gradus
-
-	if (rotation_by_gradus_buffer > 90.0f) { //calculete new gradus
-		rotation_by_gradus = 360 - rotation_by_gradus;
-	}
-
-	Sprite_object_.setRotation(rotation_by_gradus);
+	Sprite_object_.setRotation(this->CalculateGradus());
 	this->SetNeedRedrawImage();
 }
 
@@ -213,6 +241,17 @@ void VisibleObject::SetRotation(float const& rotation_by_gradus)
 	vector_rotate_x_ = 0.0f;
 	vector_rotate_y_ = 1.0f;
 	this->VectorRotation(rotation_by_gradus);
+}
+Vector2f VisibleObject::ChangeVectorByDirection(Vector2f const& vector)
+{
+	float rotation_degree_ = -this->CalculateGradus();
+	float new_vector_x, new_vector_y;
+	float to_radian = rotation_degree_ * M_PI / 180.0f;
+	new_vector_x = (vector.x * cos(to_radian) -
+		vector.y * sin(to_radian));
+	new_vector_y = (vector.x * sin(to_radian) +
+		vector.y * cos(to_radian));
+	return Vector2f(new_vector_x, new_vector_y);
 }
 ;
 bool VisibleObject::SetTexture(string const& texture, 
@@ -245,13 +284,7 @@ void VisibleObject::Draw(sf::RenderWindow& window,
 	if ((Sprite_object_.getTexture()) != &Texture_object_) {
 		Sprite_object_.setTexture(Texture_object_);
 	}
-	if (plus_offset_camera) {
-		// +offset camera????????? <----------------------------------------------
-		window.draw(Sprite_object_);
-	}
-	else {
-		window.draw(Sprite_object_);
-	}
+	window.draw(Sprite_object_);
 	//SetOffsetSprite(offset_sprite_coordinate_);
 	need_redraw_image_ = false;
 }

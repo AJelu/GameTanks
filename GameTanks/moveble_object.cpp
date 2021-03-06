@@ -91,6 +91,7 @@ void MovebleObject::RecalculateState(float const& game_time)
 				distance_ = 0;
 			}
 			this->MoveByVector(-size);
+			PlayAnimateMoveMinus();
 		}
 		else if (distance_ > 0) {
 			distance_ -= size;
@@ -99,6 +100,7 @@ void MovebleObject::RecalculateState(float const& game_time)
 				distance_ = 0;
 			}
 			this->MoveByVector(size);
+			PlayAnimateMovePlus();
 		}
 	}
 
@@ -113,6 +115,7 @@ void MovebleObject::RecalculateState(float const& game_time)
 				rotation_degree_ = 0;
 			}
 			this->VectorRotation(-size);
+			PlayAnimateRotate—ounterclockwise();
 		}
 		else if (rotation_degree_ > 0) {
 			rotation_degree_ -= size;
@@ -120,17 +123,13 @@ void MovebleObject::RecalculateState(float const& game_time)
 				size += rotation_degree_;
 				rotation_degree_ = 0;
 			}
-			this->VectorRotation(size);
+			this->VectorRotation(size); 
+			PlayAnimateRotate—lockwise();
 		}
 	}
 }
 
-//for heal collisions
-void MovebleObject::TerminateCollision(GameObject& game_object)
-{
-	//<-------------------------------------------------------------------
-}
-void MovebleObject::TerminateCollision(MovebleObject& moveble_object)
-{
-	//<-------------------------------------------------------------------
-}
+void MovebleObject::PlayAnimateMovePlus() {}
+void MovebleObject::PlayAnimateMoveMinus() {}
+void MovebleObject::PlayAnimateRotate—lockwise() {}
+void MovebleObject::PlayAnimateRotate—ounterclockwise() {}
