@@ -56,8 +56,6 @@ View& BaseLevel::Draw(RenderWindow& window)
 
 void BaseLevel::AddUiObject(UiObject Ui_object)
 {
-}
-
 	for (i = 0; i < Players_objects_.size(); i++)
 	{ Players_objects_[i]->Draw(window, nullptr); }
 	
