@@ -10,8 +10,8 @@ Engine::Engine()
 void Engine::CreateResolutionWindowMode()
 {
     Vector2f resolution;
-    resolution.x = 1024;
-    resolution.y = 768;
+    resolution.x = SCREEN_RESOLUTION_X;
+    resolution.y = SCREEN_RESOLUTION_Y;
 
     Main_window.create(VideoMode(int(resolution.x), int(resolution.y)), "TANKS", Style::Default);
     Main_window.setFramerateLimit(60);

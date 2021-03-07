@@ -5,15 +5,13 @@
 #include "levels.h"
 #include "objects.h"
 
-#include "TestUnitController.h" /* TESTING MODULE! */
-
 /*
 	Engine includes the following files :
-		Engine.cpp
-		LanGame.cpp
-		Audio.cpp
-		EngineUpdate.cpp
-		EngineInput.cpp
+		engine.cpp
+		engine_draw.cpp
+		engine_input.cpp
+		engine_update.cpp
+		lan_game.cpp
 */
 
 using namespace sf;
@@ -24,6 +22,8 @@ private:
 	RenderWindow Main_window; // this object is responsible for all render
 	BaseLevel Point_level;
 	Font Main_font;
+
+	View& CameraControl(View& player_camera);
 
 	bool im_server;
 
@@ -43,8 +43,6 @@ private:
 	bool RecvMessageFromServer();
 
 	void Font();
-
-	Unit TestUnit{ FloatRect(300, 300, 100, 100) }; /* TESTING UNIT! */
 
 public:
 	Engine();

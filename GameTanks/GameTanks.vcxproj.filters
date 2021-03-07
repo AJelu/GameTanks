@@ -42,9 +42,6 @@
     <ClCompile Include="Collisions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestUnitController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="engine.cpp">
       <Filter>Source Files\ENGINE</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestUnitController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="collisions.h">
       <Filter>Header Files</Filter>
     </ClInclude>

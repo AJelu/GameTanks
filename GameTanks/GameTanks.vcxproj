@@ -157,7 +157,6 @@
     <ClCompile Include="tank_object.cpp" />
     <ClCompile Include="ui_object.cpp" />
     <ClCompile Include="visible_object.cpp" />
-    <ClCompile Include="TestUnitController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collisions.h" />
@@ -166,7 +165,6 @@
     <ClInclude Include="objects.h" />
     <ClInclude Include="run_game.h" />
     <ClInclude Include="settings.h" />
-    <ClInclude Include="TestUnitController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -178,7 +178,7 @@ void VisibleObject::SetRotationVector(float const& vector_x, float const& vector
 		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
 		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
 			sqrtf(vector_x * vector_x + vector_y * vector_y)));
-	rotation_by_gradus = (rotation_by_gradus * 180) / M_PI; //calculate temp gradus
+	rotation_by_gradus = float((rotation_by_gradus * 180) / M_PI); //calculate temp gradus
 
 	temp_vector_x = 1.0f;//set temp vector
 	temp_vector_y = 0.0f;
@@ -186,7 +186,7 @@ void VisibleObject::SetRotationVector(float const& vector_x, float const& vector
 		acosf((temp_vector_x * vector_x + temp_vector_y * vector_y) /
 		(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
 			sqrtf(vector_x * vector_x + vector_y * vector_y)));
-	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180) / M_PI;//calculate temp gradus
+	rotation_by_gradus_buffer = float((rotation_by_gradus_buffer * 180) / M_PI);//calculate temp gradus
 
 	if (rotation_by_gradus_buffer > 90.0f) { //calculete new gradus
 		rotation_by_gradus = 360 - rotation_by_gradus;
@@ -200,7 +200,7 @@ void VisibleObject::VectorRotation(float const& rotation_degree)
 {
 	float rotation_degree_ = -rotation_degree;
 	float new_vector_x, new_vector_y;
-	float to_radian = rotation_degree_ * M_PI / 180.0f;
+	float to_radian = float(rotation_degree_ * M_PI / 180.0f);
 	new_vector_x = vector_rotate_x_ * cos(to_radian) - 
 					vector_rotate_y_ * sin(to_radian);
 	new_vector_y = vector_rotate_x_ * sin(to_radian) + 
