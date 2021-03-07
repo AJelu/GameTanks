@@ -2,31 +2,8 @@
 
 BaseLevel::BaseLevel()
 {
-	/* Initialization tile map: */
-	Texture_background_.loadFromFile("Data/Map.png");
-	Sprite_background_.setTexture(Texture_background_);
-	Sprite_background_.setPosition(0, 0);
-
-
-	this->AddPlayerObject(new RedTank(1, 200, 200));
-
-	this->AddEnemyObject(new RedTank(1, 300, 400));
-	this->AddEnemyObject(new RedTank(1, 600, 400));
-	this->AddEnemyObject(new RedTank(1, 600, 600));
-
-
-	/* temporarily for the test */
-	animation = VisibleObject(2,
-		sf::Vector2f(270, 270), sf::Vector2f(165, 189),
-		"Data/BoomTest2.png", 
-		36, 1);
-	/* temporarily for the test */
-
-
-	/* Initialization border map: */
-	Texture_border_.loadFromFile("Data/Map_border.png");
-	Sprite_border_.setTexture(Texture_border_);
-	Sprite_border_.setPosition(0, 0);
+	size_level_width_ = SCREEN_RESOLUTION_X;
+	size_level_height_ = SCREEN_RESOLUTION_Y;
 }
 
 View& BaseLevel::Draw(RenderWindow& window)
@@ -48,12 +25,8 @@ View& BaseLevel::Draw(RenderWindow& window)
 
 	for (i = 0; i < Ui_objects_.size(); i++)
 	{ Ui_objects_[i]->Draw(window, nullptr); }
-	
-	Player_client.Draw(window, nullptr);
-	Player_camera.setCenter(Players_objects_[0]->GetCoordinateCentre().x,
-							Players_objects_[0]->GetCoordinateCentre().y);
 
-	animation.Draw(window, nullptr); /* temporarily for the test */
+	CameraControl();
 
 	window.draw(Sprite_border_);
 
@@ -72,6 +45,25 @@ void BaseLevel::AddPlayerObject(TankObject* Player_objects)
 void BaseLevel::AddShotObject(MovebleObject* Shot_objects)
 { if (Shot_objects != nullptr) { Shot_objects_.push_back(Shot_objects); } }
 
+void BaseLevel::SetWatchObject(VisibleObject* Watch_object)
+{ if (Watch_object != nullptr) { Watch_object_ = Watch_object; } }
+
+void BaseLevel::SetBackgroundTexture(string texture_address)
+{
+	Texture_background_.loadFromFile(texture_address);
+	Sprite_background_.setTexture(Texture_background_);
+	Sprite_background_.setPosition(0, 0);
+	size_level_width_ = Texture_background_.getSize().x;
+	size_level_height_ = Texture_background_.getSize().y;
+}
+
+void BaseLevel::SetBorderTexture(string texture_address)
+{
+	Texture_border_.loadFromFile(texture_address);
+	Sprite_border_.setTexture(Texture_border_);
+	Sprite_border_.setPosition(0, 0);
+}
+
 BaseObject* BaseLevel::GetObjectToSendClient()
 {
 	return nullptr;
@@ -81,24 +73,32 @@ void BaseLevel::RecvObjectFromServer()
 {
 }
 
-bool BaseLevel::InputKeyboard(bool for_client, sf::Keyboard::Key Key)
+bool BaseLevel::InputKeyboard(int player_nuber, sf::Keyboard::Key Key)
 {
-	if (Key == Keyboard::Up) {
-		Players_objects_[0]->MoveUp();
+	if (player_nuber >= 0 && player_nuber < Players_objects_.size()) {
+		if (Key == Keyboard::Up) {
+			Players_objects_[player_nuber]->MoveUp();
+		}
+		if (Key == Keyboard::Down) {
+			Players_objects_[player_nuber]->MoveDown();
+		}
+		if (Key == Keyboard::Left) {
+			Players_objects_[player_nuber]->MoveLeft();
+		}
+		if (Key == Keyboard::Right) {
+			Players_objects_[player_nuber]->MoveRight();
+		}
+		if (Key == Keyboard::Space) {
+			this->AddShotObject(Players_objects_[player_nuber]->CreateShot());
+			//start test code: explosions
+			Statis_objects_[0]->StartPlayAnimation(1, 1, 10, 70);
+			Statis_objects_[1]->StartPlayAnimation(1, 1, 48, 20);
+			Statis_objects_[2]->StartPlayAnimation(1, 1, 48, 20);
+			//end test code;
+		}
+		return true;
 	}
-	if (Key == Keyboard::Down) {
-		Players_objects_[0]->MoveDown();
-	}
-	if (Key == Keyboard::Left) {
-		Players_objects_[0]->MoveLeft();
-	}
-	if (Key == Keyboard::Right) {
-		Players_objects_[0]->MoveRight();
-	}
-	if (Key == Keyboard::Space) {
-		this->AddShotObject(Players_objects_[0]->CreateShot());
-	}
-	return true;
+	return false;
 }
 
 bool BaseLevel::InputMouse(sf::Event::EventType event_type, sf::Vector2i mpuse_position)
@@ -137,7 +137,6 @@ bool BaseLevel::UpdateState(float& game_timer)
 	for (i = 0; i < Ui_objects_.size(); i++)
 	{ Ui_objects_[i]->ForAnimation(game_timer); }
 
-
 	this->CalculateCollisionOnLevel();
 	//respawn died objects and delete from vector
 	// 
@@ -168,7 +167,7 @@ void BaseLevel::CalculateCollisionOnLevel()
 			for (j = i + 1; j < Players_objects_.size(); j++) {
 				if (Players_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) < 0) {
 					if (!Players_objects_[i]->Collision(Players_objects_[j], true)) {
-						j = -1;
+						j = i;
 						recalc_i = true;
 						continue;
 					}
@@ -205,7 +204,6 @@ void BaseLevel::CalculateCollisionOnLevel()
 			}
 
 			for (j = 0; j < Players_objects_.size(); j++) {
-				//cout << Enemy_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) << endl;
 				if (Enemy_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) < 0) {
 					if (!Enemy_objects_[i]->Collision(Players_objects_[j], true)) {
 						j = -1;
@@ -215,10 +213,10 @@ void BaseLevel::CalculateCollisionOnLevel()
 				}
 			}
 			
-			for (j = i+1; j < Enemy_objects_.size(); j++) {
+			for (j = i + 1; j < Enemy_objects_.size(); j++) {
 				if (Enemy_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
 					if (!Enemy_objects_[i]->Collision(Enemy_objects_[j], true)) {
-						j = -1;
+						j = i;
 						recalc_i = true;
 						continue;
 					}
@@ -271,6 +269,32 @@ void BaseLevel::CalculateCollisionOnLevel()
 	for (i = 0; i < Statis_objects_.size(); i++) {
 		Statis_objects_[i]->SafeState();
 	}
+}
+
+void BaseLevel::CameraControl()
+{
+	float temp_camera_x, temp_camera_y;
+	if (Watch_object_ != nullptr) {
+		temp_camera_x = Watch_object_->GetCoordinateCentre().x;
+		temp_camera_y = Watch_object_->GetCoordinateCentre().y;
+	}
+	else {
+		temp_camera_x = size_level_width_ / 2;
+		temp_camera_y = size_level_height_ / 2;
+	}
+
+	if (temp_camera_x < SCREEN_RESOLUTION_X / 2) 
+		temp_camera_x = SCREEN_RESOLUTION_X / 2; //left edge
+	if (temp_camera_x > size_level_width_ - SCREEN_RESOLUTION_X / 2) 
+		temp_camera_x = size_level_width_ - SCREEN_RESOLUTION_X / 2; //right edge
+	if (temp_camera_y < SCREEN_RESOLUTION_Y / 2) 
+		temp_camera_y = SCREEN_RESOLUTION_Y / 2; //upper edge
+	if (temp_camera_y > size_level_height_ - SCREEN_RESOLUTION_Y / 2) 
+		temp_camera_y = size_level_height_ - SCREEN_RESOLUTION_Y / 2; //lower edge
+
+	Player_camera.setSize(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y);
+
+	Player_camera.setCenter(temp_camera_x, temp_camera_y);
 }
 
 int BaseLevel::NextLevel()

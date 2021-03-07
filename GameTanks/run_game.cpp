@@ -11,6 +11,10 @@ int main()
 void RunGame()
 {
     Engine engine;
+
+    GameLevel Game_level;
+    engine.ChangeLevel(&Game_level);
+
     int state = 0;
     while (true) {
         state = engine.Start();

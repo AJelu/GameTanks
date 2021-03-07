@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "ready_objects.h"
+#include "settings.h"
 
 using namespace sf;
 
@@ -21,20 +22,20 @@ private:
 	std::vector <BaseObject*> Need_sync_with_client_objects_;
 
 	//list game  die objects
-	int size_level_height, size_level_width;
+	int size_level_height_, size_level_width_;
 
-	TankObject Player_server;
-	TankObject Player_client;
-	VisibleObject animation;/*+++*/
+	VisibleObject* Watch_object_;
 
 	View Player_camera;
 
+	//background and border:
 	Texture Texture_background_;
 	Sprite Sprite_background_;
 	Texture Texture_border_;
 	Sprite Sprite_border_;
 
 	void CalculateCollisionOnLevel(); 
+	void CameraControl();
 public:
 	BaseLevel();
 	View& Draw(RenderWindow& window); ////////////////
@@ -45,12 +46,16 @@ public:
 	void AddPlayerObject(TankObject* Player_objects);
 	void AddShotObject(MovebleObject* Shot_objects);
 
+	void SetWatchObject(VisibleObject* Watch_object);
+	void SetBackgroundTexture(string texture_address);
+	void SetBorderTexture(string texture_address);
+
 	BaseObject* GetObjectToSendClient();
 	
 	void RecvObjectFromServer();
 
-	bool InputKeyboard(bool for_client, sf::Keyboard::Key Key); 
-	bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 
+	virtual bool InputKeyboard(int player_nuber, sf::Keyboard::Key Key);
+	virtual bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 
 
 	void InputEnemy();
 
@@ -59,4 +64,11 @@ public:
 	int NextLevel();
 	bool ExitGame();
 	~BaseLevel();
+};
+
+class GameLevel : public BaseLevel {
+private:
+	TankObject* Player_;
+public:
+	GameLevel();
 };

@@ -20,10 +20,10 @@ class Engine {
 private:
 	Clock Game_clock;
 	RenderWindow Main_window; // this object is responsible for all render
-	BaseLevel Point_level;
+	BaseLevel* Point_level;
 	Font Main_font;
 
-	View& CameraControl(View& player_camera);
+	//View& CameraControl(View& player_camera);
 
 	bool im_server;
 
@@ -50,5 +50,5 @@ public:
 	int Start();
 	void Stop();
 
-	void ChangeLevel(BaseLevel level);
+	void ChangeLevel(BaseLevel* level);
 };

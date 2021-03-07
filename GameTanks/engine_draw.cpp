@@ -3,11 +3,11 @@
 void Engine::EngineDraw(float& timer)
 {
 	Main_window.clear(Color::Black);
-	Main_window.setView(CameraControl(Point_level.Draw(Main_window)));
+	Main_window.setView(Point_level->Draw(Main_window));
 	Main_window.display(); //end the current frame
 }
 
-View& Engine::CameraControl(View& player_camera)
+/*View& Engine::CameraControl(View& player_camera)
 {
     float temp_camera_x = player_camera.getCenter().x;
     float temp_camera_y = player_camera.getCenter().y;
@@ -21,4 +21,4 @@ View& Engine::CameraControl(View& player_camera)
 
     player_camera.setCenter(temp_camera_x, temp_camera_y);
     return player_camera;
-}
+}*/
