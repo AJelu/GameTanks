@@ -81,6 +81,12 @@
     <ClCompile Include="tank_object.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
+    <ClCompile Include="ready_objects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ready_objects.cpp">
+      <Filter>Source Files\OBJECTS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collisions.h">
@@ -99,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ready_objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

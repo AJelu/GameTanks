@@ -1,27 +1,22 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+
+using namespace sf;
 
 class BaseCollision
 {
 private:
-	int x_, y_;
-	float rotation_vector_x_, rotation_vector_y_;
-	//for optimisation:
-	bool set_new_vector;
-	int temp_x_, temp_y_;
+	Vector2f coordinate_;
 public:
 	BaseCollision();
-	BaseCollision(int x_coordinate, int y_coordinate);
+	BaseCollision(Vector2f const& coordinate);
 
-	int GetCoordinateX();
-	int GetCoordinateY();
-	int GetCoordinateByRotateX();
-	int GetCoordinateByRotateY();
+	Vector2f GetCoordinate();
 
-	void SetCoordinate(int x_coordinate, int y_coordinate);
-	virtual void SetRotation(float rotation_vector_x, float rotation_vector_y);
+	void SetCoordinate(Vector2f const& coordinate);
 
 	//check if coordinate is in figure
-	virtual bool CoordinatesInFigure(int x_coordinate, int y_coordinate) = 0;
+	virtual bool CoordinatesInFigure(Vector2f const& coordinate) = 0;
 };
 
 class RoundCollision : public BaseCollision
@@ -31,10 +26,10 @@ private:
 
 public:
 	RoundCollision();
-	RoundCollision(int x_coordinate, int y_coordinate, int radius);
+	RoundCollision(Vector2f const& coordinate, float const& radius);
 
-	int GetRadius();
-	void SetRadius(int radius);
+	float GetRadius();
+	void SetRadius(float const& radius);
 
-	bool CoordinatesInFigure(int x_coordinate, int y_coordinate) override;
+	bool CoordinatesInFigure(Vector2f const& coordinate) override;
 };

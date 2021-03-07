@@ -43,7 +43,7 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot)
 		if (shot != nullptr) {
 			shot->SetSpeedMove(speed_shot_);
 			shot->SetDistanceMove(shot_distance_);
-			shot->SetRotationVector(GetVectorX(), GetVectorY());
+			shot->SetRotationVector(this->GetVectorX(), this->GetVectorY());
 			this->StartAudioAction("shot", false);
 			return shot;
 		}
@@ -64,19 +64,23 @@ void TankObject::RecalculateState(float const& game_time) //+recalculate time_to
 	}
 }
 
-void TankObject::MoveUp() { SetDistanceMove(10); }
+void TankObject::MoveUp()
+{ SetDistanceMove(5); }
+	SetDistanceMove(10);
+void TankObject::MoveDown()
+{ SetDistanceMove(-5); }
+void TankObject::MoveDown()
+void TankObject::MoveRight()
+{ SetRotationDegree(5); }
+{ SetDistanceMove(-5); }
+void TankObject::MoveLeft()
+{ SetRotationDegree(-5); }
+}
 
-void TankObject::MoveDown() { SetDistanceMove(-10); }
-
-void TankObject::MoveRight() { SetRotationDegree(10); }
-
-void TankObject::MoveLeft() { SetRotationDegree(-10); }
-
-float TankObject::GetSpeedShot() { return speed_shot_; }
-
-float TankObject::GetShotDistance() { return shot_distance_; }
-
-float TankObject::GetTimeToNextShot() { return time_to_next_shot_; }
+void TankObject::MoveLeft()
+{
+	SetRotationDegree(-10);
+}
 
 float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
 
