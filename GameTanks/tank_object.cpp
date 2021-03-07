@@ -66,21 +66,12 @@ void TankObject::RecalculateState(float const& game_time) //+recalculate time_to
 
 void TankObject::MoveUp()
 { SetDistanceMove(5); }
-	SetDistanceMove(10);
 void TankObject::MoveDown()
 { SetDistanceMove(-5); }
-void TankObject::MoveDown()
 void TankObject::MoveRight()
 { SetRotationDegree(5); }
-{ SetDistanceMove(-5); }
 void TankObject::MoveLeft()
 { SetRotationDegree(-5); }
-}
-
-void TankObject::MoveLeft()
-{
-	SetRotationDegree(-10);
-}
 
 float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
 

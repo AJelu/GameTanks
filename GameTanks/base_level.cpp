@@ -13,10 +13,6 @@ BaseLevel::BaseLevel()
 	this->AddEnemyObject(new RedTank(1, 300, 400));
 	this->AddEnemyObject(new RedTank(1, 600, 400));
 	this->AddEnemyObject(new RedTank(1, 600, 600));
-	Player_client = TankObject(1, 
-		sf::Vector2f(200, 200), sf::Vector2f(60, 157), 
-		"Data/Tank4.png", 
-		5, 2, 1,   200  , 0, 20 , 1000, 200, 500);
 
 
 	/* temporarily for the test */
@@ -36,27 +32,13 @@ BaseLevel::BaseLevel()
 View& BaseLevel::Draw(RenderWindow& window)
 {
 	window.draw(Sprite_background_);
+
 	int i;
 	for (i = 0; i < Statis_objects_.size(); i++) 
 	{ Statis_objects_[i]->Draw(window, nullptr); }
 	
 	for (i = 0; i < Enemy_objects_.size(); i++)
 	{ Enemy_objects_[i]->Draw(window, nullptr); }
-	
-	Player_client.Draw(window, nullptr);
-	Player_camera.setCenter(Player_client.GetCoordinateCentre().x, 
-							Player_client.GetCoordinateCentre().y);
-
-	animation.Draw(window, nullptr); /* temporarily for the test */
-
-	window.draw(Sprite_border_);
-
-	return Player_camera;
-}
-
-void BaseLevel::AddUiObject(UiObject Ui_object)
-{
-}
 
 	for (i = 0; i < Players_objects_.size(); i++)
 	{ Players_objects_[i]->Draw(window, nullptr); }
@@ -66,6 +48,17 @@ void BaseLevel::AddUiObject(UiObject Ui_object)
 
 	for (i = 0; i < Ui_objects_.size(); i++)
 	{ Ui_objects_[i]->Draw(window, nullptr); }
+	
+	Player_client.Draw(window, nullptr);
+	Player_camera.setCenter(Players_objects_[0]->GetCoordinateCentre().x,
+							Players_objects_[0]->GetCoordinateCentre().y);
+
+	animation.Draw(window, nullptr); /* temporarily for the test */
+
+	window.draw(Sprite_border_);
+
+	return Player_camera;
+
 }
 
 void BaseLevel::AddUiObject(UiObject* Ui_object)
