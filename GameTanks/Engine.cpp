@@ -44,8 +44,11 @@ int Engine::Start()
 
 void Engine::Stop() { Main_window.close(); }
 
-void Engine::ChangeLevel(BaseLevel level)
+void Engine::ChangeLevel(BaseLevel* level)
 {
+    if (level != nullptr) {
+        Point_level = level;
+    }
 }
 
 void Engine::GameTimer(float& timer)
