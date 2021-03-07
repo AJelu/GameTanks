@@ -8,7 +8,6 @@ TankObject::TankObject() : MovebleObject()
 	SetTimeToNextShot(0);
 }
 
-
 TankObject::TankObject(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate,
@@ -27,10 +26,7 @@ TankObject::TankObject(int const& id_object,
 	SetTimeToNextShot(0);
 }
 
-MovebleObject* TankObject::Shot()
-{
-	return nullptr;
-}
+MovebleObject* TankObject::Shot() { return nullptr; }
 
 bool TankObject::CanCreateShot()
 {
@@ -70,32 +66,30 @@ void TankObject::RecalculateState(float const& game_time) //+recalculate time_to
 
 void TankObject::MoveUp()
 { SetDistanceMove(5); }
-
+	SetDistanceMove(10);
 void TankObject::MoveDown()
 { SetDistanceMove(-5); }
-
+void TankObject::MoveDown()
 void TankObject::MoveRight()
 { SetRotationDegree(5); }
-
+{ SetDistanceMove(-5); }
 void TankObject::MoveLeft()
 { SetRotationDegree(-5); }
+}
 
-float TankObject::GetSpeedShot() 
-{ return speed_shot_; }
-float TankObject::GetShotDistance() 
-{ return shot_distance_; }
-float TankObject::GetTimeToNextShot() 
-{ return time_to_next_shot_; }
-float TankObject::GetTimeFreezeShot() 
-{ return time_freeze_shot_; }
+void TankObject::MoveLeft()
+{
+	SetRotationDegree(-10);
+}
 
-void TankObject::SetSpeedShot(float const& speed_shot)
-{ speed_shot_ = speed_shot; }
+float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
 
-void TankObject::SetShotDistance(float const& shot_distance)
+void TankObject::SetSpeedShot(float const& speed_shot) { speed_shot_ = speed_shot; }
+
+void TankObject::SetShotDistance(float const& shot_distance) 
 { shot_distance_ = shot_distance; }
 
-void TankObject::SetTimeToNextShot(float const& time_to_next_shot)
+void TankObject::SetTimeToNextShot(float const& time_to_next_shot) 
 { time_to_next_shot_ = time_to_next_shot; }
 
 void TankObject::SetTimeFreezeShot(float const& time_freeze_shot)

@@ -228,7 +228,7 @@ void VisibleObject::VectorRotation(float const& rotation_degree)
 {
 	float rotation_degree_ = -rotation_degree;
 	float new_vector_x, new_vector_y;
-	float to_radian = rotation_degree_ * M_PI / 180.0f;
+	float to_radian = float(rotation_degree_ * M_PI / 180.0f);
 	new_vector_x = vector_rotate_x_ * cos(to_radian) - 
 					vector_rotate_y_ * sin(to_radian);
 	new_vector_y = vector_rotate_x_ * sin(to_radian) + 

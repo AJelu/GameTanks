@@ -25,6 +25,9 @@ private:
 
 	TankObject Player_server;
 	TankObject Player_client;
+	VisibleObject animation;/*+++*/
+
+	View Player_camera;
 
 	Texture Texture_background_;
 	Sprite Sprite_background_;
@@ -34,7 +37,7 @@ private:
 	void CalculateCollisionOnLevel(); 
 public:
 	BaseLevel();
-	void Draw(RenderWindow& window); 
+	View& Draw(RenderWindow& window); ////////////////
 	
 	void AddUiObject(UiObject* Ui_object);
 	void AddStatisObject(GameObject* Static_objects);

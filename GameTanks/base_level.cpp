@@ -13,9 +13,27 @@ BaseLevel::BaseLevel()
 	this->AddEnemyObject(new RedTank(1, 300, 400));
 	this->AddEnemyObject(new RedTank(1, 600, 400));
 	this->AddEnemyObject(new RedTank(1, 600, 600));
+	Player_client = TankObject(1, 
+		sf::Vector2f(200, 200), sf::Vector2f(60, 157), 
+		"Data/Tank4.png", 
+		5, 2, 1,   200  , 0, 20 , 1000, 200, 500);
+
+
+	/* temporarily for the test */
+	animation = VisibleObject(2,
+		sf::Vector2f(270, 270), sf::Vector2f(165, 189),
+		"Data/BoomTest2.png", 
+		36, 1);
+	/* temporarily for the test */
+
+
+	/* Initialization border map: */
+	Texture_border_.loadFromFile("Data/Map_border.png");
+	Sprite_border_.setTexture(Texture_border_);
+	Sprite_border_.setPosition(0, 0);
 }
 
-void BaseLevel::Draw(RenderWindow& window)
+View& BaseLevel::Draw(RenderWindow& window)
 {
 	window.draw(Sprite_background_);
 	int i;
@@ -24,6 +42,21 @@ void BaseLevel::Draw(RenderWindow& window)
 	
 	for (i = 0; i < Enemy_objects_.size(); i++)
 	{ Enemy_objects_[i]->Draw(window, nullptr); }
+	
+	Player_client.Draw(window, nullptr);
+	Player_camera.setCenter(Player_client.GetCoordinateCentre().x, 
+							Player_client.GetCoordinateCentre().y);
+
+	animation.Draw(window, nullptr); /* temporarily for the test */
+
+	window.draw(Sprite_border_);
+
+	return Player_camera;
+}
+
+void BaseLevel::AddUiObject(UiObject Ui_object)
+{
+}
 
 	for (i = 0; i < Players_objects_.size(); i++)
 	{ Players_objects_[i]->Draw(window, nullptr); }
