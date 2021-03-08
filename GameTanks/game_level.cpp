@@ -1,7 +1,6 @@
 #include "Levels.h"
 
-GameLevel::GameLevel() : BaseLevel()
-{
+GameLevel::GameLevel() : BaseLevel() {
 	/* Initialization tile map: */
 	SetBackgroundTexture("Data/Map.png");
 
@@ -23,8 +22,8 @@ GameLevel::GameLevel() : BaseLevel()
 		48, 1, 1));
 	this->AddStatisObject(new GameObject(2,
 		sf::Vector2f(600, 600), sf::Vector2f(115, 115),
-		"Data/BoomTest4.png",
-		48, 1, 1));
+		"Data/BoomTest5.png",
+		22, 1, 1));
 
 
 	/* Initialization border map: */

@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::cout << "Console message: Game Run!" << endl; //this is for the test!
+    std::cout << "Console message: Game Run!" << std::endl; //this is for the test!
     RunGame();
     return 0;
 }
@@ -27,9 +27,9 @@ void RunGame()
         }
         else if (state == 2) {
             engine.Stop();
-            std::cout << "Console message: Game Restart!" << endl; //this is for the test!
+            std::cout << "Console message: Game Restart!" << std::endl; //this is for the test!
             RunGame();
         }  
     }
-    std::cout << "Console message: Game Quit!" << endl; //this is for the test!
+    std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
 }

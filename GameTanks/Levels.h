@@ -4,7 +4,6 @@
 #include "ready_objects.h"
 #include "settings.h"
 
-using namespace sf;
 
 class BaseLevel
 {
@@ -22,11 +21,11 @@ private:
 	std::vector <BaseObject*> Need_sync_with_client_objects_;
 
 	//list game  die objects
-	int size_level_height_, size_level_width_;
+	int size_level_height_, size_level_width_, size_level_border_ = 50;
 
 	VisibleObject* Watch_object_;
 
-	View Player_camera;
+	View Player_camera_;
 
 	//background and border:
 	Texture Texture_background_;
@@ -47,8 +46,8 @@ public:
 	void AddShotObject(MovebleObject* Shot_objects);
 
 	void SetWatchObject(VisibleObject* Watch_object);
-	void SetBackgroundTexture(string texture_address);
-	void SetBorderTexture(string texture_address);
+	void SetBackgroundTexture(std::string texture_address);
+	void SetBorderTexture(std::string texture_address);
 
 	BaseObject* GetObjectToSendClient();
 	

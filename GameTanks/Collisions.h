@@ -22,7 +22,7 @@ public:
 class RoundCollision : public BaseCollision
 {
 private:
-	int r_;
+	float r_;
 
 public:
 	RoundCollision();

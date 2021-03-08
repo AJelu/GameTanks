@@ -1,7 +1,6 @@
 #include "ready_objects.h"
 
-MovebleObject* RedTank::Shot()
-{
+MovebleObject* RedTank::Shot() {
 	//create chot
 	return new RedTank(1, this->GetCoordinateCentre().x, this->GetCoordinateCentre().y);
 }
@@ -17,31 +16,28 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		100,	//rotation speed
 		100,	//speed shot
 		400,	//shot distance
-		1500)	//time freeze shot (to next shot)
-{
+		1500) {	//time freeze shot (to next shot)
 	this->AddCollision(new RoundCollision(Vector2f(0, 0), 50));
 }
 
-void RedTank::PlayAnimateDie()
-{
+void RedTank::PlayAnimateDie() {
 }
 
-void RedTank::PlayAnimateMovePlus()
-{
+void RedTank::PlayAnimateLife() {
+}
+
+void RedTank::PlayAnimateMovePlus() {
 	this->StartPlayAnimation(1, 1, 5, 50);
 }
 
-void RedTank::PlayAnimateMoveMinus()
-{
+void RedTank::PlayAnimateMoveMinus() {
 	this->StartPlayAnimation(1, 5, 1, 150);
 }
 
-void RedTank::PlayAnimateRotateÑlockwise()
-{
+void RedTank::PlayAnimateRotateÑlockwise() {
 	this->StartPlayAnimation(2, 1, 5, 70);
 }
 
-void RedTank::PlayAnimateRotateÑounterclockwise()
-{
+void RedTank::PlayAnimateRotateÑounterclockwise() {
 	this->StartPlayAnimation(2, 5, 1, 70);
 }

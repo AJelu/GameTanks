@@ -6,16 +6,10 @@
 #include <iostream>
 #include "collisions.h"
 
-using namespace std;
-using namespace sf;
-
 //this objects using in levels to create game experience: game menu, game levels
 
 
-
-
-class BaseObject
-{
+class BaseObject{
 private:
 	int id_object_; //for synchronize by lan
 
@@ -29,25 +23,23 @@ public:
 	virtual ~BaseObject();
 };
 
-class AudioObject : public BaseObject
-{
+class AudioObject : public BaseObject{
 private:
-	vector <string> audio_action_name_;
-	vector <Sound*> sounds_file_;
-	vector <SoundBuffer*> sounds_buffer_;
-	vector <int> sounds_volume_;
+	std::vector <std::string> audio_action_name_;
+	std::vector <Sound*> sounds_file_;
+	std::vector <SoundBuffer*> sounds_buffer_;
+	std::vector <int> sounds_volume_;
 public:
 	AudioObject();
 	AudioObject(int const& id_object);
-	void AddAudioAction(string const& audio_action,
-						string const& audio_file, int const& volume = 100);
-	bool StartAudioAction(string const& audio_action, bool looped = false);
-	bool StopAudioAction(string const& audio_action);
+	void AddAudioAction(std::string const& audio_action_name,
+						std::string const& audio_file, int const& volume = 100);
+	bool StartAudioAction(std::string const& audio_action, bool looped = false);
+	bool StopAudioAction(std::string const& audio_action);
 	~AudioObject() override;
 };
 
-class VisibleObject : public AudioObject
-{
+class VisibleObject : public AudioObject{
 private:
 	bool need_redraw_image_; //using for redraw screen. if have changing - true
 
@@ -80,7 +72,7 @@ public:
 	VisibleObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		string const& texture, int const& frame_count_x, int const& frame_count_y);
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 
 	//animatinos
 	void StartPlayAnimation(int const& tile_level, 
@@ -91,8 +83,8 @@ public:
 
 	//get object parameters
 	bool GetNeedRedrawImage(); //return true if need update image
-	sf::Vector2f GetCoordinateCentre();
-	sf::Vector2f GetOffsetSprite();
+	const sf::Vector2f& GetCoordinateCentre();
+	const sf::Vector2f& GetOffsetSprite();
 	int GetHeightSprite();
 	int GetWidthSprite();
 	float GetVectorX();
@@ -102,7 +94,7 @@ public:
 	void RestorePreviousState(); 
 	void SafeState();
 
-	//set vector...
+	//vector...
 	void SetRotationVector(float const& vector_x, float const& vector_y);
 	void VectorRotation(float const& rotation_degree);
 	void SetRotation(float const& rotation_by_gradus);
@@ -111,66 +103,62 @@ public:
 	//for move
 	void SetCoordinate(sf::Vector2f const& coordinate_centre);
 	void MoveByVector(float const& length_move);
-	float GetDistanceToPoint(sf::Vector2f const& point);
+	float GetDistanceToPoint(const sf::Vector2f& point);
 
 	//view`s part
-	bool SetTexture(string const& texture, 
+	bool SetTexture(std::string const& texture,
 						int const& frame_count_x, int const& frame_count_y);
 	void SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate);
 
-	void Draw(sf::RenderWindow& window, 
-				View* const& Player_camera, bool const& plus_offset_camera = false);
+	virtual void Draw(sf::RenderWindow& window);
 };
 
-class UiObject : public VisibleObject
-{
+class UiObject : public VisibleObject {
 private:
 	bool focus_on_this_, down_on_this_, up_on_this_;
-	string text_;
+	std::string text_;
 
+	sf::Vector2f coordinate_centre_;
+	sf::View* Camera_;
 public:
 	UiObject();
 	UiObject(int const& id_object,
-		sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& coordinate_centre, sf::View* Camera,
 		sf::Vector2f const& offset_sprite_coordinate,
-		string const& texture, int const& frame_count_x, int const& frame_count_y);
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 	bool IsFocusOnThis(int const& x, int const& y);
 	bool IsDownOnThis(int const& x, int const& y);
 	bool IsUpOnThis(int const& x, int const& y);
-	void AddInputText(string const& text);
-	void SetText(string const& text);
+	void AddInputText(std::string const& text);
+	void SetText(std::string const& text);
 
+	bool GetFocusOnThis(bool clear = false);
+	bool GetDownOnThis(bool clear = false);
+	bool GetUpOnThis(bool clear = false);
+	std::string GetText();
 
-	bool GetFocusOnThis();
-	bool GetDownOnThis();
-	bool GetUpOnThis();
-	string GetText();
+	void Draw(sf::RenderWindow& window) override;
 };
 
-class Button : public UiObject
-{
+class Button : public UiObject {
 public:
 
 };
 
-//others ui objects
 
-
-
-class GameObject : public VisibleObject
-{
+class GameObject : public VisibleObject {
 private:
 	int life_level_;
-	float max_collision_distance;
-	bool collision_off;
+	float max_collision_distance_;
+	bool collision_off_;
 
-	vector <RoundCollision*> collisions_;
+	std::vector <RoundCollision*> Collisions_;
 public:
 	GameObject();
 	GameObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		string const& texture, int const& frame_count_x, int const& frame_count_y,
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& life_level);
 
 	void SetLifeLevel(int const& life_level);
@@ -178,21 +166,23 @@ public:
 
 	//for collisions
 	void AddCollision(RoundCollision* new_colision);
-	float SafeDistanceToCollision(GameObject* game_object);
-	bool Collision(GameObject* Game_object, bool healt = false);
+	float SafeDistanceToCollision(GameObject* game_object, 
+		int level_size_x, int level_size_y, int level_size_border);
+	bool Collision(GameObject* Game_object, 
+		int level_size_x, int level_size_y, int level_size_border, bool healt = false);
 
 	void CollisionOff();//ignore all collisions
 	void CollisionOn();
 
 	//for animation
 	virtual void PlayAnimateDie(); ///need override in daughter
+	virtual void PlayAnimateLife(); ///need override in daughter
 
 	~GameObject() override;
 };
 
 
-class MovebleObject : public GameObject
-{
+class MovebleObject : public GameObject {
 private:
 	float speed_/*px by sec*/, distance_, freeze_time_;
 	float rotation_speed_/*gradus by sec*/, rotation_degree_;
@@ -201,7 +191,7 @@ public:
 	MovebleObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		string const& texture, int const& frame_count_x, int const& frame_count_y,
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& life_level, float const& speed, float const& freeze_time, 
 		float const& rotation_speed);
 
@@ -231,11 +221,9 @@ public:
 	virtual void PlayAnimateRotate—ounterclockwise(); ///need override in daughter
 };
 
-class TankObject : public MovebleObject
-{
+class TankObject : public MovebleObject {
 private:
 	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_;
-
 protected:
 	virtual MovebleObject* Shot();
 public:
@@ -243,7 +231,7 @@ public:
 	TankObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		string const& texture, int const& frame_count_x, int const& frame_count_y,
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& life_level, float const& speed, float const& freeze_time,
 		float const& rotation_speed,
 		float const& speed_shot, float const& shot_distance, 
