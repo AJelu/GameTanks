@@ -25,19 +25,19 @@ private:
 
 	VisibleObject* Watch_object_;
 
-	View Player_camera_;
+	sf::View Player_camera_;
 
 	//background and border:
-	Texture Texture_background_;
-	Sprite Sprite_background_;
-	Texture Texture_border_;
-	Sprite Sprite_border_;
+	sf::Texture Texture_background_;
+	sf::Sprite Sprite_background_;
+	sf::Texture Texture_border_;
+	sf::Sprite Sprite_border_;
 
 	void CalculateCollisionOnLevel(); 
 	void CameraControl();
 public:
 	BaseLevel();
-	View& Draw(RenderWindow& window); ////////////////
+	sf::View& Draw(sf::RenderWindow& window); ////////////////
 	
 	void AddUiObject(UiObject* Ui_object);
 	void AddStatisObject(GameObject* Static_objects);

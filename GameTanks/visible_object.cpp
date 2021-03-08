@@ -45,7 +45,7 @@ bool VisibleObject::ShowTile() {
 	x1 = this->GetWidthSprite() * (tile_frame_current_ - 1);
 	y1 = this->GetHeightSprite() * (tile_level_ - 1);
 
-	Sprite_object_.setTextureRect(IntRect(x1, y1, this->GetWidthSprite(), this->GetHeightSprite()));
+	Sprite_object_.setTextureRect(sf::IntRect(x1, y1, this->GetWidthSprite(), this->GetHeightSprite()));
 
 	return true;
 }
@@ -178,7 +178,7 @@ void VisibleObject::SetCoordinate(sf::Vector2f const& coordinate_centre) {
 }
 
 void VisibleObject::MoveByVector(float const& length_move) {
-	this->SetCoordinate(Vector2f(
+	this->SetCoordinate(sf::Vector2f(
 		this->GetCoordinateCentre().x + length_move * vector_rotate_x_,
 		this->GetCoordinateCentre().y + length_move * -vector_rotate_y_));
 }
@@ -214,7 +214,7 @@ void VisibleObject::SetRotation(float const& rotation_by_gradus) {
 	this->VectorRotation(rotation_by_gradus);
 }
 
-Vector2f VisibleObject::ChangeVectorByDirection(Vector2f const& vector) {
+sf::Vector2f VisibleObject::ChangeVectorByDirection(sf::Vector2f const& vector) {
 	float rotation_degree_ = -this->CalculateGradus();
 	float new_vector_x, new_vector_y;
 	float to_radian = rotation_degree_ * (float)M_PI / 180.0f;
@@ -222,7 +222,7 @@ Vector2f VisibleObject::ChangeVectorByDirection(Vector2f const& vector) {
 		vector.y * sin(to_radian));
 	new_vector_y = (vector.x * sin(to_radian) +
 		vector.y * cos(to_radian));
-	return Vector2f(new_vector_x, new_vector_y);
+	return sf::Vector2f(new_vector_x, new_vector_y);
 }
 ;
 bool VisibleObject::SetTexture(std::string const& texture,

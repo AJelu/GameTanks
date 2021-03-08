@@ -16,10 +16,10 @@
 
 class Engine {
 private:
-	Clock Game_clock_;
-	RenderWindow Main_window_; // this object is responsible for all render
+	sf::Clock Game_clock_;
+	sf::RenderWindow Main_window_; // this object is responsible for all render
 	BaseLevel* Point_level_;
-	Font Main_font_;
+	sf::Font Main_font_;
 
 	bool im_server_;
 

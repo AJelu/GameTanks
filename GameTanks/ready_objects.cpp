@@ -17,7 +17,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		100,	//speed shot
 		400,	//shot distance
 		1500) {	//time freeze shot (to next shot)
-	this->AddCollision(new RoundCollision(Vector2f(0, 0), 50));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
 void RedTank::PlayAnimateDie() {

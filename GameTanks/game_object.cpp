@@ -69,7 +69,7 @@ bool GameObject::Collision(GameObject* Game_object,
 				int level_size_x, int level_size_y, int level_size_border,
 				bool healt) {
 	if (collision_off_) return true;
-	Vector2f point_1, point_2;
+	sf::Vector2f point_1, point_2;
 	float distance;
 	if (Game_object != nullptr) {
 		for (int i = 0; i < (int)this->Collisions_.size(); i++) {

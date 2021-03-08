@@ -5,7 +5,7 @@ BaseLevel::BaseLevel() {
 	size_level_height_ = SCREEN_RESOLUTION_Y;
 }
 
-View& BaseLevel::Draw(RenderWindow& window) {
+sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	window.draw(Sprite_background_);
 	int i;
 	for (i = 0; i < (int)Statis_objects_.size(); i++)	Statis_objects_[i]->Draw(window);	
@@ -65,11 +65,11 @@ void BaseLevel::RecvObjectFromServer() {
 
 bool BaseLevel::InputKeyboard(int player_nuber, sf::Keyboard::Key Key) {
 	if (player_nuber >= 0 && player_nuber < (int)Players_objects_.size()) {
-		if (Key == Keyboard::Up) Players_objects_[player_nuber]->MoveUp();
-		if (Key == Keyboard::Down) Players_objects_[player_nuber]->MoveDown();
-		if (Key == Keyboard::Left) Players_objects_[player_nuber]->MoveLeft();
-		if (Key == Keyboard::Right) Players_objects_[player_nuber]->MoveRight();
-		if (Key == Keyboard::Space) {
+		if (Key == sf::Keyboard::Up) Players_objects_[player_nuber]->MoveUp();
+		if (Key == sf::Keyboard::Down) Players_objects_[player_nuber]->MoveDown();
+		if (Key == sf::Keyboard::Left) Players_objects_[player_nuber]->MoveLeft();
+		if (Key == sf::Keyboard::Right) Players_objects_[player_nuber]->MoveRight();
+		if (Key == sf::Keyboard::Space) {
 			this->AddShotObject(Players_objects_[player_nuber]->CreateShot());
 			//start test code: explosions
 			Statis_objects_[0]->StartPlayAnimation(1, 1, 10, 50);

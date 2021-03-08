@@ -2,7 +2,7 @@
 #include "run_game.h"
 
 int main() {
-    std::cout << "Console message: Game Run!" << endl; //this is for the test!
+    std::cout << "Console message: Game Run!" << std::endl; //this is for the test!
     RunGame();
     return 0;
 }

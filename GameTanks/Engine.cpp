@@ -7,21 +7,21 @@ Engine::Engine() {
 }
 
 void Engine::CreateResolutionWindowMode() {
-    Vector2f resolution;
+    sf::Vector2f resolution;
     resolution.x = SCREEN_RESOLUTION_X;
     resolution.y = SCREEN_RESOLUTION_Y;
 
-    Main_window_.create(VideoMode(int(resolution.x), int(resolution.y)), "TANKS", Style::Default);
+    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Default);
     Main_window_.setFramerateLimit(60);
 }
 
 int Engine::Start() {
-    Event game; 
+    sf::Event game;
     if (Main_window_.isOpen()) { //launch all game events during game time iteration
         while (Main_window_.pollEvent(game)) {
-            if (game.type == Event::Closed) Main_window_.close(); //close the window
-            if (game.type == Event::KeyReleased && game.key.code == Keyboard::Q) return 1;
-            if (game.type == Event::KeyReleased && game.key.code == Keyboard::R) return 2;
+            if (game.type == sf::Event::Closed) Main_window_.close(); //close the window
+            if (game.type == sf::Event::KeyReleased && game.key.code == sf::Keyboard::Q) return 1;
+            if (game.type == sf::Event::KeyReleased && game.key.code == sf::Keyboard::R) return 2;
         } //touch 'Q' to exit and touch 'R' to restart
 
         float game_time;

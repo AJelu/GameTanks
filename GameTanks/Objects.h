@@ -26,8 +26,8 @@ public:
 class AudioObject : public BaseObject{
 private:
 	std::vector <std::string> audio_action_name_;
-	std::vector <Sound*> sounds_file_;
-	std::vector <SoundBuffer*> sounds_buffer_;
+	std::vector <sf::Sound*> sounds_file_;
+	std::vector <sf::SoundBuffer*> sounds_buffer_;
 	std::vector <int> sounds_volume_;
 public:
 	AudioObject();
@@ -53,14 +53,14 @@ private:
 	float current_frame_animation_time_; // time for current frame
 
 	int frame_count_x_, frame_count_y_; // count frame on texture 1..x
-	Texture Texture_object_;
-	Sprite Sprite_object_;
+	sf::Texture Texture_object_;
+	sf::Sprite Sprite_object_;
 
 	float vector_rotate_x_, vector_rotate_y_;
 
 	//for return previous state
 	float previous_vector_rotate_x_, previous_vector_rotate_y_;
-	Vector2f previous_position_centre_;
+	sf::Vector2f previous_position_centre_;
 
 	void SetNeedRedrawImage();
 	bool RecalculateVector();
@@ -98,7 +98,7 @@ public:
 	void SetRotationVector(float const& vector_x, float const& vector_y);
 	void VectorRotation(float const& rotation_degree);
 	void SetRotation(float const& rotation_by_gradus);
-	Vector2f ChangeVectorByDirection(Vector2f const& vector);
+	sf::Vector2f ChangeVectorByDirection(sf::Vector2f const& vector);
 
 	//for move
 	void SetCoordinate(sf::Vector2f const& coordinate_centre);

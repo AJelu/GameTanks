@@ -9,11 +9,11 @@ void AudioObject::AddAudioAction(std::string const& audio_action_name,
 	if (!audio_action_name.empty() && !audio_file.empty()) {
 		audio_action_name_.push_back(audio_action_name);
 
-		SoundBuffer* sound_buffer = new SoundBuffer();
+		sf::SoundBuffer* sound_buffer = new sf::SoundBuffer();
 		(*sound_buffer).loadFromFile(audio_file);
 		sounds_buffer_.push_back(sound_buffer);
 
-		Sound* sound = new Sound();
+		sf::Sound* sound = new sf::Sound();
 		(*sound).setBuffer(*sound_buffer);
 		sounds_file_.push_back(sound);
 
