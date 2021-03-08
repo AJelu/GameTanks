@@ -12,20 +12,28 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->AddEnemyObject(new RedTank(1, 300, 400));
 	this->AddEnemyObject(new RedTank(1, 600, 400));
 
-	this->AddStatisObject(new GameObject(2,
+	this->AddStaticObject(new GameObject(2,
 		sf::Vector2f(200, 600), sf::Vector2f(108, 124),
 		"Data/BoomTest2.png", 
 		36, 1, 1));
-	this->AddStatisObject(new GameObject(2,
+	this->AddStaticObject(new GameObject(2,
 		sf::Vector2f(400, 600), sf::Vector2f(57, 57),
 		"Data/BoomTest3.png",
 		48, 1, 1));
-	this->AddStatisObject(new GameObject(2,
+	this->AddStaticObject(new GameObject(2,
 		sf::Vector2f(600, 600), sf::Vector2f(115, 115),
 		"Data/BoomTest5.png",
 		22, 1, 1));
 
 
 	/* Initialization border map: */
-	SetBorderTexture("Data/Map_border.png");
+	SetBorderTexture("Data/Map_border.png", 50);
+}
+
+int GameLevel::NextLevel() {
+	return BaseLevel::NextLevel();
+}
+
+bool GameLevel::ExitGame() {
+	return BaseLevel::ExitGame();
 }

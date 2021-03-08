@@ -14,10 +14,10 @@ TankObject::TankObject(int const& id_object,
 	int const& life_level, float const& speed, float const& freeze_time,
 	float const& rotation_speed,
 	float const& speed_shot, float const& shot_distance, 
-	float const& time_freeze_shot)
+	float const& time_freeze_shot, GameObject* Parrent)
 	: MovebleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y,
-		life_level, speed, freeze_time, rotation_speed) {
+		life_level, speed, freeze_time, rotation_speed, Parrent) {
 	SetSpeedShot(speed_shot);
 	SetShotDistance(shot_distance);
 	SetTimeFreezeShot(time_freeze_shot);
@@ -30,7 +30,7 @@ bool TankObject::CanCreateShot() { return time_to_next_shot_ <= 0; }
 
 //return null. no shot. overriding in daughter classes
 MovebleObject* TankObject::CreateShot(bool const& forcibly_shot) { 
-	if (time_to_next_shot_ <= 0 || forcibly_shot) {
+	if ((time_to_next_shot_ <= 0 && this->GetFreezeTime() <= 0) || forcibly_shot) {
 		time_to_next_shot_ = time_freeze_shot_;
 		MovebleObject* shot = Shot();
 		if (shot != nullptr) {

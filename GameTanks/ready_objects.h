@@ -6,12 +6,13 @@ class RedTank : public TankObject {
 protected:
 	virtual MovebleObject* Shot() override;
 public:
-	RedTank(int const& id_object, float const& spawn_x, float const& spawn_y);
+	RedTank(int const& id_object, float const& spawn_x, float const& spawn_y, GameObject* Parrent = nullptr);
 
-	virtual void PlayAnimateDie() override;
-	virtual void PlayAnimateLife() override;
-	virtual void PlayAnimateMovePlus() override;
-	virtual void PlayAnimateMoveMinus() override;
-	virtual void PlayAnimateRotate—lockwise() override;
-	virtual void PlayAnimateRotate—ounterclockwise() override;
+	void PlayAnimateDie() override;
+	void PlayAnimateLife() override;
+	void PlayAnimateMovePlus() override;
+	void PlayAnimateMoveMinus() override;
+	void PlayAnimateRotate—lockwise() override;
+	void PlayAnimateRotate—ounterclockwise() override;
+	void RestoreLife() override;
 };

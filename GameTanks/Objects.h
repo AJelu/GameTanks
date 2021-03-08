@@ -152,22 +152,35 @@ private:
 	float max_collision_distance_;
 	bool collision_off_;
 
+	float time_to_respawn_;
+
 	std::vector <RoundCollision*> Collisions_;
+
+	GameObject* Parrent_;
 public:
 	GameObject();
 	GameObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
-		int const& life_level);
+		int const& life_level, GameObject* Parrent = nullptr);
 
-	void SetLifeLevel(int const& life_level);
+	void SetLifeLevel(int const& life_level, bool const& add_to_previous = false);
+	void SetTimeToRespawn(float const& time_to_respawn, bool const& add_to_previous = false);
 	int GetLifeLevel();
+	float GetTimeToRespawn();
+	GameObject* GetPerrent();
+
+	virtual void RestoreLife();
+
+	//for recalculate time to respawn
+	virtual void RecalculateState(float const& game_time);
 
 	//for collisions
-	void AddCollision(RoundCollision* new_colision);
-	float SafeDistanceToCollision(GameObject* game_object, 
+	void AddCollision(RoundCollision* New_colision);
+	float SafeDistanceToCollision(GameObject* Game_object,
 		int level_size_x, int level_size_y, int level_size_border);
+	float SafeDistanceToCollision(GameObject* Game_object);
 	bool Collision(GameObject* Game_object, 
 		int level_size_x, int level_size_y, int level_size_border, bool healt = false);
 
@@ -193,7 +206,7 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& life_level, float const& speed, float const& freeze_time, 
-		float const& rotation_speed);
+		float const& rotation_speed, GameObject* Parrent = nullptr);
 
 	//set object parameters
 	void SetSpeedMove(float const& speed); //px by sec
@@ -212,7 +225,7 @@ public:
 	void MoveTo(float const& move_to_x, float const& move_to_y);
 
 	//for recalculate position ((vector+speed+distance)*timer), vector rotate
-	virtual void RecalculateState(float const& game_time);
+	void RecalculateState(float const& game_time) override;
 
 	//for animation
 	virtual void PlayAnimateMovePlus(); ///need override in daughter
@@ -235,7 +248,7 @@ public:
 		int const& life_level, float const& speed, float const& freeze_time,
 		float const& rotation_speed,
 		float const& speed_shot, float const& shot_distance, 
-		float const& time_freeze_shot);
+		float const& time_freeze_shot, GameObject* Parrent);
 
 	bool CanCreateShot();
 	MovebleObject* CreateShot(bool const& forcibly_shot = false);

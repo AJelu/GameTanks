@@ -13,9 +13,9 @@ MovebleObject::MovebleObject(int const& id_object,
 	sf::Vector2f const& offset_sprite_coordinate,
 	std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 	int const& life_level, float const& speed, float const& freeze_time,
-	float const& rotation_speed)
+	float const& rotation_speed, GameObject* Parrent)
 	: GameObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_count_x, frame_count_y, life_level) {
+		texture, frame_count_x, frame_count_y, life_level, Parrent) {
 	this->SetSpeedMove(speed);
 	this->SetFreezeTime(freeze_time);
 	this->SetRotationSpeed(rotation_speed);
@@ -56,6 +56,8 @@ void MovebleObject::MoveTo(float const& move_to_x, float const& move_to_y) {
 
 //for recalculate position ((speed+distance)*timer), vector rotate
 void MovebleObject::RecalculateState(float const& game_time) {
+	GameObject::RecalculateState(game_time);
+
 	if (freeze_time_ > 0) {
 		distance_ = rotation_degree_ = 0;
 		freeze_time_ -= game_time;

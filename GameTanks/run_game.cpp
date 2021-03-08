@@ -8,6 +8,8 @@ int main() {
 }
 
 void RunGame() {
+    srand((unsigned int)time(NULL));
+
     Engine engine;
 
     GameLevel Game_level;
