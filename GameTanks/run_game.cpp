@@ -1,15 +1,13 @@
 #include <iostream>
 #include "run_game.h"
 
-int main()
-{
+int main() {
     std::cout << "Console message: Game Run!" << endl; //this is for the test!
     RunGame();
     return 0;
 }
 
-void RunGame()
-{
+void RunGame() {
     Engine engine;
 
     GameLevel Game_level;

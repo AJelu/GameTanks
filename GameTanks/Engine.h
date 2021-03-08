@@ -14,18 +14,14 @@
 		lan_game.cpp
 */
 
-using namespace sf;
-
 class Engine {
 private:
-	Clock Game_clock;
-	RenderWindow Main_window; // this object is responsible for all render
-	BaseLevel* Point_level;
-	Font Main_font;
+	Clock Game_clock_;
+	RenderWindow Main_window_; // this object is responsible for all render
+	BaseLevel* Point_level_;
+	Font Main_font_;
 
-	//View& CameraControl(View& player_camera);
-
-	bool im_server;
+	bool im_server_;
 
 	void GameTimer(float& timer); // create main game timer
 	void GameSpeed(float& timer); // regulates the speed of the game
