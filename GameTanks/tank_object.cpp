@@ -1,10 +1,10 @@
 #include "objects.h"
 
 TankObject::TankObject() : MovebleObject() {
-	SetSpeedShot(1000);
-	SetShotDistance(1000);
-	SetTimeFreezeShot(1000);
-	SetTimeToNextShot(0);
+	this->SetSpeedShot(1000);
+	this->SetShotDistance(1000);
+	this->SetTimeFreezeShot(1000);
+	this->SetTimeToNextShot(0);
 }
 
 TankObject::TankObject(int const& id_object,
@@ -18,10 +18,10 @@ TankObject::TankObject(int const& id_object,
 	: MovebleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y,
 		life_level, speed, freeze_time, rotation_speed, Parrent) {
-	SetSpeedShot(speed_shot);
-	SetShotDistance(shot_distance);
-	SetTimeFreezeShot(time_freeze_shot);
-	SetTimeToNextShot(0);
+	this->SetSpeedShot(speed_shot);
+	this->SetShotDistance(shot_distance);
+	this->SetTimeFreezeShot(time_freeze_shot);
+	this->SetTimeToNextShot(0);
 }
 
 MovebleObject* TankObject::Shot() { return nullptr; }
@@ -78,4 +78,6 @@ void TankObject::SetTimeToNextShot(float const& time_to_next_shot) {
 	time_to_next_shot_ = time_to_next_shot; 
 }
 
-void TankObject::SetTimeFreezeShot(float const& time_freeze_shot) { time_freeze_shot_ = time_freeze_shot; }
+void TankObject::SetTimeFreezeShot(float const& time_freeze_shot) { 
+	time_freeze_shot_ = time_freeze_shot; 
+}

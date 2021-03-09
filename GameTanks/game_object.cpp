@@ -3,7 +3,7 @@
 
 GameObject::GameObject() : VisibleObject() {
 	this->SetLifeLevel(1);
-	CollisionOn();
+	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = nullptr;
 }
@@ -16,7 +16,7 @@ GameObject::GameObject(int const& id_object,
 			: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 				texture, frame_count_x, frame_count_y) {
 	this->SetLifeLevel(life_level);
-	CollisionOn();
+	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = Parrent;
 }
@@ -28,8 +28,8 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 	if (new_life_level < 0)	new_life_level = 0;
 
 	if (life_level_ != new_life_level) {
-		if (new_life_level == 0)	PlayAnimateDie();
-		if (life_level_ == 0)		PlayAnimateLife();
+		if (new_life_level == 0)	this->PlayAnimateDie();
+		if (life_level_ == 0)		this->PlayAnimateLife();
 
 		life_level_ = new_life_level;
 	}
@@ -81,9 +81,11 @@ float GameObject::SafeDistanceToCollision(GameObject* Game_object,
 	result = this->GetCoordinateCentre().x - max_collision_distance_ - level_size_border;
 	temp = this->GetCoordinateCentre().y - max_collision_distance_ - level_size_border;
 	if (temp < result) result = temp;
-	temp = level_size_x - (this->GetCoordinateCentre().x + max_collision_distance_ + level_size_border);
+	temp = level_size_x - (this->GetCoordinateCentre().x + 
+							max_collision_distance_ + level_size_border);
 	if (temp < result) result = temp;
-	temp = level_size_y - (this->GetCoordinateCentre().y + max_collision_distance_ + level_size_border);
+	temp = level_size_y - (this->GetCoordinateCentre().y + 
+							max_collision_distance_ + level_size_border);
 	if (temp < result) result = temp;
 	temp = this->SafeDistanceToCollision(Game_object);
 	if (temp < result) result = temp;
@@ -107,8 +109,7 @@ bool GameObject::Collision(GameObject* Game_object,
 	float distance;
 	if (Game_object != nullptr) {
 		for (int i = 0; i < (int)this->Collisions_.size(); i++) {
-			point_1 = this->ChangeVectorByDirection(
-				this->Collisions_[i]->GetCoordinate());
+			point_1 = this->ChangeVectorByDirection(this->Collisions_[i]->GetCoordinate());
 			point_1.x += this->GetCoordinateCentre().x;
 			point_1.y *= -1;
 			point_1.y += this->GetCoordinateCentre().y;
@@ -148,7 +149,6 @@ void GameObject::CollisionOff() { collision_off_ = true; }
 void GameObject::CollisionOn() { collision_off_ = false; }
 
 GameObject::~GameObject() {
-	for (int i = 0; i < (int)Collisions_.size(); i++) {
+	for (int i = 0; i < (int)Collisions_.size(); i++)
 		if (Collisions_.at(i)) delete Collisions_[i];
-	}
 }

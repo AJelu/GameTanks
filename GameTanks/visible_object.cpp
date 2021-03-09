@@ -45,7 +45,8 @@ bool VisibleObject::ShowTile() {
 	x1 = this->GetWidthSprite() * (tile_frame_current_ - 1);
 	y1 = this->GetHeightSprite() * (tile_level_ - 1);
 
-	Sprite_object_.setTextureRect(sf::IntRect(x1, y1, this->GetWidthSprite(), this->GetHeightSprite()));
+	Sprite_object_.setTextureRect(sf::IntRect(x1, y1, this->GetWidthSprite(), 
+														this->GetHeightSprite()));
 
 	return true;
 }
@@ -67,7 +68,7 @@ float VisibleObject::CalculateGradus() {
 	float rotation_by_gradus =
 		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
 			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+			sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
 	rotation_by_gradus = (rotation_by_gradus * 180.0f) / (float)M_PI; //calculate temp gradus1
 
 	temp_vector_x = 1.0f;//set temp vector
@@ -75,7 +76,7 @@ float VisibleObject::CalculateGradus() {
 	float rotation_by_gradus_buffer =
 		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
 			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+			sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
 	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180.0f) / (float)M_PI;//calculate temp gradus2
  
 	//calculete new gradus
@@ -110,7 +111,7 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 	looped_ = looped and (frame_start != frame_end);
 
 	//set start parameters
-	if (need_restart_animation || AnimationEnd()) {
+	if (need_restart_animation || this->AnimationEnd()) {
 		current_frame_animation_time_ = 0;
 		this->SetTile(tile_level_, animation_frame_start_);
 	}
@@ -128,9 +129,9 @@ void VisibleObject::ForAnimation(float const& game_time){
 		while (current_frame_animation_time_ > animation_speed_for_frame_) {
 			current_frame_animation_time_ -= animation_speed_for_frame_;
 
-			if (!this->AnimationEnd())
-				this->SetTile(tile_level_, 
-					tile_frame_current_ + ((animation_frame_end_ > animation_frame_start_) ? 1 : -1));
+			if (!this->AnimationEnd()) 
+				this->SetTile(tile_level_, tile_frame_current_ + 
+					((animation_frame_end_ > animation_frame_start_) ? 1 : -1));
 			else if (looped_) this->SetTile(tile_level_, animation_frame_start_);
 		}
 	}
@@ -248,9 +249,8 @@ void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate
 }
 
 void VisibleObject::Draw(sf::RenderWindow& window) {
-	if ((Sprite_object_.getTexture()) != &Texture_object_) {
+	if ((Sprite_object_.getTexture()) != &Texture_object_)
 		Sprite_object_.setTexture(Texture_object_);
-	}
 	window.draw(Sprite_object_);
 	need_redraw_image_ = false;
 }

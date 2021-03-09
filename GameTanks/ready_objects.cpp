@@ -24,28 +24,16 @@ MovebleObject* RedTank::Shot() {
 	return t;
 }
 
-void RedTank::PlayAnimateDie() {
-	this->StartPlayAnimation(2, 1, 5, 500);
-}
+void RedTank::PlayAnimateDie() { this->StartPlayAnimation(2, 1, 5, 500); }
 
-void RedTank::PlayAnimateLife() {
-	this->StartPlayAnimation(1, 1, 5, 500);
-}
+void RedTank::PlayAnimateLife() { this->StartPlayAnimation(1, 1, 5, 500); }
 
-void RedTank::PlayAnimateMovePlus() {
-	this->StartPlayAnimation(1, 1, 5, 50);
-}
+void RedTank::PlayAnimateMovePlus() { this->StartPlayAnimation(1, 1, 5, 50); }
 
-void RedTank::PlayAnimateMoveMinus() {
-	this->StartPlayAnimation(1, 5, 1, 150);
-}
+void RedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(1, 5, 1, 150); }
 
-void RedTank::PlayAnimateRotateÑlockwise() {
-	this->StartPlayAnimation(2, 1, 5, 70);
-}
+void RedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(2, 1, 5, 70); }
 
-void RedTank::PlayAnimateRotateÑounterclockwise() {
-	this->StartPlayAnimation(2, 5, 1, 70);
-}
+void RedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(2, 5, 1, 70); }
 
 void RedTank::RestoreLife() { this->SetLifeLevel(5); }

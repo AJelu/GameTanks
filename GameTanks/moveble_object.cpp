@@ -38,7 +38,9 @@ void MovebleObject::SetRotationDegree(float const& rotation_degree, bool const& 
 	else rotation_degree_ = rotation_degree;
 }
 
-void MovebleObject::SetRotationSpeed(float const& rotation_speed) { rotation_speed_ = rotation_speed; }
+void MovebleObject::SetRotationSpeed(float const& rotation_speed) { 
+	rotation_speed_ = rotation_speed; 
+}
 
 //get object parameters
 float MovebleObject::GetSpeedMove() { return speed_; }

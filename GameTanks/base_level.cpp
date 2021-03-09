@@ -39,7 +39,7 @@ void BaseLevel::AddShotObject(MovebleObject* Shot_objects) {
 }
 
 void BaseLevel::SetWatchObject(VisibleObject* Watch_object) { 
-	if (Watch_object != nullptr) { Watch_object_ = Watch_object; } 
+	if (Watch_object != nullptr) Watch_object_ = Watch_object;
 }
 
 void BaseLevel::SetBackgroundTexture(std::string texture_address) {
@@ -65,14 +65,14 @@ void BaseLevel::RecvObjectFromServer() {
 	////////////////////////////////////////////////////////////////////////////////////////
 }
 
-bool BaseLevel::InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key) {
-	if (player_nuber >= 0 && player_nuber < (int)Players_objects_.size()) {
-		if (Key == sf::Keyboard::Up) Players_objects_[player_nuber]->MoveUp();
-		if (Key == sf::Keyboard::Down) Players_objects_[player_nuber]->MoveDown();
-		if (Key == sf::Keyboard::Left) Players_objects_[player_nuber]->MoveLeft();
-		if (Key == sf::Keyboard::Right) Players_objects_[player_nuber]->MoveRight();
+bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key) {
+	if (player_number >= 0 && player_number < (int)Players_objects_.size()) {
+		if (Key == sf::Keyboard::Up) Players_objects_[player_number]->MoveUp();
+		if (Key == sf::Keyboard::Down) Players_objects_[player_number]->MoveDown();
+		if (Key == sf::Keyboard::Left) Players_objects_[player_number]->MoveLeft();
+		if (Key == sf::Keyboard::Right) Players_objects_[player_number]->MoveRight();
 		if (Key == sf::Keyboard::Space) {
-			this->AddShotObject(Players_objects_[player_nuber]->CreateShot());
+			this->AddShotObject(Players_objects_[player_number]->CreateShot());
 			//start test code: explosions-----------------------------------------------------
 			Static_objects_[0]->StartPlayAnimation(1, 1, 10, 50);
 			Static_objects_[1]->StartPlayAnimation(1, 1, 48, 20);
@@ -104,19 +104,16 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		Enemy_objects_[i]->RecalculateState(game_timer);
 		Enemy_objects_[i]->ForAnimation(game_timer);
 	}
-
 	// update animation and state for Players_objects_
 	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		Players_objects_[i]->RecalculateState(game_timer);
 		Players_objects_[i]->ForAnimation(game_timer);
 	}
-
 	// update animation and state for Shot_objects_
 	for (i = 0; i < (int)Shot_objects_.size(); i++) {
 		Shot_objects_[i]->RecalculateState(game_timer);
 		Shot_objects_[i]->ForAnimation(game_timer);
 	}
-
 	// update animation for Ui_objects_
 	for (i = 0; i < (int)Ui_objects_.size(); i++)
 		Ui_objects_[i]->ForAnimation(game_timer);
@@ -264,7 +261,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Enemy_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Enemy_objects_[j]->GetLifeLevel() != 0) {
-							Enemy_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), true);
+							Enemy_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), 
+																						true);
 							if (Enemy_objects_[j]->GetLifeLevel() == 0) {
 								Enemy_objects_[j]->SetDistanceMove(0);
 								Enemy_objects_[j]->SetFreezeTime(5000);
@@ -285,7 +283,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Players_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Players_objects_[j]->GetLifeLevel() != 0) {
-							Players_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), true);
+							Players_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), 
+																						true);
 							if (Players_objects_[j]->GetLifeLevel() == 0) {
 								Players_objects_[j]->SetDistanceMove(0);
 								Players_objects_[j]->SetFreezeTime(5000);
@@ -306,7 +305,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Static_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Static_objects_[j]->GetLifeLevel() != 0) {
-							Static_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), true);
+							Static_objects_[j]->SetLifeLevel(-Shot_objects_[i]->GetLifeLevel(), 
+																						true);
 							if (Static_objects_[j]->GetLifeLevel() == 0) {
 								Static_objects_[j]->SetTimeToRespawn(5000);
 								Dies_objects_.push_back(Static_objects_[j]);
@@ -364,8 +364,10 @@ void BaseLevel::CameraControl() {
 bool BaseLevel::SafePointSpawn(GameObject* Game_object) {
 	float level_size;
 	float cur_procent;
-	if (size_level_height_ > size_level_width_) level_size = float(size_level_height_ - size_level_border_);
-	else										level_size = float(size_level_width_ - size_level_border_);
+	if (size_level_height_ > size_level_width_) 
+		level_size = float(size_level_height_ - size_level_border_);
+	else										
+		level_size = float(size_level_width_ - size_level_border_);
 
 	int i;
 	// check psition Game_object Static_objects_
@@ -373,26 +375,30 @@ bool BaseLevel::SafePointSpawn(GameObject* Game_object) {
 	for (i = 0; i < (int)Static_objects_.size(); i++) {
 		if (Static_objects_[i] != Game_object)
 			if (Static_objects_[i]->SafeDistanceToCollision(Game_object,
-				size_level_width_, size_level_height_, size_level_border_) < cur_procent) return false;
+				size_level_width_, size_level_height_, size_level_border_) < cur_procent) 
+				return false;
 	}
 	// check psition Game_object for Enemy_objects_
 	cur_procent = level_size * min_distance_respawn_to_Enemy_objects_;
 	for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 		if (Enemy_objects_[i] != Game_object)
-			if (Enemy_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) return false;
+			if (Enemy_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) 
+				return false;
 	}
 
 	// check psition Game_object for Players_objects_
 	cur_procent = level_size * min_distance_respawn_to_Players_objects_;
 	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		if (Players_objects_[i] != Game_object)
-			if (Players_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) return false;
+			if (Players_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) 
+				return false;
 	}
 
 	// check psition Game_object for Shot_objects_
 	cur_procent = level_size * min_distance_respawn_to_Shot_objects_;
 	for (i = 0; i < (int)Shot_objects_.size(); i++) {
-		if (Shot_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) return false;
+		if (Shot_objects_[i]->SafeDistanceToCollision(Game_object) < cur_procent) 
+			return false;
 	}
 	return true;
 }
@@ -407,9 +413,18 @@ bool BaseLevel::ExitGame() {
 
 BaseLevel::~BaseLevel() {
 	int i;
-	for (i = 0; i < (int)Ui_objects_.size(); i++)		if (Ui_objects_.at(i))		delete Ui_objects_[i];
-	for (i = 0; i < (int)Static_objects_.size(); i++)	if (Static_objects_.at(i))	delete Static_objects_[i];
-	for (i = 0; i < (int)Enemy_objects_.size(); i++)	if (Enemy_objects_.at(i))	delete Enemy_objects_[i];
-	for (i = 0; i < (int)Players_objects_.size(); i++)	if (Players_objects_.at(i)) delete Players_objects_[i];
-	for (i = 0; i < (int)Shot_objects_.size(); i++)		if (Shot_objects_.at(i))	delete Shot_objects_[i];
+	for (i = 0; i < (int)Ui_objects_.size(); i++) 
+		if (Ui_objects_.at(i)) delete Ui_objects_[i];
+
+	for (i = 0; i < (int)Static_objects_.size(); i++) 
+		if (Static_objects_.at(i)) delete Static_objects_[i];
+
+	for (i = 0; i < (int)Enemy_objects_.size(); i++)	
+		if (Enemy_objects_.at(i)) delete Enemy_objects_[i];
+
+	for (i = 0; i < (int)Players_objects_.size(); i++)	
+		if (Players_objects_.at(i)) delete Players_objects_[i];
+
+	for (i = 0; i < (int)Shot_objects_.size(); i++)		
+		if (Shot_objects_.at(i)) delete Shot_objects_[i];
 }
