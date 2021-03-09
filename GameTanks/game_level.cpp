@@ -3,14 +3,18 @@
 GameLevel::GameLevel() : BaseLevel() {
 	/* Initialization tile map: */
 	SetBackgroundTexture("Data/Map.png");
+	SetBorderTexture("Data/Map_border.png", 50);
 
 	this->Player_ = new RedTank(1, 200, 200);
 	this->AddPlayerObject(Player_);
 	this->SetWatchObject(Player_);
-	this->AddPlayerObject(new RedTank(1, 400, 200));
+	this->AddPlayerObject(new RedTank(1, 900, 200));
 
-	this->AddEnemyObject(new RedTank(1, 300, 400));
-	this->AddEnemyObject(new RedTank(1, 600, 400));
+	TankObject* tank;
+	for (int i = 0; i < 20; i++) {
+		tank = new RedTank(1, 300, 400);
+		this->AddEnemyObject(tank);
+	}
 
 	this->AddStaticObject(new GameObject(2,
 		sf::Vector2f(200, 600), sf::Vector2f(108, 124),
@@ -27,7 +31,6 @@ GameLevel::GameLevel() : BaseLevel() {
 
 
 	/* Initialization border map: */
-	SetBorderTexture("Data/Map_border.png", 50);
 }
 
 int GameLevel::NextLevel() {

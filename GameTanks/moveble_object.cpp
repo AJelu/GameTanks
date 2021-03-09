@@ -49,6 +49,8 @@ float MovebleObject::GetDistanceMove() { return distance_; }
 
 float MovebleObject::GetFreezeTime() { return freeze_time_; }
 
+float MovebleObject::GetRotationDegree() { return rotation_degree_; }
+
 void MovebleObject::MoveTo(float const& move_to_x, float const& move_to_y) {
 	this->SetRotationVector(move_to_x, move_to_y);
 	float length_vector = powf(move_to_x - GetVectorX(), 2) + powf(move_to_y - GetVectorY(), 2);

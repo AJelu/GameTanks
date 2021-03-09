@@ -221,6 +221,7 @@ public:
 	float GetSpeedMove(); //px by sec
 	float GetDistanceMove(); //px
 	float GetFreezeTime(); //sec
+	float GetRotationDegree(); // the remainder of the angle of rotation
 
 	void MoveTo(float const& move_to_x, float const& move_to_y);
 

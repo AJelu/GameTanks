@@ -12,6 +12,7 @@ private:
 	std::vector <UiObject*> Ui_objects_;
 	std::vector <GameObject*> Static_objects_;
 	std::vector <TankObject*> Enemy_objects_;
+	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
 	std::vector <MovebleObject*> Shot_objects_;
 
@@ -38,21 +39,23 @@ private:
 	sf::Texture Texture_border_;
 	sf::Sprite Sprite_border_;
 
-	void CalculateCollisionOnLevel(); 
+	void CalculateCollisionOnLevel();
 	void CameraControl();
 
 	bool SafePointSpawn(GameObject* Game_object);
+	bool RespawnObject(GameObject* Game_object); ///recreate??? very hard//////////////////
 public:
 	BaseLevel();
-	sf::View& Draw(sf::RenderWindow& window); ////////////////
+	sf::View& Draw(sf::RenderWindow& window);
 	
-	void AddUiObject(UiObject* Ui_object);
-	void AddStaticObject(GameObject* Static_objects);
-	void AddEnemyObject(TankObject* Enemy_objects);
-	void AddPlayerObject(TankObject* Player_objects);
-	void AddShotObject(MovebleObject* Shot_objects);
+	bool AddUiObject(UiObject* Ui_object);
+	bool AddStaticObject(GameObject* Static_objects);
+	bool AddEnemyObject(TankObject* Enemy_objects);
+	bool AddPlayerObject(TankObject* Player_objects);
+	bool AddShotObject(MovebleObject* Shot_objects);
+	bool AddDieObject(GameObject* Dies_objects);
+	bool SetWatchObject(VisibleObject* Watch_object);
 
-	void SetWatchObject(VisibleObject* Watch_object);
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
 
