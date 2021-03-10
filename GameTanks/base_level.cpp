@@ -195,67 +195,71 @@ void BaseLevel::CalculateCollisionOnLevel() {
 		for (i = 0; i < (int)Players_objects_.size(); i++) {
 			recalc_i = false;
 			control2 = 0;
-			for (j = 0; j < (int)Static_objects_.size(); j++) {
-				if (Players_objects_[i]->SafeDistanceToCollision(Static_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Players_objects_[i]->Collision(Static_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						j = -1;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Players_objects_ <-> Static_objects_;" 
-								<< std::endl;
-							break;
+			if (Players_objects_[i]->ObjectInRangeLevel(
+				size_level_width_, size_level_height_, size_level_border_))
+			{
+				for (j = 0; j < (int)Static_objects_.size(); j++) {
+					if (Players_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
+						if (!Players_objects_[i]->Collision(Static_objects_[j], true)) {
+							j = -1;
+							recalc_i = true;
+							control2++;
+							if (control2 > 100000) {
+								std::cout << "control2 = " << control2
+									<< "; exit recalc_i Players_objects_ <-> Static_objects_;"
+									<< std::endl;
+								break;
+							}
+							continue;
 						}
-						continue;
 					}
 				}
-			}
 
-			control2 = 0;
-			for (j = i + 1; j < (int)Players_objects_.size(); j++) {
-				if (Players_objects_[i]->SafeDistanceToCollision(Players_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Players_objects_[i]->Collision(Players_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						j = i;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Players_objects_ <-> Players_objects_;"
-								<< std::endl;
-							break;
+				control2 = 0;
+				for (j = i + 1; j < (int)Players_objects_.size(); j++) {
+					if (Players_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) < 0) {
+						if (!Players_objects_[i]->Collision(Players_objects_[j], true)) {
+							j = i;
+							recalc_i = true;
+							control2++;
+							if (control2 > 100000) {
+								std::cout << "control2 = " << control2
+									<< "; exit recalc_i Players_objects_ <-> Players_objects_;"
+									<< std::endl;
+								break;
+							}
+							continue;
 						}
-						continue;
 					}
 				}
-			}
 
-			control2 = 0;
-			for (j = 0; j < (int)Enemy_objects_.size(); j++) {
-				if (Players_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Players_objects_[i]->Collision(Enemy_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						Enemy_objects_[j]->SetDistanceMove(0);
-						j = -1;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Players_objects_ <-> Enemy_objects_;"
-								<< std::endl;
-							break;
+				control2 = 0;
+				for (j = 0; j < (int)Enemy_objects_.size(); j++) {
+					if (Players_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
+						if (!Players_objects_[i]->Collision(Enemy_objects_[j], true)) {
+							Enemy_objects_[j]->SetDistanceMove(0);
+							j = -1;
+							recalc_i = true;
+							control2++;
+							if (control2 > 100000) {
+								std::cout << "control2 = " << control2
+									<< "; exit recalc_i Players_objects_ <-> Enemy_objects_;"
+									<< std::endl;
+								break;
+							}
+							continue;
 						}
-						continue;
 					}
 				}
-			}
 
-			if (recalc_i) {
+				if (recalc_i) {
+					i = -1;
+					recalc_all = true;
+					continue;
+				}
+			}
+			else {
+				Players_objects_[i]->RestorePreviousState();
 				i = -1;
 				recalc_all = true;
 				continue;
@@ -265,68 +269,53 @@ void BaseLevel::CalculateCollisionOnLevel() {
 		for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 			recalc_i = false;
 			control2 = 0;
-			for (j = 0; j < (int)Static_objects_.size(); j++) {
-				if (Enemy_objects_[i]->SafeDistanceToCollision(Static_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Enemy_objects_[i]->Collision(Static_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						Enemy_objects_[i]->SetDistanceMove(0);
-						j = -1;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Enemy_objects_ <-> Static_objects_;"
-								<< std::endl;
-							break;
+			if (Enemy_objects_[i]->ObjectInRangeLevel(
+				size_level_width_, size_level_height_, size_level_border_))
+			{
+				for (j = 0; j < (int)Static_objects_.size(); j++) {
+					if (Enemy_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
+						if (!Enemy_objects_[i]->Collision(Static_objects_[j], true)) {
+							Enemy_objects_[i]->SetDistanceMove(0);
+							j = -1;
+							recalc_i = true;
+							control2++;
+							if (control2 > 100000) {
+								std::cout << "control2 = " << control2
+									<< "; exit recalc_i Enemy_objects_ <-> Static_objects_;"
+									<< std::endl;
+								break;
+							}
+							continue;
 						}
-						continue;
 					}
 				}
-			}
 
-			control2 = 0;
-			for (j = 0; j < (int)Players_objects_.size(); j++) {
-				if (Enemy_objects_[i]->SafeDistanceToCollision(Players_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Enemy_objects_[i]->Collision(Players_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						Enemy_objects_[i]->SetDistanceMove(0);
-						j = -1;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Enemy_objects_ <-> Players_objects_;"
-								<< std::endl;
-							break;
+				control2 = 0;
+				for (j = i + 1; j < (int)Enemy_objects_.size(); j++) {
+					if (Enemy_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
+						if (!Enemy_objects_[i]->Collision(Enemy_objects_[j], true)) {
+							Enemy_objects_[i]->SetDistanceMove(0);
+							j = i;
+							recalc_i = true;
+							control2++;
+							if (control2 > 100000) {
+								std::cout << "control2 = " << control2
+									<< "; exit recalc_i Enemy_objects_ <-> Enemy_objects_;"
+									<< std::endl;
+								break;
+							}
+							continue;
 						}
-						continue;
 					}
 				}
-			}
-
-			control2 = 0;
-			for (j = i + 1; j < (int)Enemy_objects_.size(); j++) {
-				if (Enemy_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Enemy_objects_[i]->Collision(Enemy_objects_[j],
-							size_level_width_, size_level_height_, size_level_border_, true)) {
-						Enemy_objects_[i]->SetDistanceMove(0);
-						j = i;
-						recalc_i = true;
-						control2++;
-						if (control2 > 100000) {
-							std::cout << "control2 = " << control2
-								<< "; exit recalc_i Enemy_objects_ <-> Enemy_objects_;"
-								<< std::endl;
-							break;
-						}
-						continue;
-					}
+				if (recalc_i) {
+					i = -1;
+					recalc_all = true;
+					continue;
 				}
 			}
-			if (recalc_i) {
+			else {
+				Enemy_objects_[i]->RestorePreviousState();
 				i = -1;
 				recalc_all = true;
 				continue;
@@ -339,15 +328,13 @@ void BaseLevel::CalculateCollisionOnLevel() {
 	bool die_current_shot;
 	for (i = 0; i < (int)Shot_objects_.size(); i++) {
 		//check if shot is die
-		if (Shot_objects_[i]->GetLifeLevel() != 0) {
+		if (Shot_objects_[i]->GetLifeLevel() > 0) {
 			// shot is not die
 			die_current_shot = false;
 			for (j = 0; j < (int)Enemy_objects_.size(); j++) {				
 				if (Shot_objects_[i]->GetPerrent() != Enemy_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Shot_objects_[i]->Collision(Enemy_objects_[j],
-						size_level_width_, size_level_height_, size_level_border_, false)) {
+					Shot_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
+					if (!Shot_objects_[i]->Collision(Enemy_objects_[j], false)) {
 						//add Enemy_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Enemy_objects_[j]->GetLifeLevel() != 0) {
@@ -364,10 +351,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 
 			for (j = 0; j < (int)Players_objects_.size(); j++) {
 				if (Shot_objects_[i]->GetPerrent() != Players_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Players_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Shot_objects_[i]->Collision(Players_objects_[j],
-						size_level_width_, size_level_height_, size_level_border_, false)) {
+					Shot_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) < 0) {
+					if (!Shot_objects_[i]->Collision(Players_objects_[j], false)) {
 						//add Players_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Players_objects_[j]->GetLifeLevel() != 0) {
@@ -384,10 +369,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 
 			for (j = 0; j < (int)Static_objects_.size(); j++) {
 				if (Shot_objects_[i]->GetPerrent() != Static_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Static_objects_[j],
-					size_level_width_, size_level_height_, size_level_border_) < 0) {
-					if (!Shot_objects_[i]->Collision(Static_objects_[j],
-						size_level_width_, size_level_height_, size_level_border_, false)) {
+					Shot_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
+					if (!Shot_objects_[i]->Collision(Static_objects_[j], false)) {
 						//add Static_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Static_objects_[j]->GetLifeLevel() != 0) {
@@ -457,16 +440,14 @@ bool BaseLevel::SafePointSpawn(GameObject* Game_object) {
 	cur_procent = level_size * min_distance_respawn_to_Static_objects_;
 	for (i = 0; i < (int)Static_objects_.size(); i++) {
 		if (Static_objects_[i] != Game_object)
-			if (Game_object->SafeDistanceToCollision(Static_objects_[i],
-				size_level_width_, size_level_height_, size_level_border_) < cur_procent) 
+			if (Game_object->SafeDistanceToCollision(Static_objects_[i]) < cur_procent) 
 				return false;
 	}
 	// check psition Game_object for Enemy_objects_
 	cur_procent = level_size * min_distance_respawn_to_Enemy_objects_;
 	for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 		if (Enemy_objects_[i] != Game_object)
-			if (Game_object->SafeDistanceToCollision(Enemy_objects_[i],
-				size_level_width_, size_level_height_, size_level_border_) < cur_procent)
+			if (Game_object->SafeDistanceToCollision(Enemy_objects_[i]) < cur_procent)
 				return false;
 	}
 
@@ -474,16 +455,14 @@ bool BaseLevel::SafePointSpawn(GameObject* Game_object) {
 	cur_procent = level_size * min_distance_respawn_to_Players_objects_;
 	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		if (Players_objects_[i] != Game_object)
-			if (Game_object->SafeDistanceToCollision(Players_objects_[i],
-				size_level_width_, size_level_height_, size_level_border_) < cur_procent)
+			if (Game_object->SafeDistanceToCollision(Players_objects_[i]) < cur_procent)
 				return false;
 	}
 
 	// check psition Game_object for Shot_objects_
 	cur_procent = level_size * min_distance_respawn_to_Shot_objects_;
 	for (i = 0; i < (int)Shot_objects_.size(); i++) {
-		if (Game_object->SafeDistanceToCollision(Shot_objects_[i],
-			size_level_width_, size_level_height_, size_level_border_) < cur_procent)
+		if (Game_object->SafeDistanceToCollision(Shot_objects_[i]) < cur_procent)
 			return false;
 	}
 	return true;
@@ -493,9 +472,17 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 {
 	for (int i = 0; i < 100000; i++) {
 		Game_object->SetCoordinate(sf::Vector2f(
-			float(rand() % size_level_width_),
-			float(rand() % size_level_height_)));
-		if (this->SafePointSpawn(Game_object)) return true;
+			size_level_border_ + Game_object->GetSafeDistance() +
+			float(rand() % int(size_level_width_
+				- (size_level_border_ + Game_object->GetSafeDistance()) * 2)),
+			size_level_border_ + Game_object->GetSafeDistance() +
+			float(rand() % int(size_level_height_
+				- (size_level_border_ + Game_object->GetSafeDistance()) * 2))
+		));
+		if (this->SafePointSpawn(Game_object)) {
+			std::cout << "good respawn: " << i << ";" << std::endl;
+			return true;
+		}
 	}
 	std::cout << "error respawn: 100000;" << std::endl;
 	Game_object->RestorePreviousState();

@@ -62,11 +62,14 @@ private:
 	float previous_vector_rotate_x_, previous_vector_rotate_y_;
 	sf::Vector2f previous_position_centre_;
 
+	//for optimization:
+	float gradus_ = 0; //float CalculateGradus();
+	//end for optimization;
+
 	void SetNeedRedrawImage();
 	bool RecalculateVector();
 	bool ShowTile(); //show current frame texture
 	bool SetTile(int const& tile_level, int const& tile_number); //set show choosed frame texture
-	float CalculateGradus();
 public:
 	VisibleObject();
 	VisibleObject(int const& id_object,
@@ -74,6 +77,7 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 
+	float CalculateGradus();
 	//animatinos
 	void StartPlayAnimation(int const& tile_level, 
 		int const& frame_start, int const& frame_end,
@@ -157,6 +161,9 @@ private:
 	std::vector <RoundCollision*> Collisions_;
 
 	GameObject* Parrent_;
+
+	//temp var:
+	sf::Vector2f point_1, point_2;//////
 public:
 	GameObject();
 	GameObject(int const& id_object,
@@ -169,6 +176,7 @@ public:
 	void SetTimeToRespawn(float const& time_to_respawn, bool const& add_to_previous = false);
 	int GetLifeLevel();
 	float GetTimeToRespawn();
+	float GetSafeDistance();
 	GameObject* GetPerrent();
 
 	virtual void RestoreLife();
@@ -178,11 +186,9 @@ public:
 
 	//for collisions
 	void AddCollision(RoundCollision* New_colision);
-	float SafeDistanceToCollision(GameObject* Game_object,
-		int level_size_x, int level_size_y, int level_size_border);
+	bool ObjectInRangeLevel(int level_size_x, int level_size_y, int level_size_border);
 	float SafeDistanceToCollision(GameObject* Game_object);
-	bool Collision(GameObject* Game_object, 
-		int level_size_x, int level_size_y, int level_size_border, bool healt = false);
+	bool Collision(GameObject* Game_object, bool healt = false);
 
 	void CollisionOff();//ignore all collisions
 	void CollisionOn();
