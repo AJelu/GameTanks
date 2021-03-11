@@ -2,8 +2,8 @@
 
 GameLevel::GameLevel() : BaseLevel() {
 	/* Initialization tile map and border: */
-	this->SetBackgroundTexture("Data/Map.png");
-	this->SetBorderTexture("Data/Map_border.png", 50);
+	this->SetBackgroundTexture("Data/Maps/Map.png");
+	this->SetBorderTexture("Data/Maps/Map_border.png", 50);
 
 	this->Player_ = new RedTank(1, 200, 200);
 	this->AddPlayerObject(Player_);

@@ -5,7 +5,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
 		sf::Vector2f(60, 157), //offset
-		"Data/Tank4.png", //texture
+		"Data/Unit/Tank4.png", //texture
 		5, 2,	//frame count
 		5,		//life level
 		200,	//speed move
@@ -49,7 +49,7 @@ Bullet::Bullet(int const& id_object, float const& spawn_x, float const& spawn_y,
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
 		sf::Vector2f(10, 30), //offset
-		"Data/Bullet.png", //texture
+		"Data/Animation/Bullet.png", //texture
 		1, 1,	//frame count
 		3,		//life level
 		500,	//speed move
