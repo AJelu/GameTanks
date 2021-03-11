@@ -8,13 +8,14 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->Player_ = new RedTank(1, 200, 200);
 	this->AddPlayerObject(Player_);
 	this->SetWatchObject(Player_);
-	this->AddPlayerObject(new RedTank(1, 900, 200)); /* why this additional object ? */
 
 	TankObject* tank;
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 50; i++) {
 		tank = new RedTank(1, 300, 400);
 		this->AddEnemyObject(tank);
 	}
+
+
 }
 
 int GameLevel::NextLevel() {

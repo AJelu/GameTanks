@@ -48,6 +48,10 @@ int GameObject::GetLifeLevel() { return life_level_; }
 
 float GameObject::GetTimeToRespawn() { return time_to_respawn_; }
 
+float GameObject::GetSafeDistance(){
+	return max_collision_distance_;
+}
+
 GameObject* GameObject::GetPerrent() { return Parrent_; }
 
 void GameObject::RestoreLife() { this->SetLifeLevel(1); }
@@ -74,49 +78,57 @@ void GameObject::AddCollision(RoundCollision* New_colision) {
 	}
 }
 
-float GameObject::SafeDistanceToCollision(GameObject* Game_object, 
-				int level_size_x, int level_size_y, int level_size_border) {
-	if (collision_off_ || Game_object->collision_off_) return 100000;
-	
-	float result = 1, temp;
-	result = this->GetCoordinateCentre().x - max_collision_distance_ - level_size_border;
-	temp = this->GetCoordinateCentre().y - max_collision_distance_ - level_size_border;
-	if (temp < result) result = temp;
-	temp = level_size_x - (this->GetCoordinateCentre().x + 
-							max_collision_distance_ + level_size_border);
-	if (temp < result) result = temp;
-	temp = level_size_y - (this->GetCoordinateCentre().y + 
-							max_collision_distance_ + level_size_border);
-	if (temp < result) result = temp;
-	temp = this->SafeDistanceToCollision(Game_object);
-	if (temp < result) result = temp;
+bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int level_size_border){
+	if (this->GetCoordinateCentre().x - max_collision_distance_
+		> level_size_border &&
+		this->GetCoordinateCentre().y - max_collision_distance_
+		> level_size_border &&
+		this->GetCoordinateCentre().x + max_collision_distance_
+		< level_size_x - level_size_border &&
+		this->GetCoordinateCentre().y + max_collision_distance_
+		< level_size_y - level_size_border)
+		return true;
 
-	return result - 1;
+	for (int i = 0; i < (int)this->Collisions_.size(); i++) {
+		point_1 = this->Collisions_[i]->
+			GetCoordinateByRotation(this->CalculateGradus());
+		point_1.x += this->GetCoordinateCentre().x;
+		point_1.y *= -1;
+		point_1.y += this->GetCoordinateCentre().y;
+		if (point_1.x - this->Collisions_[i]->GetRadius()
+				< level_size_border ||
+			point_1.y - this->Collisions_[i]->GetRadius()
+				< level_size_border ||
+			point_1.x + this->Collisions_[i]->GetRadius()
+				> level_size_x - level_size_border ||
+			point_1.y + this->Collisions_[i]->GetRadius()
+				> level_size_y - level_size_border) 
+			return false;		
+	}
+	return true;
 }
 
 float GameObject::SafeDistanceToCollision(GameObject* Game_object) {
 	if (collision_off_ || Game_object->collision_off_) return 100000;
 
 	return this->GetDistanceToPoint(Game_object->GetCoordinateCentre()) -
-		this->max_collision_distance_ - Game_object->max_collision_distance_ - 1;
+		this->max_collision_distance_ - Game_object->max_collision_distance_;
 }
 
 //not have collision - return true
-bool GameObject::Collision(GameObject* Game_object, 
-				int level_size_x, int level_size_y, int level_size_border,
-				bool healt) {
+bool GameObject::Collision(GameObject* Game_object,	bool healt) {
 	if (collision_off_ || Game_object->collision_off_) return true;
-	sf::Vector2f point_1, point_2;
 	float distance;
 	if (Game_object != nullptr) {
 		for (int i = 0; i < (int)this->Collisions_.size(); i++) {
-			point_1 = this->ChangeVectorByDirection(this->Collisions_[i]->GetCoordinate());
+			point_1 = this->Collisions_[i]->
+				GetCoordinateByRotation(this->CalculateGradus());
 			point_1.x += this->GetCoordinateCentre().x;
 			point_1.y *= -1;
 			point_1.y += this->GetCoordinateCentre().y;
 			for (int j = 0; j < (int)Game_object->Collisions_.size(); j++) {
-				point_2 = Game_object->ChangeVectorByDirection(
-					Game_object->Collisions_[j]->GetCoordinate());
+				point_2 = Game_object->Collisions_[j]->
+					GetCoordinateByRotation(Game_object->CalculateGradus());
 				point_2.x += Game_object->GetCoordinateCentre().x;
 				point_2.y *= -1;
 				point_2.y += Game_object->GetCoordinateCentre().y;
@@ -131,14 +143,6 @@ bool GameObject::Collision(GameObject* Game_object,
 					}
 					return false;
 				}
-			}
-			if (healt && 
-				(point_1.x - this->Collisions_[i]->GetRadius() < level_size_border ||
-				point_1.y - this->Collisions_[i]->GetRadius() < level_size_border ||
-				point_1.x + this->Collisions_[i]->GetRadius() > level_size_x - level_size_border ||
-				point_1.y + this->Collisions_[i]->GetRadius() > level_size_y - level_size_border)) {
-				this->RestorePreviousState();
-				return false;
 			}
 		}
 	}

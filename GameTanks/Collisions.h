@@ -4,12 +4,15 @@
 class BaseCollision {
 private:
 	sf::Vector2f coordinate_;
+	sf::Vector2f coordinate_by_rotation_;
+	float rotation_degree_ = 0;
 
 public:
 	BaseCollision();
 	BaseCollision(sf::Vector2f const& coordinate);
 
 	sf::Vector2f GetCoordinate();
+	sf::Vector2f GetCoordinateByRotation(float const& rotation_degree);
 
 	void SetCoordinate(sf::Vector2f const& coordinate);
 

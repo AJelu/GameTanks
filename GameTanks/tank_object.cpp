@@ -54,13 +54,13 @@ void TankObject::RecalculateState(float const& game_time) {
 	else if (time_to_next_shot_ > 0.0f) time_to_next_shot_ -= game_time;
 }
 
-void TankObject::MoveUp() { SetDistanceMove(5); }
+void TankObject::MoveUp() { SetDistanceMove(10); }
 
-void TankObject::MoveDown() { SetDistanceMove(-5); }
+void TankObject::MoveDown() { SetDistanceMove(-10); }
 
-void TankObject::MoveRight() { SetRotationDegree(5); }
+void TankObject::MoveRight() { SetRotationDegree(10); }
 
-void TankObject::MoveLeft() { SetRotationDegree(-5); }
+void TankObject::MoveLeft() { SetRotationDegree(-10); }
 
 
 int TankObject::GetPointCreateShot() { return point_create_shot_; }

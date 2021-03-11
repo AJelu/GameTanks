@@ -63,6 +63,8 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 }
 
 float VisibleObject::CalculateGradus() {
+	return gradus_;
+	/*
 	float temp_vector_x = 0.0f;//create and set temp vector
 	float temp_vector_y = 1.0f;
 	float rotation_by_gradus =
@@ -81,7 +83,7 @@ float VisibleObject::CalculateGradus() {
  
 	//calculete new gradus
 	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
-	return rotation_by_gradus;
+	return rotation_by_gradus;*/
 }
 
 void VisibleObject::StartPlayAnimation(int const& tile_level,
@@ -194,7 +196,26 @@ float VisibleObject::GetDistanceToPoint(const sf::Vector2f& point) {
 void VisibleObject::SetRotationVector(float const& vector_x, float const& vector_y) {
 	vector_rotate_x_ = vector_x;
 	vector_rotate_y_ = vector_y;
-	this->RecalculateVector();
+	this->RecalculateVector(); 
+	float temp_vector_x = 0.0f;//create and set temp vector
+	float temp_vector_y = 1.0f;
+	float rotation_by_gradus =
+		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
+			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+	rotation_by_gradus = (rotation_by_gradus * 180.0f) / (float)M_PI; //calculate temp gradus1
+
+	temp_vector_x = 1.0f;//set temp vector
+	temp_vector_y = 0.0f;
+	float rotation_by_gradus_buffer =
+		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
+			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
+	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180.0f) / (float)M_PI;//calculate temp gradus2
+
+	//calculete new gradus
+	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
+	gradus_ = rotation_by_gradus;
 	Sprite_object_.setRotation(this->CalculateGradus());
 	this->SetNeedRedrawImage();
 }
