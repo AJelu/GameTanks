@@ -10,7 +10,7 @@ static const int SCREEN_RESOLUTION_X = 1024;
 static const int SCREEN_RESOLUTION_Y = 768;
 
 //enemy settings:
-static const int ENEMY_SHOT_TIME_MULTIPLY = 10;
+static const int ENEMY_SHOT_TIME_MULTIPLY = 1;
 static const int ENEMY_ROTATION_DEGREE = 180;
 static const int ENEMY_DISTANCE_MOVE = 200;
 

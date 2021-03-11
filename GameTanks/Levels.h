@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <list>
 #include "ready_objects.h"
 #include "settings.h"
 
@@ -14,7 +15,7 @@ private:
 	std::vector <TankObject*> Enemy_objects_;
 	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
-	std::vector <MovebleObject*> Shot_objects_;
+	std::list <MovebleObject*> Shot_objects_;
 
 	//die game objects (exist in other vectors).
 	std::vector <GameObject*> Dies_objects_;

@@ -11,7 +11,8 @@ sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);	
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->Draw(window);
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->Draw(window);
-	for (i = 0; i < (int)Shot_objects_.size(); i++)		Shot_objects_[i]->Draw(window);
+	//for (i = 0; i < (int)Shot_objects_.size(); i++)		Shot_objects_[i]->Draw(window);
+	for (MovebleObject* item : Shot_objects_)			item->Draw(window);
 	for (i = 0; i < (int)Ui_objects_.size(); i++)		Ui_objects_[i]->Draw(window);
 	CameraControl();
 	window.draw(Sprite_border_);
@@ -160,9 +161,13 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		Players_objects_[i]->ForAnimation(game_timer);
 	}
 	// update animation and state for Shot_objects_
-	for (i = 0; i < (int)Shot_objects_.size(); i++) {
+	/*for (i = 0; i < (int)Shot_objects_.size(); i++) {
 		Shot_objects_[i]->RecalculateState(game_timer);
 		Shot_objects_[i]->ForAnimation(game_timer);
+	}*/
+	for (MovebleObject* item : Shot_objects_){
+		item->RecalculateState(game_timer);
+		item->ForAnimation(game_timer);
 	}
 	// update animation for Ui_objects_
 	for (i = 0; i < (int)Ui_objects_.size(); i++)
@@ -202,8 +207,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			recalc_i = false;
 			control2 = 0;
 			if (Players_objects_[i]->ObjectInRangeLevel(
-				size_level_width_, size_level_height_, size_level_border_))
-			{
+				size_level_width_, size_level_height_, size_level_border_)) {
 				for (j = 0; j < (int)Static_objects_.size(); j++) {
 					if (Players_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
 						if (!Players_objects_[i]->Collision(Static_objects_[j], true)) {
@@ -276,8 +280,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			recalc_i = false;
 			control2 = 0;
 			if (Enemy_objects_[i]->ObjectInRangeLevel(
-				size_level_width_, size_level_height_, size_level_border_))
-			{
+				size_level_width_, size_level_height_, size_level_border_)) {
 				for (j = 0; j < (int)Static_objects_.size(); j++) {
 					if (Enemy_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
 						if (!Enemy_objects_[i]->Collision(Static_objects_[j], true)) {
@@ -296,7 +299,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 					}
 				}
 
-				control2 = 0;
+				/*control2 = 0;
 				for (j = i + 1; j < (int)Enemy_objects_.size(); j++) {
 					if (Enemy_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
 						if (!Enemy_objects_[i]->Collision(Enemy_objects_[j], true)) {
@@ -313,7 +316,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 							continue;
 						}
 					}
-				}
+				}*/
 				if (recalc_i) {
 					i = -1;
 					recalc_all = true;
@@ -332,20 +335,20 @@ void BaseLevel::CalculateCollisionOnLevel() {
 
 	//shot collisions
 	bool die_current_shot;
-	for (i = 0; i < (int)Shot_objects_.size(); i++) {
+	for (MovebleObject* Shot_item : Shot_objects_){
 		//check if shot is die
-		if (Shot_objects_[i]->GetLifeLevel() > 0) {
+		if (Shot_item->GetLifeLevel() > 0) {
 			// shot is not die
 			die_current_shot = false;
 			for (j = 0; j < (int)Enemy_objects_.size(); j++) {				
-				if (Shot_objects_[i]->GetPerrent() != Enemy_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
-					if (!Shot_objects_[i]->Collision(Enemy_objects_[j], false)) {
+				if (Shot_item->GetPerrent() != Enemy_objects_[j] && //check if not parent
+					Shot_item->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
+					if (!Shot_item->Collision(Enemy_objects_[j], false)) {
 						//add Enemy_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Enemy_objects_[j]->GetLifeLevel() != 0) {
 							Enemy_objects_[j]->SetLifeLevel(
-								-Shot_objects_[i]->GetLifeLevel(), true);
+								-Shot_item->GetLifeLevel(), true);
 							if (this->AddDieObject(Enemy_objects_[j])) {
 								Enemy_objects_[j]->SetDistanceMove(0);
 								Enemy_objects_[j]->SetFreezeTime(TIME_TO_RESPAWN);
@@ -356,14 +359,14 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			}
 
 			for (j = 0; j < (int)Players_objects_.size(); j++) {
-				if (Shot_objects_[i]->GetPerrent() != Players_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Players_objects_[j]) < 0) {
-					if (!Shot_objects_[i]->Collision(Players_objects_[j], false)) {
+				if (Shot_item->GetPerrent() != Players_objects_[j] && //check if not parent
+					Shot_item->SafeDistanceToCollision(Players_objects_[j]) < 0) {
+					if (!Shot_item->Collision(Players_objects_[j], false)) {
 						//add Players_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Players_objects_[j]->GetLifeLevel() != 0) {
 							Players_objects_[j]->SetLifeLevel(
-								-Shot_objects_[i]->GetLifeLevel(), true);
+								-Shot_item->GetLifeLevel(), true);
 							if (this->AddDieObject(Players_objects_[j])) {
 								Players_objects_[j]->SetDistanceMove(0);
 								Players_objects_[j]->SetFreezeTime(TIME_TO_RESPAWN);
@@ -374,31 +377,31 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			}
 
 			for (j = 0; j < (int)Static_objects_.size(); j++) {
-				if (Shot_objects_[i]->GetPerrent() != Static_objects_[j] && //check if not parent
-					Shot_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
-					if (!Shot_objects_[i]->Collision(Static_objects_[j], false)) {
+				if (Shot_item->GetPerrent() != Static_objects_[j] && //check if not parent
+					Shot_item->SafeDistanceToCollision(Static_objects_[j]) < 0) {
+					if (!Shot_item->Collision(Static_objects_[j], false)) {
 						//add Static_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Static_objects_[j]->GetLifeLevel() != 0) {
 							Static_objects_[j]->SetLifeLevel(
-								-Shot_objects_[i]->GetLifeLevel(), true);
+								-Shot_item->GetLifeLevel(), true);
 							this->AddDieObject(Static_objects_[j]);
 						}
 					}
 				}
 			}
-			if (die_current_shot || Shot_objects_[i]->GetDistanceMove() == 0) {
-				Shot_objects_[i]->SetDistanceMove(0);
-				Shot_objects_[i]->SetLifeLevel(0);
+			if (die_current_shot || Shot_item->GetDistanceMove() == 0) {
+				Shot_item->SetDistanceMove(0);
+				Shot_item->SetLifeLevel(0);
 			}
 		}
 		else {
 			//shot is die
-			if (Shot_objects_[i]->AnimationEnd()) {
-				delete Shot_objects_[i];
-				Shot_objects_[i] = nullptr;
-				Shot_objects_.erase(Shot_objects_.begin() + i);
-				i--;
+			if (Shot_item->AnimationEnd()) {
+				delete Shot_item;
+				//Shot_item = nullptr;
+				Shot_objects_.remove(Shot_item);
+				//i--;
 			}
 		}
 	}
@@ -468,8 +471,8 @@ bool BaseLevel::SafePointSpawn(GameObject* Game_object) {
 
 	// check psition Game_object for Shot_objects_
 	cur_procent = level_size * min_distance_respawn_to_Shot_objects_;
-	for (i = 0; i < (int)Shot_objects_.size(); i++) {
-		if (Game_object->SafeDistanceToCollision(Shot_objects_[i]) < cur_procent)
+	for (MovebleObject* Shot_item : Shot_objects_) {
+		if (Game_object->SafeDistanceToCollision(Shot_item) < cur_procent)
 			return false;
 	}
 	return true;
@@ -519,6 +522,5 @@ BaseLevel::~BaseLevel() {
 	for (i = 0; i < (int)Players_objects_.size(); i++)	
 		if (Players_objects_.at(i)) delete Players_objects_[i];
 
-	for (i = 0; i < (int)Shot_objects_.size(); i++)		
-		if (Shot_objects_.at(i)) delete Shot_objects_[i];
+	for (MovebleObject* Shot_item : Shot_objects_) delete Shot_item;
 }
