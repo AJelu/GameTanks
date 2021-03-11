@@ -22,6 +22,7 @@ class Bullet : public MovebleObject {
 private:
 	void PlayAnimateDie() override;
 	void PlayAnimateLife() override;
+	void PlayAnimateMovePlus() override;
 	void RestoreLife() override;
 
 public:

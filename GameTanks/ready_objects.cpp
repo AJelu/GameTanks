@@ -48,9 +48,9 @@ Bullet::Bullet(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : MovebleObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
-		sf::Vector2f(10, 30), //offset
-		"Data/Animation/Bullet.png", //texture
-		1, 1,	//frame count
+		sf::Vector2f(96, 96), //offset
+		"Data/Animation/BoomTestSet.png", //texture
+		37, 3,	//frame count
 		3,		//life level
 		500,	//speed move
 		0,		//freeze time
@@ -59,8 +59,10 @@ Bullet::Bullet(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 }
 
-void Bullet::PlayAnimateDie() { }
+void Bullet::PlayAnimateDie() { this->StartPlayAnimation(1, 1, 37, 50); }
 
-void Bullet::PlayAnimateLife() { }
+void Bullet::PlayAnimateLife() { this->StartPlayAnimation(2, 1, 4, 50); }
+
+void Bullet::PlayAnimateMovePlus() { this->StartPlayAnimation(3, 1, 1, 1); }
 
 void Bullet::RestoreLife() { this->SetLifeLevel(3); }

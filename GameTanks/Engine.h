@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include "settings.h"
 #include "run_game.h"
 #include "levels.h"

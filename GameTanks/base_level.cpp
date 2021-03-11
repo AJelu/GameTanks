@@ -322,7 +322,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			}
 		}
 	}
-
+	
 
 	//shot collisions
 	bool die_current_shot;
@@ -395,7 +395,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			}
 		}
 	}
-
+	
 	//save good collisions
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->SafeState();
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->SafeState();
