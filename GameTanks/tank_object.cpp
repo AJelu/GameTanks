@@ -12,12 +12,13 @@ TankObject::TankObject(int const& id_object,
 	sf::Vector2f const& offset_sprite_coordinate,
 	std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 	int const& life_level, float const& speed, float const& freeze_time,
-	float const& rotation_speed,
+	float const& rotation_speed, int const& point_create_shot_by_vector,
 	float const& speed_shot, float const& shot_distance, 
 	float const& time_freeze_shot, GameObject* Parrent)
 	: MovebleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y,
 		life_level, speed, freeze_time, rotation_speed, Parrent) {
+	this->SetPointCreateShot(point_create_shot_by_vector);
 	this->SetSpeedShot(speed_shot);
 	this->SetShotDistance(shot_distance);
 	this->SetTimeFreezeShot(time_freeze_shot);
@@ -37,6 +38,7 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot) {
 			shot->SetSpeedMove(speed_shot_);
 			shot->SetDistanceMove(shot_distance_);
 			shot->SetRotationVector(this->GetVectorX(), this->GetVectorY());
+			shot->MoveByVector(this->GetPointCreateShot());
 			this->StartAudioAction("shot", false);
 			return shot;
 		}
@@ -61,6 +63,8 @@ void TankObject::MoveRight() { SetRotationDegree(5); }
 void TankObject::MoveLeft() { SetRotationDegree(-5); }
 
 
+int TankObject::GetPointCreateShot() { return point_create_shot_; }
+
 float TankObject::GetSpeedShot() { return speed_shot_; }
 
 float TankObject::GetShotDistance() { return shot_distance_; }
@@ -69,6 +73,10 @@ float TankObject::GetTimeToNextShot() { return time_to_next_shot_; }
 
 float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
 
+
+void TankObject::SetPointCreateShot(int const& point_create_shot) {
+	point_create_shot_ = point_create_shot;
+}
 
 void TankObject::SetSpeedShot(float const& speed_shot) { speed_shot_ = speed_shot; }
 

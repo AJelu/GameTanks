@@ -5,6 +5,7 @@
 class RedTank : public TankObject {
 protected:
 	MovebleObject* Shot() override;
+
 public:
 	RedTank(int const& id_object, float const& spawn_x, float const& spawn_y, GameObject* Parrent = nullptr);
 
@@ -17,7 +18,7 @@ public:
 	void RestoreLife() override;
 };
 
-class Bullet : MovebleObject {
+class Bullet : public MovebleObject {
 private:
 	void PlayAnimateDie() override;
 	void PlayAnimateLife() override;

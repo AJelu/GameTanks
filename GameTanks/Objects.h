@@ -237,7 +237,7 @@ public:
 
 class TankObject : public MovebleObject {
 private:
-	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_;
+	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_, point_create_shot_;
 protected:
 	virtual MovebleObject* Shot();
 public:
@@ -245,11 +245,13 @@ public:
 	TankObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
-		int const& life_level, float const& speed, float const& freeze_time,
-		float const& rotation_speed,
-		float const& speed_shot, float const& shot_distance, 
-		float const& time_freeze_shot, GameObject* Parrent);
+		std::string const& texture, 
+		int const& frame_count_x, int const& frame_count_y,
+		int const& life_level,
+		float const& speed, float const& freeze_time,
+		float const& rotation_speed, int const& point_create_shot_by_vector, 
+		float const& speed_shot, float const& shot_distance, float const& time_freeze_shot, 
+		GameObject* Parrent);
 
 	bool CanCreateShot();
 	MovebleObject* CreateShot(bool const& forcibly_shot = false);
@@ -260,11 +262,13 @@ public:
 	void MoveRight();
 	void MoveLeft();
 
+	int GetPointCreateShot();
 	float GetSpeedShot();
 	float GetShotDistance();
 	float GetTimeToNextShot();
 	float GetTimeFreezeShot();
 
+	void SetPointCreateShot(int const& point_create_shot);
 	void SetSpeedShot(float const& speed_shot);
 	void SetShotDistance(float const& shot_distance);
 	void SetTimeToNextShot(float const& time_to_next_shot);

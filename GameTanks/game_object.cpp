@@ -11,7 +11,8 @@ GameObject::GameObject() : VisibleObject() {
 GameObject::GameObject(int const& id_object,
 			sf::Vector2f const& coordinate_centre,
 			sf::Vector2f const& offset_sprite_coordinate,
-			std::string const& texture, int const& frame_count_x, int const& frame_count_y,
+			std::string const& texture, 
+			int const& frame_count_x, int const& frame_count_y,
 			int const& life_level, GameObject* Parrent)
 			: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 				texture, frame_count_x, frame_count_y) {
