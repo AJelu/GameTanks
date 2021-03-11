@@ -25,9 +25,9 @@ private:
 	int size_level_height_, size_level_width_, size_level_border_ = 0;
 
 	float min_distance_respawn_to_Static_objects_ = 0.01f; //% size level
-	float min_distance_respawn_to_Enemy_objects_ = 0.10f; //% size level
-	float min_distance_respawn_to_Players_objects_ = 0.10f; //% size level
-	float min_distance_respawn_to_Shot_objects_ = 0.10f; //% size level
+	float min_distance_respawn_to_Enemy_objects_ = 0.010f; //% size level
+	float min_distance_respawn_to_Players_objects_ = 0.010f; //% size level
+	float min_distance_respawn_to_Shot_objects_ = 0.010f; //% size level
 
 	VisibleObject* Watch_object_;
 

@@ -154,6 +154,9 @@ void GameObject::CollisionOff() { collision_off_ = true; }
 void GameObject::CollisionOn() { collision_off_ = false; }
 
 GameObject::~GameObject() {
-	for (int i = 0; i < (int)Collisions_.size(); i++)
+	for (int i = 0; i < (int)Collisions_.size(); i++) {
 		if (Collisions_.at(i)) delete Collisions_[i];
+		Collisions_[i] = nullptr;
+	}
+	Parrent_ = nullptr;
 }

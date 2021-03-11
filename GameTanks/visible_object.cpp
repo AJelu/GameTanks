@@ -2,8 +2,10 @@
 #include <cmath>
 #include "objects.h"
 
-VisibleObject::VisibleObject() : AudioObject() 
-{
+std::vector<std::string> VisibleObject::Texture_name_;
+std::vector<sf::Texture*> VisibleObject::Texture_objects_;
+
+VisibleObject::VisibleObject() : AudioObject() {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
@@ -12,16 +14,29 @@ VisibleObject::VisibleObject() : AudioObject()
 }
 
 VisibleObject::VisibleObject(int const& id_object,
-	sf::Vector2f const& coordinate_centre,
-	sf::Vector2f const& offset_sprite_coordinate,
-	std::string const& texture, int const& frame_count_x,
-	int const& frame_count_y) : AudioObject(id_object)
-{
+		sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate,
+		std::string const& texture, int const& frame_count_x,
+		int const& frame_count_y) : AudioObject(id_object) {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(coordinate_centre);
 	this->SetOffsetSprite(offset_sprite_coordinate);
 	this->SetTexture(texture, frame_count_x, frame_count_y);
 	this->SafeState();
+}
+
+sf::Texture* VisibleObject::GetTexture(std::string texture_name)
+{
+	for (int i = 0; i < (int)Texture_name_.size(); i++) {
+		if (Texture_name_[i] == texture_name) { return Texture_objects_[i]; }
+	}
+	sf::Texture* Texture = new sf::Texture();
+	if (Texture->loadFromFile(texture_name)) {
+		Texture->setSmooth(true);
+		Texture_objects_.push_back(Texture);
+		Texture_name_.push_back(texture_name);
+	}
+	return Texture;
 }
 
 void VisibleObject::SetNeedRedrawImage() { need_redraw_image_ = true; }
@@ -64,26 +79,6 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 
 float VisibleObject::CalculateGradus() {
 	return gradus_;
-	/*
-	float temp_vector_x = 0.0f;//create and set temp vector
-	float temp_vector_y = 1.0f;
-	float rotation_by_gradus =
-		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
-			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-			sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
-	rotation_by_gradus = (rotation_by_gradus * 180.0f) / (float)M_PI; //calculate temp gradus1
-
-	temp_vector_x = 1.0f;//set temp vector
-	temp_vector_y = 0.0f;
-	float rotation_by_gradus_buffer =
-		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
-			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-			sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
-	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180.0f) / (float)M_PI;//calculate temp gradus2
- 
-	//calculete new gradus
-	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
-	return rotation_by_gradus;*/
 }
 
 void VisibleObject::StartPlayAnimation(int const& tile_level,
@@ -145,12 +140,12 @@ bool VisibleObject::GetNeedRedrawImage() { return need_redraw_image_; };
 const sf::Vector2f& VisibleObject::GetCoordinateCentre() { return Sprite_object_.getPosition(); }
 
 int VisibleObject::GetHeightSprite() {
-	if (frame_count_y_ > 0) return Texture_object_.getSize().y / frame_count_y_;
+	if (frame_count_y_ > 0) return Texture_object_->getSize().y / frame_count_y_;
 	return 0;
 }
 
 int VisibleObject::GetWidthSprite() {
-	if (frame_count_x_ > 0) return Texture_object_.getSize().x / frame_count_x_;
+	if (frame_count_x_ > 0) return Texture_object_->getSize().x / frame_count_x_;
 	return 0;
 }
 
@@ -249,9 +244,8 @@ sf::Vector2f VisibleObject::ChangeVectorByDirection(sf::Vector2f const& vector) 
 ;
 bool VisibleObject::SetTexture(std::string const& texture,
 							int const& frame_count_x, int const& frame_count_y) {
-	if (Texture_object_.loadFromFile(texture)) {
-		Texture_object_.setSmooth(true);
-		Sprite_object_.setTexture(Texture_object_);
+	Texture_object_ = (this->GetTexture(texture));
+		Sprite_object_.setTexture(*Texture_object_);
 		frame_count_x_ = frame_count_x;
 		if (frame_count_x_ < 1) frame_count_x_ = 1;
 		frame_count_y_ = frame_count_y;
@@ -260,7 +254,7 @@ bool VisibleObject::SetTexture(std::string const& texture,
 		this->SetTile(1, 1);
 		this->SetOffsetSprite(offset_sprite_coordinate_);
 		return true;
-	}
+	
 	return false;
 }
 void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate) {
@@ -270,8 +264,12 @@ void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate
 }
 
 void VisibleObject::Draw(sf::RenderWindow& window) {
-	if ((Sprite_object_.getTexture()) != &Texture_object_)
-		Sprite_object_.setTexture(Texture_object_);
+	if ((Sprite_object_.getTexture()) != Texture_object_)
+		Sprite_object_.setTexture(*Texture_object_);
 	window.draw(Sprite_object_);
 	need_redraw_image_ = false;
+}
+
+VisibleObject::~VisibleObject() {
+	Texture_object_ = nullptr;
 }

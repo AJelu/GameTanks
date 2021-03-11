@@ -39,6 +39,7 @@ bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects) {
 		Enemy_objects->SafeState();
 		Enemy_objects_.push_back(Enemy_objects);
 		enemy_shot_time_.push_back(0);
+		Enemy_objects = nullptr;
 		return true;
 	}
 	return false;
@@ -55,6 +56,7 @@ bool BaseLevel::AddPlayerObject(TankObject* Player_objects) {
 bool BaseLevel::AddShotObject(MovebleObject* Shot_objects) {
 	if (Shot_objects != nullptr) {
 		Shot_objects_.push_back(Shot_objects);
+		Shot_objects = nullptr;
 		return true;
 	}
 	return false;
@@ -64,14 +66,17 @@ bool BaseLevel::AddDieObject(GameObject* Dies_objects) {
 	if (Dies_objects != nullptr && Dies_objects->GetLifeLevel() == 0) {
 		Dies_objects->SetTimeToRespawn(TIME_TO_RESPAWN);
 		Dies_objects_.push_back(Dies_objects);
+		Dies_objects = nullptr;
 		return true;
 	}
+	Dies_objects = nullptr;
 	return false;
 }
 
 bool BaseLevel::SetWatchObject(VisibleObject* Watch_object) { 
 	if (Watch_object != nullptr) {
 		Watch_object_ = Watch_object;
+		Watch_object = nullptr;
 		return true;
 	}
 	return false;
@@ -171,6 +176,7 @@ bool BaseLevel::UpdateState(float& game_timer) {
 			Dies_objects_[i]->CollisionOn();
 			if (this->RespawnObject(Dies_objects_[i])) {
 				//Dies_objects_[i]->SafeState();
+				Dies_objects_[i] = nullptr;
 				Dies_objects_.erase(Dies_objects_.begin() + i);
 				i--;
 			}
@@ -390,6 +396,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			//shot is die
 			if (Shot_objects_[i]->AnimationEnd()) {
 				delete Shot_objects_[i];
+				Shot_objects_[i] = nullptr;
 				Shot_objects_.erase(Shot_objects_.begin() + i);
 				i--;
 			}
@@ -486,6 +493,7 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 	}
 	std::cout << "error respawn: 100000;" << std::endl;
 	Game_object->RestorePreviousState();
+	Game_object = nullptr;
 	return false;
 }
 

@@ -41,6 +41,11 @@ public:
 
 class VisibleObject : public AudioObject{
 private:
+	static std::vector<std::string> Texture_name_;
+	static std::vector<sf::Texture*> Texture_objects_;
+
+	sf::Texture* GetTexture(std::string texture_name);
+
 	bool need_redraw_image_; //using for redraw screen. if have changing - true
 
 	sf::Vector2f offset_sprite_coordinate_;
@@ -53,7 +58,7 @@ private:
 	float current_frame_animation_time_; // time for current frame
 
 	int frame_count_x_, frame_count_y_; // count frame on texture 1..x
-	sf::Texture Texture_object_;
+	sf::Texture* Texture_object_;
 	sf::Sprite Sprite_object_;
 
 	float vector_rotate_x_, vector_rotate_y_;
@@ -115,6 +120,7 @@ public:
 	void SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate);
 
 	virtual void Draw(sf::RenderWindow& window);
+	~VisibleObject() override;
 };
 
 class UiObject : public VisibleObject {
