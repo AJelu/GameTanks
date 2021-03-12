@@ -5,7 +5,7 @@ class BaseCollision {
 private:
 	sf::Vector2f coordinate_;
 	sf::Vector2f coordinate_by_rotation_;
-	float rotation_degree_ = 0;
+	float rotation_degree_;
 
 public:
 	BaseCollision();

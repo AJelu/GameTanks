@@ -17,6 +17,14 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		500,	//time freeze shot (to next shot)
 		Parrent) {	
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
+	this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
+	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
+	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
+	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
+
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));
 }
 
 MovebleObject* RedTank::Shot() {

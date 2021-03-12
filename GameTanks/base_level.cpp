@@ -28,7 +28,8 @@ bool BaseLevel::AddUiObject(UiObject* Ui_object) {
 }
 
 bool BaseLevel::AddStaticObject(GameObject* Static_objects) {
-	if (Static_objects != nullptr) {
+	if (Static_objects != nullptr && this->RespawnObject(Static_objects)) {
+		Static_objects->SafeState();
 		Static_objects_.push_back(Static_objects);
 		return true;
 	}
@@ -125,7 +126,7 @@ bool BaseLevel::InputMouse(sf::Event::EventType event_type, sf::Vector2i mpuse_p
 
 void BaseLevel::InputEnemy() {
 	for (int i = 0; i < (int)Enemy_objects_.size(); i++) {
-		if (Enemy_objects_[i]->GetDistanceMove() == 0 &&
+		if (Enemy_objects_[i]->GetDistanceMove() <= 0 &&
 			Enemy_objects_[i]->GetRotationDegree() == 0) { //for moving enemy
 			if (rand() % 5 == 0) Enemy_objects_[i]->
 					SetRotationDegree((rand() % ENEMY_ROTATION_DEGREE)
@@ -247,7 +248,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				for (j = 0; j < (int)Enemy_objects_.size(); j++) {
 					if (Players_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
 						if (!Players_objects_[i]->Collision(Enemy_objects_[j], true)) {
-							Enemy_objects_[j]->SetDistanceMove(0);
+							Enemy_objects_[j]->SetDistanceMove(-10);
 							j = -1;
 							recalc_i = true;
 							control2++;
@@ -284,7 +285,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				for (j = 0; j < (int)Static_objects_.size(); j++) {
 					if (Enemy_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
 						if (!Enemy_objects_[i]->Collision(Static_objects_[j], true)) {
-							Enemy_objects_[i]->SetDistanceMove(0);
+							Enemy_objects_[i]->SetDistanceMove(-50);
 							j = -1;
 							recalc_i = true;
 							control2++;
@@ -299,11 +300,11 @@ void BaseLevel::CalculateCollisionOnLevel() {
 					}
 				}
 
-				/*control2 = 0;
+				control2 = 0;
 				for (j = i + 1; j < (int)Enemy_objects_.size(); j++) {
 					if (Enemy_objects_[i]->SafeDistanceToCollision(Enemy_objects_[j]) < 0) {
 						if (!Enemy_objects_[i]->Collision(Enemy_objects_[j], true)) {
-							Enemy_objects_[i]->SetDistanceMove(0);
+							Enemy_objects_[i]->SetDistanceMove(-50);
 							j = i;
 							recalc_i = true;
 							control2++;
@@ -316,7 +317,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 							continue;
 						}
 					}
-				}*/
+				}
 				if (recalc_i) {
 					i = -1;
 					recalc_all = true;
@@ -325,6 +326,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			}
 			else {
 				Enemy_objects_[i]->RestorePreviousState();
+				Enemy_objects_[i]->SetDistanceMove(-50);
 				i = -1;
 				recalc_all = true;
 				continue;
@@ -399,7 +401,6 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			//shot is die
 			if (Shot_item->AnimationEnd()) {
 				delete Shot_item;
-				//Shot_item = nullptr;
 				Shot_objects_.remove(Shot_item);
 				//i--;
 			}

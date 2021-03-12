@@ -10,7 +10,11 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->SetWatchObject(Player_);
 
 	TankObject* tank;
-	for (int i = 0; i < 700; i++) {
+	for (int i = 0; i < 500; i++) {
+		tank = new RedTank(1, 300 + i * 10, 400 + i * 10);
+		this->AddStaticObject(tank);
+	}
+	for (int i = 0; i < 50; i++) {
 		tank = new RedTank(1, 300, 400);
 		this->AddEnemyObject(tank);
 	}

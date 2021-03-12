@@ -157,6 +157,7 @@ void VisibleObject::RestorePreviousState() {
 	Sprite_object_.setPosition(previous_position_centre_);
 	vector_rotate_x_ = previous_vector_rotate_x_;
 	vector_rotate_y_ = previous_vector_rotate_y_;
+	gradus_ = previous_gradus_;
 	this->RecalculateVector();
 	Sprite_object_.setRotation(this->CalculateGradus());
 	this->SetNeedRedrawImage();
@@ -166,6 +167,7 @@ void VisibleObject::SafeState() {
 	previous_position_centre_ = this->GetCoordinateCentre();
 	previous_vector_rotate_x_ = vector_rotate_x_;
 	previous_vector_rotate_y_ = vector_rotate_y_;
+	previous_gradus_ = gradus_;
 }
 
 const sf::Vector2f& VisibleObject::GetOffsetSprite() { return offset_sprite_coordinate_; }

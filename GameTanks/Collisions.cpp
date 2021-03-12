@@ -2,10 +2,13 @@
 #include <cmath>
 #include "collisions.h"
 
-BaseCollision::BaseCollision() { SetCoordinate(sf::Vector2f(0, 0)); }
+BaseCollision::BaseCollision() { 
+    SetCoordinate(sf::Vector2f(0, 0));
+}
 
 BaseCollision::BaseCollision(sf::Vector2f const& coordinate) { 
-    SetCoordinate(coordinate); }
+    SetCoordinate(coordinate);
+}
 
 sf::Vector2f BaseCollision::GetCoordinate() { return coordinate_; }
 
@@ -23,7 +26,9 @@ sf::Vector2f BaseCollision::GetCoordinateByRotation(float const& rotation_degree
 }
 
 void BaseCollision::SetCoordinate(sf::Vector2f const& coordinate) { 
-    coordinate_ = coordinate; }
+    coordinate_ = coordinate;
+    GetCoordinateByRotation(rotation_degree_ + 1);
+}
 
 RoundCollision::RoundCollision() : BaseCollision() { r_ = 1; }
 

@@ -69,6 +69,7 @@ private:
 
 	//for optimization:
 	float gradus_ = 0; //float CalculateGradus();
+	float previous_gradus_ = 0; //float CalculateGradus();
 	//end for optimization;
 
 	void SetNeedRedrawImage();
