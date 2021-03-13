@@ -4,9 +4,9 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 	GameObject* Parrent) : TankObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
-		sf::Vector2f(60, 157), //offset
-		"Data/Unit/Tank4.png", //texture
-		5, 2,	//frame count
+		sf::Vector2f(74, 165), //offset
+		"Data/Unit/Tank6.png", //texture
+		4, 4,	//frame count
 		5,		//life level
 		200,	//speed move
 		0,		//freeze time
@@ -36,17 +36,17 @@ MovebleObject* RedTank::Shot() {
 	return shot_bullet;
 }
 
-void RedTank::PlayAnimateDie() { this->StartPlayAnimation(2, 1, 5, 500); }
+void RedTank::PlayAnimateDie() { this->StartPlayAnimation(4, 1, 4, 500); }
 
-void RedTank::PlayAnimateLife() { this->StartPlayAnimation(1, 1, 5, 500); }
+void RedTank::PlayAnimateLife() { this->StartPlayAnimation(1, 1, 4, 500); }
 
-void RedTank::PlayAnimateMovePlus() { this->StartPlayAnimation(1, 1, 5, 50); }
+void RedTank::PlayAnimateMovePlus() { this->StartPlayAnimation(3, 1, 4, 200); }
 
-void RedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(1, 5, 1, 150); }
+void RedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(3, 4, 1, 100); }
 
-void RedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(2, 1, 5, 70); }
+void RedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(2, 1, 4, 100); }
 
-void RedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(2, 5, 1, 70); }
+void RedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(2, 4, 1, 100); }
 
 void RedTank::RestoreLife() { this->SetLifeLevel(5); }
 
