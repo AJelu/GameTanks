@@ -16,9 +16,10 @@ private:
 	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
 	std::list <MovebleObject*> Shot_objects_;
+	GameObject* Bonus_object_;
 
 	//die game objects (exist in other vectors).
-	std::vector <GameObject*> Dies_objects_;
+	std::list <GameObject*> Dies_objects_;
 
 	std::vector <BaseObject*> Need_sync_with_client_objects_;
 
@@ -56,6 +57,7 @@ public:
 	bool AddShotObject(MovebleObject* Shot_objects);
 	bool AddDieObject(GameObject* Dies_objects);
 	bool SetWatchObject(VisibleObject* Watch_object);
+	bool SetBonusObject(GameObject* Bonus_object);
 
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);

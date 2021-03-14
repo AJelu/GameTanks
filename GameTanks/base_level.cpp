@@ -8,10 +8,10 @@ BaseLevel::BaseLevel() {
 sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	window.draw(Sprite_background_);
 	int i;
-	for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);	
+	for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);
+	if (Bonus_object_ != nullptr) Bonus_object_->Draw(window);
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->Draw(window);
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->Draw(window);
-	//for (i = 0; i < (int)Shot_objects_.size(); i++)		Shot_objects_[i]->Draw(window);
 	for (MovebleObject* item : Shot_objects_)			item->Draw(window);
 	for (i = 0; i < (int)Ui_objects_.size(); i++)		Ui_objects_[i]->Draw(window);
 	CameraControl();
@@ -41,7 +41,6 @@ bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects) {
 		Enemy_objects->SafeState();
 		Enemy_objects_.push_back(Enemy_objects);
 		enemy_shot_time_.push_back(0);
-		Enemy_objects = nullptr;
 		return true;
 	}
 	return false;
@@ -58,7 +57,6 @@ bool BaseLevel::AddPlayerObject(TankObject* Player_objects) {
 bool BaseLevel::AddShotObject(MovebleObject* Shot_objects) {
 	if (Shot_objects != nullptr) {
 		Shot_objects_.push_back(Shot_objects);
-		Shot_objects = nullptr;
 		return true;
 	}
 	return false;
@@ -68,7 +66,6 @@ bool BaseLevel::AddDieObject(GameObject* Dies_objects) {
 	if (Dies_objects != nullptr && Dies_objects->GetLifeLevel() == 0) {
 		Dies_objects->SetTimeToRespawn(TIME_TO_RESPAWN);
 		Dies_objects_.push_back(Dies_objects);
-		Dies_objects = nullptr;
 		return true;
 	}
 	Dies_objects = nullptr;
@@ -78,7 +75,14 @@ bool BaseLevel::AddDieObject(GameObject* Dies_objects) {
 bool BaseLevel::SetWatchObject(VisibleObject* Watch_object) { 
 	if (Watch_object != nullptr) {
 		Watch_object_ = Watch_object;
-		Watch_object = nullptr;
+		return true;
+	}
+	return false;
+}
+
+bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
+	if (Bonus_object != nullptr) {
+		Bonus_object_ = Bonus_object;
 		return true;
 	}
 	return false;
@@ -115,7 +119,6 @@ bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key) {
 		if (Key == sf::Keyboard::Right) Players_objects_[player_number]->MoveRight();
 		if (Key == sf::Keyboard::Space)
 			this->AddShotObject(Players_objects_[player_number]->CreateShot());
-		return true;
 	}
 	return false;
 }
@@ -130,9 +133,9 @@ void BaseLevel::InputEnemy() {
 			Enemy_objects_[i]->GetRotationDegree() == 0) { //for moving enemy
 			if (rand() % 5 == 0) Enemy_objects_[i]->
 					SetRotationDegree((rand() % ENEMY_ROTATION_DEGREE)
-						- ENEMY_ROTATION_DEGREE / 2);
+						- (float)ENEMY_ROTATION_DEGREE / 2);
 			else Enemy_objects_[i]->
-					SetDistanceMove((rand() % ENEMY_DISTANCE_MOVE) - 5);
+					SetDistanceMove(float(rand() % ENEMY_DISTANCE_MOVE) - 5);
 		}
 		if (enemy_shot_time_[i] <= 0) { //for shooting enemy
 			this->AddShotObject(Enemy_objects_[i]->CreateShot());
@@ -150,6 +153,10 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		Static_objects_[i]->RecalculateState(game_timer);
 		Static_objects_[i]->ForAnimation(game_timer);
 	}
+	if (Bonus_object_ != nullptr) {
+		Bonus_object_->RecalculateState(game_timer);
+		Bonus_object_->ForAnimation(game_timer);
+	}
 	// update animation and state for Enemy_objects_
 	for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 		Enemy_objects_[i]->RecalculateState(game_timer);
@@ -161,11 +168,6 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		Players_objects_[i]->RecalculateState(game_timer);
 		Players_objects_[i]->ForAnimation(game_timer);
 	}
-	// update animation and state for Shot_objects_
-	/*for (i = 0; i < (int)Shot_objects_.size(); i++) {
-		Shot_objects_[i]->RecalculateState(game_timer);
-		Shot_objects_[i]->ForAnimation(game_timer);
-	}*/
 	for (MovebleObject* item : Shot_objects_){
 		item->RecalculateState(game_timer);
 		item->ForAnimation(game_timer);
@@ -176,15 +178,14 @@ bool BaseLevel::UpdateState(float& game_timer) {
 
 	this->CalculateCollisionOnLevel();
 
-	for (i = 0; i < (int)Dies_objects_.size(); i++) {
-		if (Dies_objects_[i]->GetTimeToRespawn() == 0) {
-			Dies_objects_[i]->RestoreLife();
-			Dies_objects_[i]->CollisionOn();
-			if (this->RespawnObject(Dies_objects_[i])) {
-				//Dies_objects_[i]->SafeState();
-				Dies_objects_[i] = nullptr;
-				Dies_objects_.erase(Dies_objects_.begin() + i);
-				i--;
+	//for (i = 0; i < (int)Dies_objects_.size(); i++) {
+	for (GameObject* item : Dies_objects_) {
+		if (item->GetTimeToRespawn() == 0) {
+			item->RestoreLife();
+			item->CollisionOn();
+			if (this->RespawnObject(item)) {
+				//item->SafeState();
+				Dies_objects_.remove(item);
 			}
 		}
 	}
@@ -209,6 +210,11 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			control2 = 0;
 			if (Players_objects_[i]->ObjectInRangeLevel(
 				size_level_width_, size_level_height_, size_level_border_)) {
+				if (!Players_objects_[i]->Collision(Bonus_object_)) {
+					Players_objects_[i]->AddBonus(new Bonuses());
+					this->RespawnObject(Bonus_object_);
+				}
+
 				for (j = 0; j < (int)Static_objects_.size(); j++) {
 					if (Players_objects_[i]->SafeDistanceToCollision(Static_objects_[j]) < 0) {
 						if (!Players_objects_[i]->Collision(Static_objects_[j], true)) {
@@ -349,6 +355,15 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Enemy_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Enemy_objects_[j]->GetLifeLevel() != 0) {
+							//add current point:
+							if (Shot_item->GetPerrent() != nullptr) {
+								float procent = (float)Shot_item->GetLifeLevel() /
+									(float)Enemy_objects_[j]->GetMaxLifeLevel();
+								if (procent > 1) procent = 1.0f;
+								Shot_item->GetPerrent()->SetCurrentPoint(
+									int(Enemy_objects_[j]->GetBasePoint() * procent));
+							}
+							//work by shooting:
 							Enemy_objects_[j]->SetLifeLevel(
 								-Shot_item->GetLifeLevel(), true);
 							if (this->AddDieObject(Enemy_objects_[j])) {
@@ -367,6 +382,28 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Players_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Players_objects_[j]->GetLifeLevel() != 0) {
+							//add current point:
+							if (Shot_item->GetPerrent() != nullptr) {
+								float percentage; 
+								if (Shot_item->GetLifeLevel() < 
+									Players_objects_[j]->GetLifeLevel())
+									percentage = (float)Shot_item->GetLifeLevel() /
+										(float)Players_objects_[j]->GetMaxLifeLevel();
+								else 
+									percentage = (float)Players_objects_[j]->GetLifeLevel() /
+										(float)Players_objects_[j]->GetMaxLifeLevel();
+								if (percentage > 1) percentage = 1.0f;
+								Shot_item->GetPerrent()->SetCurrentPoint(
+									int(Players_objects_[j]->GetBasePoint() * percentage));
+								//minus current point:
+								Shot_item->GetPerrent()->SetCurrentPoint(
+									int(Players_objects_[j]->GetCurrentPoint()
+										* TRANSFER_PERCENTAGE_POINT * percentage));
+
+							}
+							if (Shot_item->GetPerrent() != nullptr) {
+							}
+							//work by shooting:
 							Players_objects_[j]->SetLifeLevel(
 								-Shot_item->GetLifeLevel(), true);
 							if (this->AddDieObject(Players_objects_[j])) {
@@ -385,6 +422,15 @@ void BaseLevel::CalculateCollisionOnLevel() {
 						//add Static_objects_[j] to vector Dies_objects_ and play dies
 						die_current_shot = true;
 						if (Static_objects_[j]->GetLifeLevel() != 0) {
+							//add current point:
+							if (Shot_item->GetPerrent() != nullptr) {
+								float procent = (float)Shot_item->GetLifeLevel() /
+									(float)Static_objects_[j]->GetMaxLifeLevel();
+								if (procent > 1) procent = 1.0f;
+								Shot_item->GetPerrent()->SetCurrentPoint(
+									int(Static_objects_[j]->GetBasePoint() * procent));
+							}
+							//work by shooting:
 							Static_objects_[j]->SetLifeLevel(
 								-Shot_item->GetLifeLevel(), true);
 							this->AddDieObject(Static_objects_[j]);

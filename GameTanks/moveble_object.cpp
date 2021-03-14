@@ -12,10 +12,10 @@ MovebleObject::MovebleObject(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate,
 	std::string const& texture, int const& frame_count_x, int const& frame_count_y,
-	int const& life_level, float const& speed, float const& freeze_time,
+	int const& max_life_level, float const& speed, float const& freeze_time,
 	float const& rotation_speed, GameObject* Parrent)
 	: GameObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_count_x, frame_count_y, life_level, Parrent) {
+		texture, frame_count_x, frame_count_y, max_life_level, Parrent) {
 	this->SetSpeedMove(speed);
 	this->SetFreezeTime(freeze_time);
 	this->SetRotationSpeed(rotation_speed);
@@ -50,6 +50,8 @@ float MovebleObject::GetDistanceMove() { return distance_; }
 float MovebleObject::GetFreezeTime() { return freeze_time_; }
 
 float MovebleObject::GetRotationDegree() { return rotation_degree_; }
+
+float MovebleObject::GetRotationSpeed() { return rotation_speed_; }
 
 void MovebleObject::MoveTo(float const& move_to_x, float const& move_to_y) {
 	this->SetRotationVector(move_to_x, move_to_y);

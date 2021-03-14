@@ -87,6 +87,9 @@
     <ClCompile Include="ready_objects.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
+    <ClCompile Include="bonuses.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collisions.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ready_objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bonuses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

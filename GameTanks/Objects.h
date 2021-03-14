@@ -3,8 +3,10 @@
 #include <SFML/Audio.hpp>
 #include <string>
 #include <vector>
+#include <list>
 #include <iostream>
 #include "collisions.h"
+#include "bonuses.h"
 
 //this objects using in levels to create game experience: game menu, game levels
 
@@ -159,7 +161,8 @@ public:
 
 class GameObject : public VisibleObject {
 private:
-	int life_level_;
+	int life_level_, max_life_level_,
+		base_point_, current_point_;
 	float max_collision_distance_;
 	bool collision_off_;
 
@@ -177,16 +180,23 @@ public:
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
-		int const& life_level, GameObject* Parrent = nullptr);
+		int const& max_life_level, GameObject* Parrent = nullptr);
 
+	void SetBasePoint(int const& base_point);
+	void SetCurrentPoint(int const& current_point, bool const& add_to_previous = true);
 	void SetLifeLevel(int const& life_level, bool const& add_to_previous = false);
+	void SetMaxLifeLevel(int const& max_life_level);
 	void SetTimeToRespawn(float const& time_to_respawn, bool const& add_to_previous = false);
+	
+	int GetBasePoint();
+	int GetCurrentPoint();
 	int GetLifeLevel();
+	int GetMaxLifeLevel();
 	float GetTimeToRespawn();
 	float GetSafeDistance();
 	GameObject* GetPerrent();
 
-	virtual void RestoreLife();
+	void RestoreLife();
 
 	//for recalculate time to respawn
 	virtual void RecalculateState(float const& game_time);
@@ -218,7 +228,7 @@ public:
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
-		int const& life_level, float const& speed, float const& freeze_time, 
+		int const& max_life_level, float const& speed, float const& freeze_time,
 		float const& rotation_speed, GameObject* Parrent = nullptr);
 
 	//set object parameters
@@ -235,6 +245,7 @@ public:
 	float GetDistanceMove(); //px
 	float GetFreezeTime(); //sec
 	float GetRotationDegree(); // the remainder of the angle of rotation
+	float GetRotationSpeed();
 
 	void MoveTo(float const& move_to_x, float const& move_to_y);
 
@@ -250,21 +261,31 @@ public:
 
 class TankObject : public MovebleObject {
 private:
-	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_, point_create_shot_;
+	float speed_shot_, shot_distance_, time_to_next_shot_, time_freeze_shot_;
+	sf::Vector2f point_create_shot_;
+	int shot_life_;
+
+	Bonuses* Bonus_;
+	void DeleteBonusFromObject(Bonuses * bonus);
+	void AddBonusToObject(Bonuses * bonus);
 protected:
 	virtual MovebleObject* Shot();
 public:
 	TankObject();
-	TankObject(int const& id_object,
+	TankObject(int const& id_object,//add life shot
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, 
 		int const& frame_count_x, int const& frame_count_y,
-		int const& life_level,
+		int const& max_life_level,
 		float const& speed, float const& freeze_time,
-		float const& rotation_speed, int const& point_create_shot_by_vector, 
-		float const& speed_shot, float const& shot_distance, float const& time_freeze_shot, 
+		float const& rotation_speed, sf::Vector2f const& point_create_shot_by_vector, 
+		int const& shot_life, float const& speed_shot, float const& shot_distance,
+		float const& time_freeze_shot, 
 		GameObject* Parrent);
+
+	void AddBonus(Bonuses* bonus);
+	Bonuses* GetBonus();
 
 	bool CanCreateShot();
 	MovebleObject* CreateShot(bool const& forcibly_shot = false);
@@ -275,14 +296,16 @@ public:
 	void MoveRight();
 	void MoveLeft();
 
-	int GetPointCreateShot();
+	sf::Vector2f GetPointCreateShot();
 	float GetSpeedShot();
+	int GetLifeShot();
 	float GetShotDistance();
 	float GetTimeToNextShot();
 	float GetTimeFreezeShot();
 
-	void SetPointCreateShot(int const& point_create_shot);
+	void SetPointCreateShot(sf::Vector2f const& point_create_shot);
 	void SetSpeedShot(float const& speed_shot);
+	void SetLifeShot(int const& shot_life);
 	void SetShotDistance(float const& shot_distance);
 	void SetTimeToNextShot(float const& time_to_next_shot);
 	void SetTimeFreezeShot(float const& time_freeze_shot);

@@ -3,6 +3,7 @@
 
 GameObject::GameObject() : VisibleObject() {
 	this->SetLifeLevel(1);
+	this->SetMaxLifeLevel(1);
 	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = nullptr;
@@ -13,10 +14,11 @@ GameObject::GameObject(int const& id_object,
 			sf::Vector2f const& offset_sprite_coordinate,
 			std::string const& texture, 
 			int const& frame_count_x, int const& frame_count_y,
-			int const& life_level, GameObject* Parrent)
+			int const& max_life_level, GameObject* Parrent)
 			: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 				texture, frame_count_x, frame_count_y) {
-	this->SetLifeLevel(life_level);
+	this->SetLifeLevel(max_life_level);
+	this->SetMaxLifeLevel(max_life_level);
 	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = Parrent;
@@ -27,12 +29,20 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 	if (add_to_previous)	new_life_level = life_level_ + life_level;
 	else					new_life_level = life_level;
 	if (new_life_level < 0)	new_life_level = 0;
+	if (new_life_level > max_life_level_) new_life_level = max_life_level_;
 
 	if (life_level_ != new_life_level) {
 		if (new_life_level == 0)	this->PlayAnimateDie();
 		if (life_level_ == 0)		this->PlayAnimateLife();
 
 		life_level_ = new_life_level;
+	}
+}
+
+void GameObject::SetMaxLifeLevel(int const& max_life_level) {
+	if (max_life_level > 0) {
+		max_life_level_ = max_life_level;
+		if (max_life_level_ > this->GetLifeLevel()) this->SetLifeLevel(max_life_level_);
 	}
 }
 
@@ -46,6 +56,8 @@ void GameObject::SetTimeToRespawn(float const& time_to_respawn, bool const& add_
 
 int GameObject::GetLifeLevel() { return life_level_; }
 
+int GameObject::GetMaxLifeLevel() { return max_life_level_; }
+
 float GameObject::GetTimeToRespawn() { return time_to_respawn_; }
 
 float GameObject::GetSafeDistance(){
@@ -54,14 +66,24 @@ float GameObject::GetSafeDistance(){
 
 GameObject* GameObject::GetPerrent() { return Parrent_; }
 
-void GameObject::RestoreLife() { this->SetLifeLevel(1); }
+void GameObject::SetBasePoint(int const& base_point) { base_point_ = base_point; }
+
+void GameObject::SetCurrentPoint(int const& current_point, bool const& add_to_previous) {
+	if (add_to_previous)	current_point_ += current_point;
+	else					current_point_ = current_point;
+}
+
+void GameObject::RestoreLife() { this->SetLifeLevel(max_life_level_); }
 
 void GameObject::RecalculateState(float const& game_time) {
-	if (time_to_respawn_ != 0) {
-		if (time_to_respawn_ > 0) time_to_respawn_ -= game_time;
-		else time_to_respawn_ = 0;
-	}
+	if (time_to_respawn_ != 0)
+		if (time_to_respawn_ > 0)	time_to_respawn_ -= game_time;
+		else						time_to_respawn_ = 0;
 }
+
+int GameObject::GetBasePoint() { return base_point_; }
+
+int GameObject::GetCurrentPoint() { return current_point_; }
 
 void GameObject::PlayAnimateDie() { }
 
@@ -79,13 +101,13 @@ void GameObject::AddCollision(RoundCollision* New_colision) {
 }
 
 bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int level_size_border){
-	if (this->GetCoordinateCentre().x - max_collision_distance_
+	if (this->GetCoordinateCentre().x - this->GetSafeDistance()
 		> level_size_border &&
-		this->GetCoordinateCentre().y - max_collision_distance_
+		this->GetCoordinateCentre().y - this->GetSafeDistance()
 		> level_size_border &&
-		this->GetCoordinateCentre().x + max_collision_distance_
+		this->GetCoordinateCentre().x + this->GetSafeDistance()
 		< level_size_x - level_size_border &&
-		this->GetCoordinateCentre().y + max_collision_distance_
+		this->GetCoordinateCentre().y + this->GetSafeDistance()
 		< level_size_y - level_size_border)
 		return true;
 
@@ -109,42 +131,44 @@ bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int leve
 }
 
 float GameObject::SafeDistanceToCollision(GameObject* Game_object) {
-	if (collision_off_ || Game_object->collision_off_) return 100000;
+	if (collision_off_ || Game_object->collision_off_) return 10000000;
 
 	return this->GetDistanceToPoint(Game_object->GetCoordinateCentre()) -
-		this->max_collision_distance_ - Game_object->max_collision_distance_;
+		this->GetSafeDistance() - Game_object->GetSafeDistance();
 }
 
 //not have collision - return true
 bool GameObject::Collision(GameObject* Game_object,	bool healt) {
-	if (collision_off_ || Game_object->collision_off_) return true;
-	float distance;
 	if (Game_object != nullptr) {
-		for (int i = 0; i < (int)this->Collisions_.size(); i++) {
-			point_1 = this->Collisions_[i]->
-				GetCoordinateByRotation(this->CalculateGradus());
-			point_1.x += this->GetCoordinateCentre().x;
-			point_1.y *= -1;
-			point_1.y += this->GetCoordinateCentre().y;
-			for (int j = 0; j < (int)Game_object->Collisions_.size(); j++) {
-				point_2 = Game_object->Collisions_[j]->
-					GetCoordinateByRotation(Game_object->CalculateGradus());
-				point_2.x += Game_object->GetCoordinateCentre().x;
-				point_2.y *= -1;
-				point_2.y += Game_object->GetCoordinateCentre().y;
-				
-				distance = sqrtf(powf(point_1.x - point_2.x, 2) +
-					powf(point_1.y - point_2.y, 2));
-				if ((distance - this->Collisions_[i]->GetRadius() -
-					Game_object->Collisions_[j]->GetRadius()) < 0) {
-					if (healt) {
-						this->RestorePreviousState();
-						Game_object->RestorePreviousState();
+		if (collision_off_ || Game_object->collision_off_) return true;
+		float distance;
+		if (Game_object != nullptr) {
+			for (int i = 0; i < (int)this->Collisions_.size(); i++) {
+				point_1 = this->Collisions_[i]->
+					GetCoordinateByRotation(this->CalculateGradus());
+				point_1.x += this->GetCoordinateCentre().x;
+				point_1.y *= -1;
+				point_1.y += this->GetCoordinateCentre().y;
+				for (int j = 0; j < (int)Game_object->Collisions_.size(); j++) {
+					point_2 = Game_object->Collisions_[j]->
+						GetCoordinateByRotation(Game_object->CalculateGradus());
+					point_2.x += Game_object->GetCoordinateCentre().x;
+					point_2.y *= -1;
+					point_2.y += Game_object->GetCoordinateCentre().y;
+
+					distance = sqrtf(powf(point_1.x - point_2.x, 2) +
+						powf(point_1.y - point_2.y, 2));
+					if ((distance - this->Collisions_[i]->GetRadius() -
+						Game_object->Collisions_[j]->GetRadius()) < 0) {
+						if (healt) {
+							this->RestorePreviousState();
+							Game_object->RestorePreviousState();
+						}
+						return false;
 					}
-					return false;
 				}
 			}
-		}
+		}		
 	}
 	return true;
 }

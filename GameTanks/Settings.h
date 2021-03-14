@@ -17,6 +17,10 @@ static const int ENEMY_DISTANCE_MOVE = 200;
 
 static const int TIME_TO_RESPAWN = 5000;
 
+static const int TIME_DURATION_BONUS = 100000;
+
+static const float TRANSFER_PERCENTAGE_POINT = 0.10f;
+
 /* GAME: */
 //here may be the basic settings of the game... 
 //may be speed attack/number of enemies/number of objects...

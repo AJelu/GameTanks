@@ -142,6 +142,7 @@
     <ClCompile Include="audio_object.cpp" />
     <ClCompile Include="base_level.cpp" />
     <ClCompile Include="base_object.cpp" />
+    <ClCompile Include="bonuses.cpp" />
     <ClCompile Include="collisions.cpp" />
     <ClCompile Include="connect_level.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="visible_object.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bonuses.h" />
     <ClInclude Include="collisions.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="levels.h" />
