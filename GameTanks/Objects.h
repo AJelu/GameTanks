@@ -7,6 +7,7 @@
 #include <iostream>
 #include "collisions.h"
 #include "bonuses.h"
+#include "settings.h"
 
 //this objects using in levels to create game experience: game menu, game levels
 
@@ -25,23 +26,7 @@ public:
 	virtual ~BaseObject();
 };
 
-class AudioObject : public BaseObject{
-private:
-	std::vector <std::string> audio_action_name_;
-	std::vector <sf::Sound*> sounds_file_;
-	std::vector <sf::SoundBuffer*> sounds_buffer_;
-	std::vector <int> sounds_volume_;
-public:
-	AudioObject();
-	AudioObject(int const& id_object);
-	void AddAudioAction(std::string const& audio_action_name,
-						std::string const& audio_file, int const& volume = 100);
-	bool StartAudioAction(std::string const& audio_action, bool looped = false);
-	bool StopAudioAction(std::string const& audio_action);
-	~AudioObject() override;
-};
-
-class VisibleObject : public AudioObject{
+class VisibleObject : public BaseObject {
 private:
 	static std::vector<std::string> Texture_name_;
 	static std::vector<sf::Texture*> Texture_objects_;
@@ -91,14 +76,15 @@ public:
 		int const& frame_start, int const& frame_end,
 		float const& animation_speed_for_frame = 1000, bool const& looped = false);
 	bool AnimationEnd();
-	void ForAnimation(float const& game_time); //counting current frame
+	//for recalculate animations
+	virtual void RecalculateState(float const& game_time);
 
 	//get object parameters
 	bool GetNeedRedrawImage(); //return true if need update image
 	const sf::Vector2f& GetCoordinateCentre();
-	const sf::Vector2f& GetOffsetSprite();
-	int GetHeightSprite();
-	int GetWidthSprite();
+	const sf::Vector2f& GetOffsetSprite(bool get_scale_size = false);
+	int GetHeightSprite(bool get_scale_size = false);
+	int GetWidthSprite(bool get_scale_size = false);
 	float GetVectorX();
 	float GetVectorY();
 
@@ -121,34 +107,111 @@ public:
 	bool SetTexture(std::string const& texture,
 						int const& frame_count_x, int const& frame_count_y);
 	void SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate);
+	void SetScale(sf::Vector2f const& vector_scale);
+	const sf::Vector2f GetScale();
 
 	virtual void Draw(sf::RenderWindow& window);
 	~VisibleObject() override;
 };
 
-class UiObject : public VisibleObject {
+class AudioObject : public VisibleObject {
 private:
-	bool focus_on_this_, down_on_this_, up_on_this_;
+	std::vector <std::string> audio_action_name_;
+	std::vector <sf::Sound*> sounds_file_;
+	std::vector <sf::SoundBuffer*> sounds_buffer_;
+	std::vector <int> sounds_volume_;
+
+	sf::View* Camera_;
+public:
+	AudioObject();
+	AudioObject(int const& id_object,
+		sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate,
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
+	void AddAudioAction(std::string const& audio_action_name,
+		std::string const& audio_file, int const& volume = 100);
+	bool StartAudioAction(std::string const& audio_action, bool looped = false);
+	bool StopAudioAction(std::string const& audio_action);
+
+	//play started audio actions
+	void RecalculateState(float const& game_time) override; /////////////////////////////
+
+	void SetCamera(sf::View* Camera);
+	sf::View* GetCamera();
+
+	~AudioObject() override;
+};
+
+class UiObject : public AudioObject {
+private:
+	bool enter_on_this_, leave_on_this_, down_on_this_, up_on_this_;
 	std::string text_;
 
 	sf::Vector2f coordinate_centre_;
-	sf::View* Camera_;
+	VisibleObject* Anchor_object_;
+	sf::Font Font_;
+	sf::Text Text_in_ui_;
+	sf::Color Text_color_;
+	sf::Text::Style Text_style_;
+	unsigned int character_size_;
+	float cursor_size_;
+
+	bool focusable_;
+	float time_blink_cursor_ = 0;
+	bool show_cursor_;
+
+	float text_centre_ = 0; // <0 - left; >0 - right; 0 - centre;
 public:
 	UiObject();
-	UiObject(int const& id_object,
-		sf::Vector2f const& coordinate_centre, sf::View* Camera,
+	UiObject(
+		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
-	bool IsFocusOnThis(int const& x, int const& y);
-	bool IsDownOnThis(int const& x, int const& y);
-	bool IsUpOnThis(int const& x, int const& y);
-	void AddInputText(std::string const& text);
-	void SetText(std::string const& text);
+	
+	bool MouseInputToObject(sf::Event::EventType const& event_type, 
+		sf::Vector2i const& mouse_position, bool keyboard_input = false);
+	void InputKey(sf::Keyboard::Key const& key);
+	
 
-	bool GetFocusOnThis(bool clear = false);
-	bool GetDownOnThis(bool clear = false);
-	bool GetUpOnThis(bool clear = false);
+	//cursor blink
+	void RecalculateState(float const& game_time) override;
+
+	//sets
+	void SetText(std::string text, bool const& add_to_previous = false);
+	void ShowCursorBlink(bool const& show_cursor);
+	void SetTextColor(sf::Color const& Text_color);
+	void SetTextStyle(sf::Text::Style const& Text_style);
+	void SetCharacterSize(unsigned int const& character_size);
+	void SetCursorSize(float const& cursor_size);
+	void SetFocusable(bool const& focusable);
+	void SetTextAlign(float const& align);
+
+	//gets
 	std::string GetText();
+	bool GetCursorBlink();
+	sf::Color GetTextColor();
+	sf::Text::Style GetTextStyle();
+	unsigned int GetCharacterSize();
+	float GetCursorSize();
+	bool GetFocusable();
+	float GetTextAlign();
+
+	bool GetMouseDownOnThis(bool clear = false);
+	bool GetMouseUpOnThis(bool clear = false);
+	
+	// methods for keyboard input:
+	// set focuseble
+	// set down
+	// set up
+	// get set focuseble
+	
+	void SetAnchorObject(VisibleObject* Anchor_object);
+	VisibleObject* GetAnchorObject();
+
+	virtual void PlayAnimateEnter();
+	virtual void PlayAnimateLeave();
+	virtual void PlayAnimateClickDown();
+	virtual void PlayAnimateClickUp();
 
 	void Draw(sf::RenderWindow& window) override;
 };
@@ -159,12 +222,14 @@ public:
 };
 
 
-class GameObject : public VisibleObject {
+class GameObject : public AudioObject {
 private:
 	int life_level_, max_life_level_,
 		base_point_, current_point_;
 	float max_collision_distance_;
 	bool collision_off_;
+	
+	std::string game_type_ = "";
 
 	float time_to_respawn_;
 
@@ -199,16 +264,19 @@ public:
 	void RestoreLife();
 
 	//for recalculate time to respawn
-	virtual void RecalculateState(float const& game_time);
+	void RecalculateState(float const& game_time) override;
 
 	//for collisions
 	void AddCollision(RoundCollision* New_colision);
 	bool ObjectInRangeLevel(int level_size_x, int level_size_y, int level_size_border);
 	float SafeDistanceToCollision(GameObject* Game_object);
-	bool Collision(GameObject* Game_object, bool healt = false);
+	bool Collision(GameObject* Game_object);
 
 	void CollisionOff();//ignore all collisions
 	void CollisionOn();
+
+	std::string GetGameType();//ignore all collisions
+	void SetGameType(std::string const& game_type);
 
 	//for animation
 	virtual void PlayAnimateDie(); ///need override in daughter

@@ -8,11 +8,11 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->Player_ = new Tank2(1, 200, 200);
 	this->AddPlayerObject(Player_);
 	this->SetWatchObject(Player_);
-	this->AddPlayerObject(new RedTank(1, 1200, 200));
+
 	this->SetBonusObject(new Tank4(1, 500, 500));
 
 	TankObject* tank;
-	for (int i = 0; i < 500; i++) {
+	for (int i = 0; i < 100; i++) {
 		tank = new RedTank(1, 300, 400);
 		this->AddStaticObject(tank);
 	}
@@ -21,6 +21,16 @@ GameLevel::GameLevel() : BaseLevel() {
 		this->AddEnemyObject(tank);
 	}
 
+	UiObject* ui = new UiObject(sf::Vector2f(200, 200), sf::Vector2f(100, 50),
+		"Data/Ui/Button1.png", 5, 2);
+	this->AddUiObject(ui);
+	ui->SetRotation(0);
+	ui->SetText("TEST text");
+	ui->SetFocusable(true);
+	/*ui = new UiObject(sf::Vector2f(0, -30), sf::Vector2f(50, 50),
+		"Data/Unit/Tank6.png", 12, 4);
+	ui->SetAnchorObject(Player_);
+	this->AddUiObject(ui);*/
 
 }
 

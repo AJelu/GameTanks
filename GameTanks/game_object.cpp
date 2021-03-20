@@ -1,7 +1,7 @@
 #include "objects.h"
 #include <cmath>
 
-GameObject::GameObject() : VisibleObject() {
+GameObject::GameObject() : AudioObject() {
 	this->SetLifeLevel(1);
 	this->SetMaxLifeLevel(1);
 	this->CollisionOn();
@@ -15,7 +15,7 @@ GameObject::GameObject(int const& id_object,
 			std::string const& texture, 
 			int const& frame_count_x, int const& frame_count_y,
 			int const& max_life_level, GameObject* Parrent)
-			: VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
+			: AudioObject(id_object, coordinate_centre, offset_sprite_coordinate,
 				texture, frame_count_x, frame_count_y) {
 	this->SetLifeLevel(max_life_level);
 	this->SetMaxLifeLevel(max_life_level);
@@ -71,11 +71,13 @@ void GameObject::SetBasePoint(int const& base_point) { base_point_ = base_point;
 void GameObject::SetCurrentPoint(int const& current_point, bool const& add_to_previous) {
 	if (add_to_previous)	current_point_ += current_point;
 	else					current_point_ = current_point;
+	if (current_point_ < 0) current_point_ = 0;
 }
 
 void GameObject::RestoreLife() { this->SetLifeLevel(max_life_level_); }
 
 void GameObject::RecalculateState(float const& game_time) {
+	AudioObject::RecalculateState(game_time);
 	if (time_to_respawn_ != 0)
 		if (time_to_respawn_ > 0)	time_to_respawn_ -= game_time;
 		else						time_to_respawn_ = 0;
@@ -125,7 +127,7 @@ bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int leve
 				> level_size_x - level_size_border ||
 			point_1.y + this->Collisions_[i]->GetRadius()
 				> level_size_y - level_size_border) 
-			return false;		
+			return false;
 	}
 	return true;
 }
@@ -138,7 +140,7 @@ float GameObject::SafeDistanceToCollision(GameObject* Game_object) {
 }
 
 //not have collision - return true
-bool GameObject::Collision(GameObject* Game_object,	bool healt) {
+bool GameObject::Collision(GameObject* Game_object) {
 	if (Game_object != nullptr) {
 		if (collision_off_ || Game_object->collision_off_) return true;
 		float distance;
@@ -160,10 +162,6 @@ bool GameObject::Collision(GameObject* Game_object,	bool healt) {
 						powf(point_1.y - point_2.y, 2));
 					if ((distance - this->Collisions_[i]->GetRadius() -
 						Game_object->Collisions_[j]->GetRadius()) < 0) {
-						if (healt) {
-							this->RestorePreviousState();
-							Game_object->RestorePreviousState();
-						}
 						return false;
 					}
 				}
@@ -176,6 +174,10 @@ bool GameObject::Collision(GameObject* Game_object,	bool healt) {
 void GameObject::CollisionOff() { collision_off_ = true; }
 
 void GameObject::CollisionOn() { collision_off_ = false; }
+
+std::string GameObject::GetGameType() { return game_type_; }
+
+void GameObject::SetGameType(std::string const& game_type) { game_type_ = game_type; }
 
 GameObject::~GameObject() {
 	for (int i = 0; i < (int)Collisions_.size(); i++) {

@@ -5,7 +5,7 @@
 std::vector<std::string> VisibleObject::Texture_name_;
 std::vector<sf::Texture*> VisibleObject::Texture_objects_;
 
-VisibleObject::VisibleObject() : AudioObject() {
+VisibleObject::VisibleObject() : BaseObject() {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
@@ -17,7 +17,7 @@ VisibleObject::VisibleObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x,
-		int const& frame_count_y) : AudioObject(id_object) {
+		int const& frame_count_y) : BaseObject(id_object) {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(coordinate_centre);
 	this->SetOffsetSprite(offset_sprite_coordinate);
@@ -120,7 +120,7 @@ bool VisibleObject::AnimationEnd(){
 }
 
 //counting current frame
-void VisibleObject::ForAnimation(float const& game_time){
+void VisibleObject::RecalculateState(float const& game_time){
 	if (animation_frame_end_ != animation_frame_start_) {
 		current_frame_animation_time_ += game_time; // add time "one screen frame"
 		while (current_frame_animation_time_ > animation_speed_for_frame_) {
@@ -139,13 +139,15 @@ bool VisibleObject::GetNeedRedrawImage() { return need_redraw_image_; };
 
 const sf::Vector2f& VisibleObject::GetCoordinateCentre() { return Sprite_object_.getPosition(); }
 
-int VisibleObject::GetHeightSprite() {
-	if (frame_count_y_ > 0) return Texture_object_->getSize().y / frame_count_y_;
+int VisibleObject::GetHeightSprite(bool get_scale_size) {
+	if (frame_count_y_ > 0) return (int)(Texture_object_->getSize().y / frame_count_y_ *
+		(get_scale_size ? Sprite_object_.getScale().y : 1));
 	return 0;
 }
 
-int VisibleObject::GetWidthSprite() {
-	if (frame_count_x_ > 0) return Texture_object_->getSize().x / frame_count_x_;
+int VisibleObject::GetWidthSprite(bool get_scale_size) {
+	if (frame_count_x_ > 0) return (int)(Texture_object_->getSize().x / frame_count_x_ *
+		(get_scale_size ? Sprite_object_.getScale().x : 1));
 	return 0;
 }
 
@@ -170,7 +172,10 @@ void VisibleObject::SafeState() {
 	previous_gradus_ = gradus_;
 }
 
-const sf::Vector2f& VisibleObject::GetOffsetSprite() { return offset_sprite_coordinate_; }
+const sf::Vector2f& VisibleObject::GetOffsetSprite(bool get_scale_size) {
+	return sf::Vector2f(offset_sprite_coordinate_.x * Sprite_object_.getScale().x,
+		offset_sprite_coordinate_.y * Sprite_object_.getScale().y);
+}
 
 void VisibleObject::SetCoordinate(sf::Vector2f const& coordinate_centre) {
 	Sprite_object_.setPosition(coordinate_centre);
@@ -242,6 +247,12 @@ sf::Vector2f VisibleObject::ChangeVectorByDirection(sf::Vector2f const& vector) 
 	new_vector_y = (vector.x * sin(to_radian) +
 		vector.y * cos(to_radian));
 	return sf::Vector2f(new_vector_x, new_vector_y);
+}
+void VisibleObject::SetScale(sf::Vector2f const& vector_scale) {
+	Sprite_object_.setScale(vector_scale);
+}
+const sf::Vector2f VisibleObject::GetScale() {
+	return Sprite_object_.getScale();
 }
 ;
 bool VisibleObject::SetTexture(std::string const& texture,

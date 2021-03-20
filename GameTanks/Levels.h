@@ -11,12 +11,16 @@ class BaseLevel
 private:
 	//all level objects:
 	std::vector <UiObject*> Ui_objects_;
+	UiObject* Focused_object;
 	std::vector <GameObject*> Static_objects_;
 	std::vector <TankObject*> Enemy_objects_;
 	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
 	std::list <MovebleObject*> Shot_objects_;
 	GameObject* Bonus_object_;
+
+
+	std::list <GameObject*> All_objects_;
 
 	//die game objects (exist in other vectors).
 	std::list <GameObject*> Dies_objects_;
@@ -26,10 +30,10 @@ private:
 	//level size
 	int size_level_height_, size_level_width_, size_level_border_ = 0;
 
-	float min_distance_respawn_to_Static_objects_ = 0.01f; //% size level
-	float min_distance_respawn_to_Enemy_objects_ = 0.05f; //% size level
-	float min_distance_respawn_to_Players_objects_ = 0.1f; //% size level
-	float min_distance_respawn_to_Shot_objects_ = 0.010f; //% size level
+	float min_distance_respawn_to_Static_objects_ = 0.001f; //% size level
+	float min_distance_respawn_to_Enemy_objects_ = 0.005f; //% size level
+	float min_distance_respawn_to_Players_objects_ = 0.001f; //% size level
+	float min_distance_respawn_to_Shot_objects_ = 0.0000010f; //% size level
 
 	VisibleObject* Watch_object_;
 
@@ -40,6 +44,8 @@ private:
 	sf::Sprite Sprite_background_;
 	sf::Texture Texture_border_;
 	sf::Sprite Sprite_border_;
+
+	float max_safe_distance = 0;
 
 	void CalculateCollisionOnLevel();
 	void CameraControl();

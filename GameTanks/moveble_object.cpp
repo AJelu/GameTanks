@@ -64,9 +64,10 @@ void MovebleObject::MoveTo(float const& move_to_x, float const& move_to_y) {
 void MovebleObject::RecalculateState(float const& game_time) {
 	GameObject::RecalculateState(game_time);
 
-	if (freeze_time_ > 0) {
+	if (freeze_time_ > 0 || this->GetLifeLevel() <= 0) {
 		distance_ = rotation_degree_ = 0;
-		freeze_time_ -= game_time;
+		if (this->GetLifeLevel() <= 0)	freeze_time_ = 1;
+		else							freeze_time_ -= game_time;
 	}
 
 	//move by vector;
@@ -81,7 +82,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				distance_ = 0;
 			}
 			this->MoveByVector(-size);
-			PlayAnimateMoveMinus();
+			this->PlayAnimateMoveMinus();
 		}
 		else if (distance_ > 0) {
 			distance_ -= size;
@@ -90,7 +91,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				distance_ = 0;
 			}
 			this->MoveByVector(size);
-			PlayAnimateMovePlus();
+			this->PlayAnimateMovePlus();
 		}
 	}
 
@@ -105,7 +106,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				rotation_degree_ = 0;
 			}
 			this->VectorRotation(-size);
-			PlayAnimateRotate—ounterclockwise();
+			this->PlayAnimateRotate—ounterclockwise();
 		}
 		else if (rotation_degree_ > 0) {
 			rotation_degree_ -= size;
@@ -114,7 +115,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				rotation_degree_ = 0;
 			}
 			this->VectorRotation(size); 
-			PlayAnimateRotate—lockwise();
+			this->PlayAnimateRotate—lockwise();
 		}
 	}
 }

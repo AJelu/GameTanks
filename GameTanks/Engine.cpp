@@ -18,11 +18,11 @@ void Engine::CreateResolutionWindowMode() {
 int Engine::Start() {
     sf::Event game;
     if (Main_window_.isOpen()) { //launch all game events during game time iteration
-        while (Main_window_.pollEvent(game)) {
+        /*while (Main_window_.pollEvent(game)) {
             if (game.type == sf::Event::Closed) Main_window_.close(); //close the window
             if (game.type == sf::Event::KeyReleased && game.key.code == sf::Keyboard::Q) return 1;
             if (game.type == sf::Event::KeyReleased && game.key.code == sf::Keyboard::R) return 2;
-        } //touch 'Q' to exit and touch 'R' to restart
+        }*/ //touch 'Q' to exit and touch 'R' to restart
 
         float game_time;
         this->GameTimer(game_time);

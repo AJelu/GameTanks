@@ -1,8 +1,17 @@
 #include <iostream>
 #include "objects.h"
 
-AudioObject::AudioObject() : BaseObject() { }
-AudioObject::AudioObject(int const& id_object) : BaseObject(id_object) { }
+AudioObject::AudioObject() : VisibleObject() {
+	Camera_ = nullptr;
+}
+AudioObject::AudioObject(int const& id_object,
+	sf::Vector2f const& coordinate_centre,
+	sf::Vector2f const& offset_sprite_coordinate,
+	std::string const& texture, int const& frame_count_x, int const& frame_count_y) : 
+	VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
+		texture, frame_count_x, frame_count_y) {
+	Camera_ = nullptr;
+}
 
 void AudioObject::AddAudioAction(std::string const& audio_action_name,
 									std::string const& audio_file, int const& volume){
@@ -46,6 +55,14 @@ bool AudioObject::StopAudioAction(std::string const& audio_action){
 		}
 	}
 	return false;
+}
+
+void AudioObject::SetCamera(sf::View* Camera) { Camera_ = Camera; }
+
+sf::View* AudioObject::GetCamera() { return Camera_; }
+
+void AudioObject::RecalculateState(float const& game_time) {
+	VisibleObject::RecalculateState(game_time);
 }
 
 AudioObject::~AudioObject(){

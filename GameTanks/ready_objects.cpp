@@ -66,14 +66,6 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		500,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* RedTank::Shot() { return new Bullet(1, this); }
@@ -96,14 +88,6 @@ Tank2::Tank2(int const& id_object, float const& spawn_x, float const& spawn_y,
 		500,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* Tank2::Shot() { return new Bullet(1, this); }
@@ -126,14 +110,6 @@ Tank3::Tank3(int const& id_object, float const& spawn_x, float const& spawn_y,
 		500,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* Tank3::Shot() { return new Bullet(1, this); }
@@ -156,14 +132,6 @@ Tank4::Tank4(int const& id_object, float const& spawn_x, float const& spawn_y,
 		100,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* Tank4::Shot() { return new Bullet(1, this); }
@@ -186,14 +154,6 @@ Tank5::Tank5(int const& id_object, float const& spawn_x, float const& spawn_y,
 		500,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* Tank5::Shot() { return new Bullet(1, this); }
@@ -216,14 +176,6 @@ Tank6::Tank6(int const& id_object, float const& spawn_x, float const& spawn_y,
 		2000,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	/*this->AddCollision(new RoundCollision(sf::Vector2f(30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, 30), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(-30, -40), 20));
-	this->AddCollision(new RoundCollision(sf::Vector2f(30, -40), 20));
-
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 60), 10));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 80), 10));*/
 }
 
 MovebleObject* Tank6::Shot() { return new Bullet(1, this); }
