@@ -22,6 +22,9 @@
     <Filter Include="Source Files\OBJECTS">
       <UniqueIdentifier>{a2cccefb-a0e9-42d9-9298-4b81c508d7a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\READY_OBJECTS">
+      <UniqueIdentifier>{3ab1215a-1639-40c0-933f-408ce79a0931}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="base_object.cpp">
@@ -82,13 +85,19 @@
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
     <ClCompile Include="ready_objects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ready_objects.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
     <ClCompile Include="bonuses.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ready_move_objects.cpp">
+      <Filter>Source Files\READY_OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="ready_ui_objects.cpp">
+      <Filter>Source Files\READY_OBJECTS</Filter>
+    </ClCompile>
+    <ClCompile Include="ready_game_objects.cpp">
+      <Filter>Source Files\READY_OBJECTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

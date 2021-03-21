@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <queue>
 #include <iostream>
 #include "collisions.h"
 #include "bonuses.h"
@@ -43,6 +44,9 @@ private:
 	bool looped_; //animate autorestart
 	float animation_speed_for_frame_; // time for one frame; 1000 = 1s
 	float current_frame_animation_time_; // time for current frame
+	//animate bufer (queue)
+	std::vector<int> q_tile_level_, q_animation_frame_start_, q_animation_frame_end_;
+	std::vector<float> q_animation_speed_for_frame_;
 
 	int frame_count_x_, frame_count_y_; // count frame on texture 1..x
 	sf::Texture* Texture_object_;
@@ -72,10 +76,11 @@ public:
 
 	float CalculateGradus();
 	//animatinos
+	void ClearAnimarionList(bool const& all = false);
 	void StartPlayAnimation(int const& tile_level, 
 		int const& frame_start, int const& frame_end,
 		float const& animation_speed_for_frame = 1000, bool const& looped = false);
-	bool AnimationEnd();
+	bool AnimationEnd(bool const& all_list = false);
 	//for recalculate animations
 	virtual void RecalculateState(float const& game_time);
 
@@ -214,11 +219,6 @@ public:
 	virtual void PlayAnimateClickUp();
 
 	void Draw(sf::RenderWindow& window) override;
-};
-
-class Button : public UiObject {
-public:
-
 };
 
 

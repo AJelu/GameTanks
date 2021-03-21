@@ -12,6 +12,7 @@ public:
 	Bullet(int const& id_object, GameObject* Parrent = nullptr);
 };
 
+//tanks objects:
 class TypedTank abstract : public TankObject {
 public:
 	TypedTank(int const& id_object,
@@ -84,4 +85,17 @@ protected:
 public:
 	Tank6(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+};
+
+
+//ui objects:
+class Button : public UiObject {
+public:
+	Button(sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate);
+
+	void PlayAnimateEnter() override;
+	void PlayAnimateLeave() override;
+	void PlayAnimateClickDown() override;
+	void PlayAnimateClickUp() override;
 };

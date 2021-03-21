@@ -81,55 +81,102 @@ float VisibleObject::CalculateGradus() {
 	return gradus_;
 }
 
+void VisibleObject::ClearAnimarionList(bool const& all) {
+	q_tile_level_ = std::vector<int>();
+	q_animation_frame_start_ = std::vector<int>();
+	q_animation_frame_end_ = std::vector<int>();
+	q_animation_speed_for_frame_ = std::vector<float>();
+	if (all) {
+		tile_frame_current_ = animation_frame_end_;
+		current_frame_animation_time_ = animation_speed_for_frame_ + 1;
+	}
+}
+
 void VisibleObject::StartPlayAnimation(int const& tile_level,
 		int const& frame_start, int const& frame_end,
 		float const& animation_speed_for_frame, bool const& looped) {
 	
-	bool need_restart_animation = true;
+	
 	if ((tile_level == tile_level_) && (frame_start == animation_frame_start_) 
-		&& (frame_end == animation_frame_end_)) 
-		need_restart_animation = false;
+		&& (frame_end == animation_frame_end_) && !AnimationEnd())
+		return;
 
-	//check is no out of range and write new parameter for animate
-
-	if (tile_level > frame_count_y_)	tile_level_ = frame_count_y_;
-	else if (tile_level < 1)			tile_level_ = 1;
-	else								tile_level_ = tile_level;
-
-	if (frame_start > frame_count_x_)	animation_frame_start_ = frame_count_x_;
-	else if (frame_start < 1)			animation_frame_start_ = 1;
-	else								animation_frame_start_ = frame_start;
-
-	if (frame_end > frame_count_x_)		animation_frame_end_ = frame_count_x_;
-	else if (frame_end < 1)				animation_frame_end_ = 1;
-	else								animation_frame_end_ = frame_end;
-
-	animation_speed_for_frame_ = animation_speed_for_frame;
 	looped_ = looped and (frame_start != frame_end);
 
-	//set start parameters
-	if (need_restart_animation || this->AnimationEnd()) {
-		current_frame_animation_time_ = 0;
-		this->SetTile(tile_level_, animation_frame_start_);
+	if (looped_) {
+		this->ClearAnimarionList();
 	}
+	//check is no out of range and write new parameter for animate
+
+	int t_tile_level_;
+	if (tile_level > frame_count_y_)	t_tile_level_ = frame_count_y_;
+	else if (tile_level < 1)			t_tile_level_ = 1;
+	else								t_tile_level_ = tile_level;
+
+	int t_animation_frame_start_;
+	if (frame_start > frame_count_x_)	t_animation_frame_start_ = frame_count_x_;
+	else if (frame_start < 1)			t_animation_frame_start_ = 1;
+	else								t_animation_frame_start_ = frame_start;
+
+	int t_animation_frame_end_;
+	if (frame_end > frame_count_x_)		t_animation_frame_end_ = frame_count_x_;
+	else if (frame_end < 1)				t_animation_frame_end_ = 1;
+	else								t_animation_frame_end_ = frame_end;
+
+	for (int i = 0; i < (int)q_tile_level_.size(); i++) {
+		if ((q_tile_level_[i] == t_tile_level_) &&
+			(q_animation_frame_start_[i] == t_animation_frame_start_) &&
+			(q_animation_frame_end_[i] == t_animation_frame_end_))
+			return;
+	}
+
+	q_tile_level_.push_back(t_tile_level_);
+	q_animation_frame_start_.push_back(t_animation_frame_start_);
+	q_animation_frame_end_.push_back(t_animation_frame_end_);
+	q_animation_speed_for_frame_.push_back(animation_speed_for_frame);
 }
 
-bool VisibleObject::AnimationEnd(){
-	if (tile_frame_current_ == animation_frame_end_) return true;
+bool VisibleObject::AnimationEnd(bool const& all_list){
+	if (all_list && !q_tile_level_.empty()) return false;
+	if ((tile_frame_current_ == animation_frame_end_) &&
+		(current_frame_animation_time_ > animation_speed_for_frame_)) return true;
 	return false;
 }
 
 //counting current frame
 void VisibleObject::RecalculateState(float const& game_time){
-	if (animation_frame_end_ != animation_frame_start_) {
+	if (!this->AnimationEnd()) {
 		current_frame_animation_time_ += game_time; // add time "one screen frame"
 		while (current_frame_animation_time_ > animation_speed_for_frame_) {
-			current_frame_animation_time_ -= animation_speed_for_frame_;
 
-			if (!this->AnimationEnd()) 
-				this->SetTile(tile_level_, tile_frame_current_ + 
+			if (!this->AnimationEnd()) {
+				current_frame_animation_time_ -= animation_speed_for_frame_;
+				this->SetTile(tile_level_, tile_frame_current_ +
 					((animation_frame_end_ > animation_frame_start_) ? 1 : -1));
-			else if (looped_) this->SetTile(tile_level_, animation_frame_start_);
+			}
+			else break;
+		}
+	}
+	if (this->AnimationEnd()) {
+		if (!q_tile_level_.empty()) {
+			//get new animate from queue
+			tile_level_ = q_tile_level_.front();
+			animation_frame_start_ = q_animation_frame_start_.front();
+			animation_frame_end_ = q_animation_frame_end_.front();
+			animation_speed_for_frame_ = q_animation_speed_for_frame_.front();
+			//delete new animate in queue
+			q_tile_level_.erase(q_tile_level_.begin());
+			q_animation_frame_start_.erase(q_animation_frame_start_.begin());
+			q_animation_frame_end_.erase(q_animation_frame_end_.begin());
+			q_animation_speed_for_frame_.erase(q_animation_speed_for_frame_.begin());
+			/////// <------insert here lan code for add animation list;
+			//set first tile animation
+			current_frame_animation_time_ = 0;
+			this->SetTile(tile_level_, animation_frame_start_);
+		}
+		else if (looped_) {//restart animation
+			current_frame_animation_time_ = 0;
+			this->SetTile(tile_level_, animation_frame_start_);
 		}
 	}
 }
@@ -258,17 +305,14 @@ const sf::Vector2f VisibleObject::GetScale() {
 bool VisibleObject::SetTexture(std::string const& texture,
 							int const& frame_count_x, int const& frame_count_y) {
 	Texture_object_ = (this->GetTexture(texture));
-		Sprite_object_.setTexture(*Texture_object_);
-		frame_count_x_ = frame_count_x;
-		if (frame_count_x_ < 1) frame_count_x_ = 1;
-		frame_count_y_ = frame_count_y;
-		if (frame_count_y_ < 1) frame_count_y_ = 1;
-		this->StartPlayAnimation(1, 1, 1);
-		this->SetTile(1, 1);
-		this->SetOffsetSprite(offset_sprite_coordinate_);
-		return true;
-	
-	return false;
+	Sprite_object_.setTexture(*Texture_object_);
+	frame_count_x_ = frame_count_x;
+	if (frame_count_x_ < 1) frame_count_x_ = 1;
+	frame_count_y_ = frame_count_y;
+	if (frame_count_y_ < 1) frame_count_y_ = 1;
+	this->SetOffsetSprite(offset_sprite_coordinate_);
+	this->StartPlayAnimation(1, 1, 1, 0);
+	return true;
 }
 void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate) {
 	offset_sprite_coordinate_ = offset_sprite_coordinate;

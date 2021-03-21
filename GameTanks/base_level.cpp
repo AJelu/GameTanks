@@ -248,7 +248,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			
 			if ((*it)->GetGameType() == "Shot_objects" &&
 				(*it)->GetLifeLevel() == 0) {
-				if ((*it)->AnimationEnd()) {
+				if ((*it)->AnimationEnd(true)) {
 					Shot_objects_.remove((MovebleObject*)(*it));
 					All_objects_.erase(it);
 					delete (*it);

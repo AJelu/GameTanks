@@ -61,8 +61,8 @@ bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,
 			if (!enter_on_this_) {
 				enter_on_this_ = true;
 				leave_on_this_ = false;
+								this->PlayAnimateEnter();
 				if (down_on_this_)	this->PlayAnimateClickDown();
-				else				this->PlayAnimateEnter();
 			}
 			break;
 		default:
@@ -75,7 +75,7 @@ bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,
 			enter_on_this_ = false;
 			leave_on_this_ = true;
 			if (down_on_this_)	this->PlayAnimateClickUp();
-			else				this->PlayAnimateLeave();
+			this->PlayAnimateLeave();
 		}
 
 		if (event_type == sf::Event::EventType::MouseButtonReleased)
@@ -215,13 +215,13 @@ void UiObject::SetAnchorObject(VisibleObject* Anchor_object) {
 
 VisibleObject* UiObject::GetAnchorObject() { return Anchor_object_; }
 
-void UiObject::PlayAnimateEnter() { StartPlayAnimation(2, 1, 5, 30); }
+void UiObject::PlayAnimateEnter() { }
 
-void UiObject::PlayAnimateLeave() { StartPlayAnimation(2, 5, 1, 30); }
+void UiObject::PlayAnimateLeave() { }
 
-void UiObject::PlayAnimateClickDown() { StartPlayAnimation(1, 1, 1, 300); }
+void UiObject::PlayAnimateClickDown() { }
 
-void UiObject::PlayAnimateClickUp() { StartPlayAnimation(2, 1, 1, 300); }
+void UiObject::PlayAnimateClickUp() { }
 
 void UiObject::Draw(sf::RenderWindow& window) {
 

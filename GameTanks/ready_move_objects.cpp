@@ -1,8 +1,14 @@
 #include "ready_objects.h"
 
-void Bullet::PlayAnimateDie() { this->StartPlayAnimation(1, 1, 8, 40); }
+void Bullet::PlayAnimateDie() { 
+	this->ClearAnimarionList(true);
+	this->StartPlayAnimation(1, 1, 8, 40); 
+}
 
-void Bullet::PlayAnimateLife() { this->StartPlayAnimation(2, 1, 4, 50); }
+void Bullet::PlayAnimateLife() { 
+	this->ClearAnimarionList(true);
+	this->PlayAnimateMovePlus();
+}
 
 void Bullet::PlayAnimateMovePlus() { this->StartPlayAnimation(2, 1, 8, 20); }
 
@@ -18,6 +24,7 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	100,	//rotation speed
 	Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
+	this->PlayAnimateLife();
 }
 
 
@@ -36,17 +43,23 @@ TypedTank::TypedTank(int const& id_object,
 		speed, freeze_time, rotation_speed, point_create_shot_by_vector,
 		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ }
 
-void TypedTank::PlayAnimateDie() { this->StartPlayAnimation(2, 1, 12, 70); }
+void TypedTank::PlayAnimateDie() { 
+	this->ClearAnimarionList();
+	this->StartPlayAnimation(2, 1, 12, 70); 
+}
 
-void TypedTank::PlayAnimateLife() { this->StartPlayAnimation(1, 12, 1, 70); }
+void TypedTank::PlayAnimateLife() { 
+	this->ClearAnimarionList();
+	this->StartPlayAnimation(1, 12, 1, 70); 
+}
 
 void TypedTank::PlayAnimateMovePlus() { this->StartPlayAnimation(3, 1, 12, 40); }
 
 void TypedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(3, 12, 1, 40); }
 
-void TypedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(4, 1, 12, 100); }
+void TypedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(4, 1, 6, 50); }
 
-void TypedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(4, 12, 1, 100); }
+void TypedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(4, 6, 1, 50); }
 
 
 RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_y,
@@ -66,6 +79,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		500,	//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
+	this->SetBasePoint(200);
 }
 
 MovebleObject* RedTank::Shot() { return new Bullet(1, this); }

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <list>
+#include <sstream>
 #include "ready_objects.h"
 #include "settings.h"
 
@@ -77,7 +78,7 @@ public:
 
 	void InputEnemy();
 
-	bool UpdateState(float& game_timer); 
+	virtual bool UpdateState(float& game_timer);
 
 	virtual int NextLevel();
 	virtual bool ExitGame();
@@ -87,8 +88,12 @@ public:
 class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
+	UiObject* Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
+		* Shot_distance_, * Time_to_next_shot_, * Shot_life_;
 public:
 	GameLevel();
+
+	bool UpdateState(float& game_timer) override;
 
 	int NextLevel() override;
 	bool ExitGame() override;
