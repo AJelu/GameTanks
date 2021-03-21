@@ -121,12 +121,24 @@ public:
 
 class AudioObject : public VisibleObject {
 private:
+	static std::vector<std::string> Audio_file_name_;
+	static std::vector<sf::SoundBuffer*> Sounds_buffer_;
+
+	sf::SoundBuffer* GetSoundsBuffer(std::string audio_file);
+
 	std::vector <std::string> audio_action_name_;
 	std::vector <sf::Sound*> sounds_file_;
-	std::vector <sf::SoundBuffer*> sounds_buffer_;
 	std::vector <int> sounds_volume_;
 
+	std::queue <std::string> Start_audio_action_;
+	std::queue <bool> Start_looped_;
+
+	std::queue <std::string> Stop_audio_action_;
+
 	sf::View* Camera_;
+
+	bool PlayAudioAction(std::string const& audio_action, bool looped = false);
+	bool StopPlayingAudioAction(std::string const& audio_action);
 public:
 	AudioObject();
 	AudioObject(int const& id_object,
@@ -135,6 +147,7 @@ public:
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 	void AddAudioAction(std::string const& audio_action_name,
 		std::string const& audio_file, int const& volume = 100);
+
 	bool StartAudioAction(std::string const& audio_action, bool looped = false);
 	bool StopAudioAction(std::string const& audio_action);
 

@@ -21,7 +21,7 @@ GameLevel::GameLevel() : BaseLevel() {
 		this->AddEnemyObject(tank);
 	}
 
-	int a = 20, m = 3;
+	float a = 20, m = 3;
 	Point_current_		= new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
 	Life_				= new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
 	Speed_				= new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
@@ -31,7 +31,7 @@ GameLevel::GameLevel() : BaseLevel() {
 	Time_to_next_shot_	= new Button(sf::Vector2f(a, a + a * m * 6), sf::Vector2f(0, 0));
 	Shot_life_			= new Button(sf::Vector2f(a, a + a * m * 7), sf::Vector2f(0, 0));
 
-	sf::Vector2f scale = sf::Vector2f(0.5, 0.3);
+	sf::Vector2f scale = sf::Vector2f(0.5f, 0.3f);
 	Point_current_->SetScale(scale);
 	Life_->SetScale(scale);
 	Speed_->SetScale(scale);
@@ -41,7 +41,7 @@ GameLevel::GameLevel() : BaseLevel() {
 	Time_to_next_shot_->SetScale(scale);
 	Shot_life_->SetScale(scale);
 
-	float text_size = 20;
+	int text_size = 20;
 	Point_current_->SetCharacterSize(text_size);
 	Life_->SetCharacterSize(text_size);
 	Speed_->SetCharacterSize(text_size);
@@ -51,7 +51,7 @@ GameLevel::GameLevel() : BaseLevel() {
 	Time_to_next_shot_->SetCharacterSize(text_size);
 	Shot_life_->SetCharacterSize(text_size);
 
-	float text_align = -0.01;
+	float text_align = -0.01f;
 	Point_current_->SetTextAlign(text_align);
 	Life_->SetTextAlign(text_align);
 	Speed_->SetTextAlign(text_align);

@@ -35,8 +35,9 @@ sf::Texture* VisibleObject::GetTexture(std::string texture_name)
 		Texture->setSmooth(true);
 		Texture_objects_.push_back(Texture);
 		Texture_name_.push_back(texture_name);
+		return Texture;
 	}
-	return Texture;
+	return nullptr;
 }
 
 void VisibleObject::SetNeedRedrawImage() { need_redraw_image_ = true; }

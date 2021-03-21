@@ -2,6 +2,7 @@
 
 #include "objects.h"
 
+//move objects:
 class Bullet : public MovebleObject {
 private:
 	void PlayAnimateDie() override;
@@ -12,7 +13,6 @@ public:
 	Bullet(int const& id_object, GameObject* Parrent = nullptr);
 };
 
-//tanks objects:
 class TypedTank abstract : public TankObject {
 public:
 	TypedTank(int const& id_object,
@@ -99,3 +99,8 @@ public:
 	void PlayAnimateClickDown() override;
 	void PlayAnimateClickUp() override;
 };
+
+
+//game objects:
+
+

@@ -6,21 +6,25 @@ Button::Button(sf::Vector2f const& coordinate_centre,
 			"Data/Ui/Button1.png", //texture
 			5, 2){ //frame count
 	this->SetFocusable(false);
+	this->AddAudioAction("action1","Data/Audio/A1.ogg");
+	this->AddAudioAction("action2", "Data/Audio/A1.ogg");
 }
 
 void Button::PlayAnimateEnter() {
-	StartPlayAnimation(2, 1, 5, 30);
+	this->StartPlayAnimation(2, 1, 5, 30);
+	this->StartAudioAction("action1");
 }
 
 void Button::PlayAnimateLeave() {
-	StartPlayAnimation(2, 5, 1, 30);
+	this->StartPlayAnimation(2, 5, 1, 30);
+	this->StartAudioAction("action2");
 }
 
 void Button::PlayAnimateClickDown() {
-	StartPlayAnimation(1, 1, 5, 20);
+	this->StartPlayAnimation(1, 1, 5, 20);
 }
 
 void Button::PlayAnimateClickUp() {
-	StartPlayAnimation(1, 5, 1, 20);
+	this->StartPlayAnimation(1, 5, 1, 20);
 }
 

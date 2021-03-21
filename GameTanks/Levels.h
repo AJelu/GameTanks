@@ -85,6 +85,7 @@ public:
 	~BaseLevel();
 };
 
+
 class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
