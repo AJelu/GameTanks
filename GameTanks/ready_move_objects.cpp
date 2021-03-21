@@ -16,7 +16,7 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	id_object,
 	sf::Vector2f(0, 0), //coordinate centr
 	sf::Vector2f(96, 96), //offset
-	"Data/Animation/Boom_3.png", //texture
+	"Data/Bullet/Boom_3.png", //texture
 	8, 2,	//frame count
 	1000000,//max life level
 	500,	//speed move
