@@ -127,11 +127,11 @@ void BaseLevel::SetBorderTexture(std::string texture_address, int const& size_le
 	size_level_border_ = size_level_border_;
 }
 
-BaseObject* BaseLevel::GetObjectToSendClient() {
-	return nullptr; /////////////////////////////////////////////////////////////////////////
+sf::Packet BaseLevel::GetPacketToSendAllClient() {
+	return sf::Packet(); /////////////////////////////////////////////////////////////////////////
 }
 
-void BaseLevel::RecvObjectFromServer() {
+void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
 	////////////////////////////////////////////////////////////////////////////////////////
 }
 

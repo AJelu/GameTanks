@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include <vector>
 #include <list>
 #include <sstream>
@@ -69,9 +70,9 @@ public:
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
 
-	BaseObject* GetObjectToSendClient();
+	sf::Packet GetPacketToSendAllClient();
 	
-	void RecvObjectFromServer();
+	void RecvPacketFromServer(sf::Packet& Packet);
 
 	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);
 	virtual bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 

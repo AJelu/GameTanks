@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Network.hpp>
 #include <string>
 #include <vector>
 #include <list>
@@ -23,6 +24,9 @@ public:
 
 	//get object parameters
 	int GetIdObject();
+
+	virtual bool CreatePacket(sf::Packet& Packet);
+	virtual bool SetDataFromPacket(sf::Packet& Packet);
 
 	virtual ~BaseObject();
 };
