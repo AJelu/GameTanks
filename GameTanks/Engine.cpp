@@ -1,8 +1,10 @@
 #include <iostream>
 #include "engine.h"
 
-Engine::Engine() {
-    im_server_ = true;
+Engine::Engine() 
+    : thread_lan_(&Engine::LanGame, this)//, thread_draw_(&Engine::EngineDraw, this)
+{
+    std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
 }
 
@@ -11,12 +13,14 @@ void Engine::CreateResolutionWindowMode() {
     resolution.x = SCREEN_RESOLUTION_X;
     resolution.y = SCREEN_RESOLUTION_Y;
 
-    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Default);
+    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), 
+                                                "TANKS", sf::Style::Default);
     Main_window_.setFramerateLimit(60);
 }
 
 int Engine::Start() {
     sf::Event game;
+    
     if (Main_window_.isOpen()) { //launch all game events during game time iteration
         while (Main_window_.pollEvent(game)) {
             if (game.type == sf::Event::Closed) Main_window_.close(); //close the window
@@ -31,8 +35,7 @@ int Engine::Start() {
 
         this->EngineInpute();
         this->EngineUpdate(game_time);
-        this->LanGame();
-        this->EngineDraw(game_time);
+        this->EngineDraw();
 
         return 0;
     }
@@ -55,3 +58,12 @@ void Engine::GameSpeed(float& timer) { timer = timer / GAME_SPEED_CONTROLLER; }
 void Engine::ForcedResetGameTimer(float& timer) { if (timer > GAME_TIMER_LIMIT) timer = 0; }
 
 void Engine::Font() { Main_font_.loadFromFile("Data/Font/Font.ttf"); }
+
+Engine::~Engine() { 
+    thread_lan_.join();
+    /*
+    for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin(); 
+        it != list_clients_.end(); it++)
+        delete* it;
+    */
+}

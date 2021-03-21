@@ -8,7 +8,7 @@ BaseLevel::BaseLevel() {
 sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	window.draw(Sprite_background_);
 	int i;
-	for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);	
+	//for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);	
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->Draw(window);
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->Draw(window);
 	//for (i = 0; i < (int)Shot_objects_.size(); i++)		Shot_objects_[i]->Draw(window);
@@ -97,7 +97,7 @@ void BaseLevel::SetBorderTexture(std::string texture_address, int const& size_le
 	size_level_height_ = Texture_border_.getSize().y;
 	size_level_border_ = size_level_border_;
 }
-
+/*
 BaseObject* BaseLevel::GetObjectToSendClient() {
 	return nullptr; /////////////////////////////////////////////////////////////////////////
 }
@@ -105,7 +105,7 @@ BaseObject* BaseLevel::GetObjectToSendClient() {
 void BaseLevel::RecvObjectFromServer() {
 	////////////////////////////////////////////////////////////////////////////////////////
 }
-
+*/
 bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key) {
 	if (player_number >= 0 && player_number < (int)Players_objects_.size()) {
 		if (Key == sf::Keyboard::Up) Players_objects_[player_number]->MoveUp();
@@ -398,9 +398,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 		else {
 			//shot is die
 			if (Shot_item->AnimationEnd()) {
-				delete Shot_item;
-				//Shot_item = nullptr;
 				Shot_objects_.remove(Shot_item);
+				delete Shot_item;
 				//i--;
 			}
 		}
@@ -490,7 +489,7 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 				- (size_level_border_ + Game_object->GetSafeDistance()) * 2))
 		));
 		if (this->SafePointSpawn(Game_object)) {
-			std::cout << "good respawn: " << i << ";" << std::endl;
+			//std::cout << "good respawn: " << i << ";" << std::endl;
 			return true;
 		}
 	}
