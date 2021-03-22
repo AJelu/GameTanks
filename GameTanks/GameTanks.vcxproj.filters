@@ -84,9 +84,6 @@
     <ClCompile Include="tank_object.cpp">
       <Filter>Source Files\OBJECTS</Filter>
     </ClCompile>
-    <ClCompile Include="ready_objects.cpp">
-      <Filter>Source Files\OBJECTS</Filter>
-    </ClCompile>
     <ClCompile Include="bonuses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

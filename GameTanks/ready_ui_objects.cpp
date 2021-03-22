@@ -6,8 +6,8 @@ Button::Button(sf::Vector2f const& coordinate_centre,
 			"Data/Ui/Button1.png", //texture
 			5, 2){ //frame count
 	this->SetFocusable(false);
-	this->AddAudioAction("action1","Data/Audio/A1.ogg");
-	this->AddAudioAction("action2", "Data/Audio/A1.ogg");
+	this->AddAudioAction("action1","Data/Audio/button_click/Button_click.ogg");
+	this->AddAudioAction("action2", "Data/Audio/button_click/Button_pressed.ogg");
 }
 
 void Button::PlayAnimateEnter() {

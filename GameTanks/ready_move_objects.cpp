@@ -3,11 +3,13 @@
 void Bullet::PlayAnimateDie() { 
 	this->ClearAnimarionList(true);
 	this->StartPlayAnimation(1, 1, 8, 40); 
+	this->StartAudioAction("action_bullet_explosion");
 }
 
 void Bullet::PlayAnimateLife() { 
 	this->ClearAnimarionList(true);
 	this->PlayAnimateMovePlus();
+	this->StartAudioAction("action_bullet_shot");
 }
 
 void Bullet::PlayAnimateMovePlus() { this->StartPlayAnimation(2, 1, 8, 20); }
@@ -25,6 +27,8 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->PlayAnimateLife();
+	this->AddAudioAction("action_bullet_shot", "Data/Audio/explosion/bullet_shot.ogg");
+	this->AddAudioAction("action_bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 }
 
 
@@ -41,11 +45,15 @@ TypedTank::TypedTank(int const& id_object,
 		offset_sprite_coordinate, texture,
 		12, 4, max_life_level,
 		speed, freeze_time, rotation_speed, point_create_shot_by_vector,
-		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ }
+		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ 
+	//this->AddAudioAction("action_tank_move", "Data/Audio/move/tank_move.ogg");
+	this->AddAudioAction("action_tank_dead", "Data/Audio/explosion/tank_dead.ogg");
+}
 
 void TypedTank::PlayAnimateDie() { 
 	this->ClearAnimarionList();
-	this->StartPlayAnimation(2, 1, 12, 70); 
+	this->StartPlayAnimation(2, 1, 12, 70);
+	this->StartAudioAction("action_tank_dead");
 }
 
 void TypedTank::PlayAnimateLife() { 
@@ -53,7 +61,10 @@ void TypedTank::PlayAnimateLife() {
 	this->StartPlayAnimation(1, 12, 1, 70); 
 }
 
-void TypedTank::PlayAnimateMovePlus() { this->StartPlayAnimation(3, 1, 12, 40); }
+void TypedTank::PlayAnimateMovePlus() { 
+	this->StartPlayAnimation(3, 1, 12, 40); 
+	//this->StartAudioAction("action_tank_move", true);
+}
 
 void TypedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(3, 12, 1, 40); }
 

@@ -8,8 +8,7 @@
 #include "settings.h"
 
 
-class BaseLevel 
-{
+class BaseLevel {
 private:
 	//all level objects:
 	std::vector <UiObject*> Ui_objects_;

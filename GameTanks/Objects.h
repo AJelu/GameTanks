@@ -143,6 +143,7 @@ private:
 
 	bool PlayAudioAction(std::string const& audio_action, bool looped = false);
 	bool StopPlayingAudioAction(std::string const& audio_action);
+
 public:
 	AudioObject();
 	AudioObject(int const& id_object,

@@ -29,7 +29,7 @@ bool AudioObject::PlayAudioAction(std::string const& audio_action, bool looped) 
 		}
 	}
 	return result;
-}
+} //if ((*sounds_file_[i]).getStatus() == sf::Sound::Status::Stopped) 
 
 bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 	bool result = false;
