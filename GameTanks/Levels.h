@@ -8,7 +8,7 @@
 #include "settings.h"
 
 
-class BaseLevel
+class BaseLevel 
 {
 private:
 	//all level objects:

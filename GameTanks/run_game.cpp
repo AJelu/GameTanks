@@ -17,7 +17,7 @@ void RunGame() {
 
     int state = 0;
     while (true) {
-        state = engine.Start();
+        state = engine.Start();  
         if (state == 0) {
             //logic game instance
         }
@@ -29,7 +29,7 @@ void RunGame() {
             engine.Stop();
             std::cout << "Console message: Game Restart!" << std::endl; //this is for the test!
             RunGame();
-        }  
+        }
     }
     std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
 }
