@@ -10,12 +10,12 @@ sf::SoundBuffer* AudioObject::GetSoundsBuffer(std::string audio_file) {
 		if (Audio_file_name_[i] == audio_file) { return Sounds_buffer_[i]; }
 	}
 	sf::SoundBuffer* Sound_buffer = new sf::SoundBuffer();
-	Sound_buffer->loadFromFile(audio_file);
 	if (Sound_buffer->loadFromFile(audio_file)) {
 		Audio_file_name_.push_back(audio_file);
 		Sounds_buffer_.push_back(Sound_buffer);
-		return Sound_buffer;
+		return Sounds_buffer_.back();
 	}
+	delete Sound_buffer;
 	return nullptr;
 }
 
@@ -23,13 +23,18 @@ bool AudioObject::PlayAudioAction(std::string const& audio_action, bool looped) 
 	bool result = false;
 	for (int i = 0; i < (int)audio_action_name_.size(); i++) {
 		if (audio_action_name_[i] == audio_action) {
-			(*sounds_file_[i]).play();
-			(*sounds_file_[i]).setLoop(looped);
+			if (sounds_file_[i]->getStatus() != sf::Sound::Status::Playing) {
+				sounds_file_[i]->play();
+				std::cout << audio_action_name_[i] << " ->res: " << 
+					(sounds_file_[i]->getStatus() == sf::Sound::Status::Playing) 
+					<< std::endl;
+			}
+			sounds_file_[i]->setLoop(looped);
 			result = true;
 		}
 	}
 	return result;
-} //if ((*sounds_file_[i]).getStatus() == sf::Sound::Status::Stopped) 
+}
 
 bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 	bool result = false;
@@ -46,6 +51,7 @@ bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 AudioObject::AudioObject() : VisibleObject() {
 	Camera_ = nullptr;
 }
+
 AudioObject::AudioObject(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate,
@@ -62,10 +68,9 @@ void AudioObject::AddAudioAction(std::string const& audio_action_name,
 		audio_action_name_.push_back(audio_action_name);
 
 		sf::Sound* sound = new sf::Sound();
-		(*sound).setBuffer(*sound_buffer);
+		sound->setBuffer(*sound_buffer);
+		sound->setVolume(volume);
 		sounds_file_.push_back(sound);
-
-		sounds_volume_.push_back(volume);
 	}
 }
 
@@ -99,7 +104,6 @@ void AudioObject::RecalculateState(float const& game_time) {
 				> this->GetCoordinateCentre().y))
 			in_range = true;
 	}
-
 	while (!Start_audio_action_.empty()) {
 		if (in_range)
 			this->PlayAudioAction(Start_audio_action_.front(), Start_looped_.front());
@@ -110,6 +114,28 @@ void AudioObject::RecalculateState(float const& game_time) {
 		this->StopPlayingAudioAction(Stop_audio_action_.front());
 		Stop_audio_action_.pop();
 	}
+}
+
+std::string AudioObject::ClassName() { return "AudioObject"; }
+
+bool AudioObject::CreatePacket(sf::Packet& Packet) {
+	VisibleObject::CreatePacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+bool AudioObject::SetDataFromPacket(sf::Packet& Packet) {
+	VisibleObject::SetDataFromPacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
 }
 
 AudioObject::~AudioObject(){

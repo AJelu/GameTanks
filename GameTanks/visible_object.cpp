@@ -37,6 +37,7 @@ sf::Texture* VisibleObject::GetTexture(std::string texture_name)
 		Texture_name_.push_back(texture_name);
 		return Texture;
 	}
+	delete Texture;
 	return nullptr;
 }
 
@@ -241,6 +242,28 @@ float VisibleObject::GetDistanceToPoint(const sf::Vector2f& point) {
 		powf(this->GetCoordinateCentre().y - point.y, 2);
 	if (temp_buf == 0) return 0;
 	else return sqrtf(temp_buf);
+}
+
+std::string VisibleObject::ClassName() { return "VisibleObject"; }
+
+bool VisibleObject::CreatePacket(sf::Packet& Packet) {
+	BaseObject::CreatePacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
+	BaseObject::SetDataFromPacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
 }
 
 void VisibleObject::SetRotationVector(float const& vector_x, float const& vector_y) {

@@ -82,7 +82,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				distance_ = 0;
 			}
 			this->MoveByVector(-size);
-			this->PlayAnimateMoveMinus();
+			this->ActionMoving(-size);
 		}
 		else if (distance_ > 0) {
 			distance_ -= size;
@@ -91,8 +91,16 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				distance_ = 0;
 			}
 			this->MoveByVector(size);
-			this->PlayAnimateMovePlus();
+			this->ActionMoving(size);
 		}
+		if (!previously_moveed_) {
+			this->ActionStartMove();
+			previously_moveed_ = true;
+		}
+	}
+	else if (previously_moveed_) {
+		this->ActionEndMove();
+		previously_moveed_ = false;
 	}
 
 	//rotate vector;
@@ -106,7 +114,7 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				rotation_degree_ = 0;
 			}
 			this->VectorRotation(-size);
-			this->PlayAnimateRotate—ounterclockwise();
+			this->ActionRotating(-size);
 		}
 		else if (rotation_degree_ > 0) {
 			rotation_degree_ -= size;
@@ -115,12 +123,44 @@ void MovebleObject::RecalculateState(float const& game_time) {
 				rotation_degree_ = 0;
 			}
 			this->VectorRotation(size); 
-			this->PlayAnimateRotate—lockwise();
+			this->ActionRotating(size);
 		}
+		if (!previously_rotated_) {
+			this->ActionStartRotate();
+			previously_rotated_ = true;
+		}
+	}
+	else if (previously_rotated_) {
+		this->ActionEndRotate();
+		previously_rotated_ = false;
 	}
 }
 
-void MovebleObject::PlayAnimateMovePlus() {}
-void MovebleObject::PlayAnimateMoveMinus() {}
-void MovebleObject::PlayAnimateRotate—lockwise() {}
-void MovebleObject::PlayAnimateRotate—ounterclockwise() {}
+std::string MovebleObject::ClassName() { return "MovebleObject"; }
+
+bool MovebleObject::CreatePacket(sf::Packet& Packet) {
+	GameObject::CreatePacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+bool MovebleObject::SetDataFromPacket(sf::Packet& Packet) {
+	GameObject::SetDataFromPacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+void MovebleObject::ActionStartMove() {}
+void MovebleObject::ActionMoving(float const& distance) {}
+void MovebleObject::ActionEndMove() {}
+void MovebleObject::ActionStartRotate() {}
+void MovebleObject::ActionRotating(float const& rotation_degree) {}
+void MovebleObject::ActionEndRotate() {}

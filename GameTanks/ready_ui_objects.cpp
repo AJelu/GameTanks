@@ -10,21 +10,21 @@ Button::Button(sf::Vector2f const& coordinate_centre,
 	this->AddAudioAction("action2", "Data/Audio/button_click/Button_pressed.ogg");
 }
 
-void Button::PlayAnimateEnter() {
+void Button::ActionEnter() {
 	this->StartPlayAnimation(2, 1, 5, 30);
 	this->StartAudioAction("action1");
 }
 
-void Button::PlayAnimateLeave() {
+void Button::ActionLeave() {
 	this->StartPlayAnimation(2, 5, 1, 30);
 	this->StartAudioAction("action2");
 }
 
-void Button::PlayAnimateClickDown() {
+void Button::ActionClickDown() {
 	this->StartPlayAnimation(1, 1, 5, 20);
 }
 
-void Button::PlayAnimateClickUp() {
+void Button::ActionClickUp() {
 	this->StartPlayAnimation(1, 5, 1, 20);
 }
 

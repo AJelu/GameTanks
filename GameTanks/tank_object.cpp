@@ -152,3 +152,25 @@ void TankObject::SetTimeToNextShot(float const& time_to_next_shot) {
 void TankObject::SetTimeFreezeShot(float const& time_freeze_shot) { 
 	time_freeze_shot_ = time_freeze_shot; 
 }
+
+std::string TankObject::ClassName() { return "TankObject"; }
+
+bool TankObject::CreatePacket(sf::Packet& Packet) {
+	MovebleObject::CreatePacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+bool TankObject::SetDataFromPacket(sf::Packet& Packet) {
+	MovebleObject::SetDataFromPacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}

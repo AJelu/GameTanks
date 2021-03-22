@@ -32,8 +32,8 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 	if (new_life_level > max_life_level_) new_life_level = max_life_level_;
 
 	if (life_level_ != new_life_level) {
-		if (new_life_level == 0)	this->PlayAnimateDie();
-		if (life_level_ == 0)		this->PlayAnimateLife();
+		if (new_life_level == 0)	this->ActionDie();
+		if (life_level_ == 0)		this->ActionLife();
 
 		life_level_ = new_life_level;
 	}
@@ -87,9 +87,9 @@ int GameObject::GetBasePoint() { return base_point_; }
 
 int GameObject::GetCurrentPoint() { return current_point_; }
 
-void GameObject::PlayAnimateDie() { }
+void GameObject::ActionDie() { }
 
-void GameObject::PlayAnimateLife() { }
+void GameObject::ActionLife() { }
 
 void GameObject::AddCollision(RoundCollision* New_colision) {
 	if (New_colision != nullptr) {
@@ -178,6 +178,28 @@ void GameObject::CollisionOn() { collision_off_ = false; }
 std::string GameObject::GetGameType() { return game_type_; }
 
 void GameObject::SetGameType(std::string const& game_type) { game_type_ = game_type; }
+
+std::string GameObject::ClassName() { return "GameObject"; }
+
+bool GameObject::CreatePacket(sf::Packet& Packet) {
+	AudioObject::CreatePacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
+
+bool GameObject::SetDataFromPacket(sf::Packet& Packet) {
+	AudioObject::SetDataFromPacket(Packet);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="Packet"></param>
+	/// <returns></returns>
+	return false;
+}
 
 GameObject::~GameObject() {
 	for (int i = 0; i < (int)Collisions_.size(); i++) {

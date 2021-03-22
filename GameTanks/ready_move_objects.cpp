@@ -1,18 +1,20 @@
 #include "ready_objects.h"
 
-void Bullet::PlayAnimateDie() { 
+void Bullet::ActionDie() {
 	this->ClearAnimarionList(true);
 	this->StartPlayAnimation(1, 1, 8, 40); 
 	this->StartAudioAction("action_bullet_explosion");
 }
 
-void Bullet::PlayAnimateLife() { 
+void Bullet::ActionLife() {
 	this->ClearAnimarionList(true);
-	this->PlayAnimateMovePlus();
+	this->ActionMoving(0);
 	this->StartAudioAction("action_bullet_shot");
 }
 
-void Bullet::PlayAnimateMovePlus() { this->StartPlayAnimation(2, 1, 8, 20); }
+void Bullet::ActionMoving(float const& distance) { 
+	this->StartPlayAnimation(2, 1, 8, 20); 
+}
 
 Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	id_object,
@@ -26,7 +28,7 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	100,	//rotation speed
 	Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->PlayAnimateLife();
+	this->ActionLife();
 	this->AddAudioAction("action_bullet_shot", "Data/Audio/explosion/bullet_shot.ogg");
 	this->AddAudioAction("action_bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 }
@@ -46,32 +48,51 @@ TypedTank::TypedTank(int const& id_object,
 		12, 4, max_life_level,
 		speed, freeze_time, rotation_speed, point_create_shot_by_vector,
 		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ 
-	//this->AddAudioAction("action_tank_move", "Data/Audio/move/tank_move.ogg");
+	this->AddAudioAction("action_tank_move", "Data/Audio/move/tank_move.ogg");
+	this->AddAudioAction("action_tank_rotate", "Data/Audio/move/tank_move.ogg");
 	this->AddAudioAction("action_tank_dead", "Data/Audio/explosion/tank_dead.ogg");
 }
 
-void TypedTank::PlayAnimateDie() { 
+void TypedTank::ActionDie() {
 	this->ClearAnimarionList();
 	this->StartPlayAnimation(2, 1, 12, 70);
 	this->StartAudioAction("action_tank_dead");
 }
 
-void TypedTank::PlayAnimateLife() { 
+void TypedTank::ActionLife() {
 	this->ClearAnimarionList();
 	this->StartPlayAnimation(1, 12, 1, 70); 
 }
 
-void TypedTank::PlayAnimateMovePlus() { 
-	this->StartPlayAnimation(3, 1, 12, 40); 
-	//this->StartAudioAction("action_tank_move", true);
+void TypedTank::ActionStartMove() {
+	this->StartAudioAction("action_tank_move", true);
 }
 
-void TypedTank::PlayAnimateMoveMinus() { this->StartPlayAnimation(3, 12, 1, 40); }
+void TypedTank::ActionMoving(float const& distance) {
+	if (distance > 0)
+		this->StartPlayAnimation(3, 1, 12, 40); 
+	else if (distance < 0)
+		this->StartPlayAnimation(3, 12, 1, 40);
+}
 
-void TypedTank::PlayAnimateRotateÑlockwise() { this->StartPlayAnimation(4, 1, 6, 50); }
+void TypedTank::ActionEndMove() {
+	this->StopAudioAction("action_tank_move");
+}
 
-void TypedTank::PlayAnimateRotateÑounterclockwise() { this->StartPlayAnimation(4, 6, 1, 50); }
+void TypedTank::ActionStartRotate() {
+	this->StartAudioAction("action_tank_rotate", true);
+}
 
+void TypedTank::ActionRotating(float const& distance) {
+	if (distance > 0)
+		this->StartPlayAnimation(4, 1, 6, 50);
+	else if (distance < 0)
+		this->StartPlayAnimation(4, 6, 1, 50);
+}
+
+void TypedTank::ActionEndRotate() {
+	this->StopAudioAction("action_tank_rotate");
+}
 
 RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(

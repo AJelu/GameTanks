@@ -5,9 +5,9 @@
 //move objects:
 class Bullet : public MovebleObject {
 private:
-	void PlayAnimateDie() override;
-	void PlayAnimateLife() override;
-	void PlayAnimateMovePlus() override;
+	void ActionDie() override;
+	void ActionLife() override;
+	void ActionMoving(float const& distance) override;
 
 public:
 	Bullet(int const& id_object, GameObject* Parrent = nullptr);
@@ -25,12 +25,14 @@ public:
 		int const& shot_life, float const& speed_shot, float const& 
 		shot_distance, float const& time_freeze_shot, GameObject* Parrent);
 
-	void PlayAnimateDie() override;
-	void PlayAnimateLife() override;
-	void PlayAnimateMovePlus() override;
-	void PlayAnimateMoveMinus() override;
-	void PlayAnimateRotate—lockwise() override;
-	void PlayAnimateRotate—ounterclockwise() override;
+	void ActionDie() override;
+	void ActionLife() override;
+	void ActionStartMove() override;
+	void ActionMoving(float const& distance) override;
+	void ActionEndMove() override;
+	void ActionStartRotate() override;
+	void ActionRotating(float const& rotation_degree) override;
+	void ActionEndRotate() override;
 };
 
 class RedTank : public TypedTank {
@@ -94,10 +96,10 @@ public:
 	Button(sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate);
 
-	void PlayAnimateEnter() override;
-	void PlayAnimateLeave() override;
-	void PlayAnimateClickDown() override;
-	void PlayAnimateClickUp() override;
+	void ActionEnter() override;
+	void ActionLeave() override;
+	void ActionClickDown() override;
+	void ActionClickUp() override;
 };
 
 

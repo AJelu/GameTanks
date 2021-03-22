@@ -24,7 +24,9 @@ public:
 
 	//get object parameters
 	int GetIdObject();
+	void SetIdObject(int const& id_object);
 
+	virtual std::string ClassName();
 	virtual bool CreatePacket(sf::Packet& Packet);
 	virtual bool SetDataFromPacket(sf::Packet& Packet);
 
@@ -112,6 +114,11 @@ public:
 	void MoveByVector(float const& length_move);
 	float GetDistanceToPoint(const sf::Vector2f& point);
 
+	//for lan
+	std::string ClassName() override;
+	bool CreatePacket(sf::Packet& Packet) override;
+	bool SetDataFromPacket(sf::Packet& Packet) override;
+
 	//view`s part
 	bool SetTexture(std::string const& texture,
 						int const& frame_count_x, int const& frame_count_y);
@@ -132,7 +139,6 @@ private:
 
 	std::vector <std::string> audio_action_name_;
 	std::vector <sf::Sound*> sounds_file_;
-	std::vector <int> sounds_volume_;
 
 	std::queue <std::string> Start_audio_action_;
 	std::queue <bool> Start_looped_;
@@ -161,6 +167,11 @@ public:
 
 	void SetCamera(sf::View* Camera);
 	sf::View* GetCamera();
+
+	//for lan
+	std::string ClassName() override;
+	bool CreatePacket(sf::Packet& Packet) override;
+	bool SetDataFromPacket(sf::Packet& Packet) override;
 
 	~AudioObject() override;
 };
@@ -231,10 +242,10 @@ public:
 	void SetAnchorObject(VisibleObject* Anchor_object);
 	VisibleObject* GetAnchorObject();
 
-	virtual void PlayAnimateEnter();
-	virtual void PlayAnimateLeave();
-	virtual void PlayAnimateClickDown();
-	virtual void PlayAnimateClickUp();
+	virtual void ActionEnter();
+	virtual void ActionLeave();
+	virtual void ActionClickDown();
+	virtual void ActionClickUp();
 
 	void Draw(sf::RenderWindow& window) override;
 };
@@ -297,8 +308,13 @@ public:
 	void SetGameType(std::string const& game_type);
 
 	//for animation
-	virtual void PlayAnimateDie(); ///need override in daughter
-	virtual void PlayAnimateLife(); ///need override in daughter
+	virtual void ActionDie(); ///need override in daughter
+	virtual void ActionLife(); ///need override in daughter
+
+	//for lan
+	std::string ClassName() override;
+	bool CreatePacket(sf::Packet& Packet) override;
+	bool SetDataFromPacket(sf::Packet& Packet) override;
 
 	~GameObject() override;
 };
@@ -308,6 +324,7 @@ class MovebleObject : public GameObject {
 private:
 	float speed_/*px by sec*/, distance_, freeze_time_;
 	float rotation_speed_/*gradus by sec*/, rotation_degree_;
+	bool previously_moveed_ = false, previously_rotated_ = false;
 public:
 	MovebleObject();
 	MovebleObject(int const& id_object,
@@ -338,11 +355,18 @@ public:
 	//for recalculate position ((vector+speed+distance)*timer), vector rotate
 	void RecalculateState(float const& game_time) override;
 
+	//for lan
+	std::string ClassName() override;
+	bool CreatePacket(sf::Packet& Packet) override;
+	bool SetDataFromPacket(sf::Packet& Packet) override;
+
 	//for animation
-	virtual void PlayAnimateMovePlus(); ///need override in daughter
-	virtual void PlayAnimateMoveMinus(); ///need override in daughter
-	virtual void PlayAnimateRotate—lockwise(); ///need override in daughter
-	virtual void PlayAnimateRotate—ounterclockwise(); ///need override in daughter
+	virtual void ActionStartMove(); ///need override in daughter
+	virtual void ActionMoving(float const& distance); ///need override in daughter
+	virtual void ActionEndMove(); ///need override in daughter
+	virtual void ActionStartRotate(); ///need override in daughter
+	virtual void ActionRotating(float const& rotation_degree); ///need override in daughter
+	virtual void ActionEndRotate(); ///need override in daughter
 };
 
 class TankObject : public MovebleObject {
@@ -395,4 +419,10 @@ public:
 	void SetShotDistance(float const& shot_distance);
 	void SetTimeToNextShot(float const& time_to_next_shot);
 	void SetTimeFreezeShot(float const& time_freeze_shot);
+
+	//for lan
+	std::string ClassName() override;
+	bool CreatePacket(sf::Packet& Packet) override;
+	bool SetDataFromPacket(sf::Packet& Packet) override;
+
 };

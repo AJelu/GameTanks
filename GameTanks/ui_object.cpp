@@ -48,21 +48,21 @@ bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,
 		case sf::Event::EventType::MouseButtonPressed:
 			down_on_this_ = true;
 			up_on_this_ = false;
-			this->PlayAnimateClickDown();
+			this->ActionClickDown();
 			break;
 		case sf::Event::EventType::MouseButtonReleased:
 			if (down_on_this_) {
 				down_on_this_ = false;
 				up_on_this_ = true;
-				this->PlayAnimateClickUp();
+				this->ActionClickUp();
 			}
 			break;
 		case sf::Event::EventType::MouseMoved:
 			if (!enter_on_this_) {
 				enter_on_this_ = true;
 				leave_on_this_ = false;
-								this->PlayAnimateEnter();
-				if (down_on_this_)	this->PlayAnimateClickDown();
+								this->ActionEnter();
+				if (down_on_this_)	this->ActionClickDown();
 			}
 			break;
 		default:
@@ -74,8 +74,8 @@ bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,
 		if (enter_on_this_) {
 			enter_on_this_ = false;
 			leave_on_this_ = true;
-			if (down_on_this_)	this->PlayAnimateClickUp();
-			this->PlayAnimateLeave();
+			if (down_on_this_)	this->ActionClickUp();
+			this->ActionLeave();
 		}
 
 		if (event_type == sf::Event::EventType::MouseButtonReleased)
@@ -215,13 +215,13 @@ void UiObject::SetAnchorObject(VisibleObject* Anchor_object) {
 
 VisibleObject* UiObject::GetAnchorObject() { return Anchor_object_; }
 
-void UiObject::PlayAnimateEnter() { }
+void UiObject::ActionEnter() { }
 
-void UiObject::PlayAnimateLeave() { }
+void UiObject::ActionLeave() { }
 
-void UiObject::PlayAnimateClickDown() { }
+void UiObject::ActionClickDown() { }
 
-void UiObject::PlayAnimateClickUp() { }
+void UiObject::ActionClickUp() { }
 
 void UiObject::Draw(sf::RenderWindow& window) {
 
