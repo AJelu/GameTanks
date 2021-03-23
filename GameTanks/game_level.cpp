@@ -12,11 +12,11 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->SetBonusObject(new Tank4(1, 500, 500));
 
 	TankObject* tank;
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 1000; i++) {
 		tank = new RedTank(1, 300, 400);
 		this->AddStaticObject(tank);
 	}
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 50; i++) {
 		tank = new RedTank(1, 300, 400);
 		this->AddEnemyObject(tank);
 	}

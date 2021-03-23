@@ -137,12 +137,18 @@ private:
 
 	sf::SoundBuffer* GetSoundsBuffer(std::string audio_file);
 
-	std::vector <std::string> audio_action_name_;
-	std::vector <sf::Sound*> sounds_file_;
+	//all audio action
+	std::vector <std::string> Audio_action_name_;
+	std::vector <std::string> Audio_action_file_name_;
+	std::vector <float> Audio_action_volume;
 
+	//playing sounds
+	std::vector <std::string> Audio_action_playing_name_;
+	std::vector <sf::Sound*> Sounds_file_;
+
+	//queues for start and stop play sound
 	std::queue <std::string> Start_audio_action_;
 	std::queue <bool> Start_looped_;
-
 	std::queue <std::string> Stop_audio_action_;
 
 	sf::View* Camera_;
@@ -157,10 +163,12 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 	void AddAudioAction(std::string const& audio_action_name,
-		std::string const& audio_file, int const& volume = 100);
+		std::string const& audio_file, float const& volume = 100);
 
 	bool StartAudioAction(std::string const& audio_action, bool looped = false);
 	bool StopAudioAction(std::string const& audio_action);
+
+	bool PlaysSounds();
 
 	//play started audio actions
 	void RecalculateState(float const& game_time) override; /////////////////////////////

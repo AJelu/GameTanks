@@ -21,30 +21,26 @@ sf::SoundBuffer* AudioObject::GetSoundsBuffer(std::string audio_file) {
 
 bool AudioObject::PlayAudioAction(std::string const& audio_action, bool looped) {
 	bool result = false;
-	for (int i = 0; i < (int)audio_action_name_.size(); i++) {
-		if (audio_action_name_[i] == audio_action) {
-			
-			if (sounds_file_[i]->getStatus() != sf::Sound::Status::Playing) {
-				sounds_file_[i]->play();
-
-				//* This is for tesing:
-				std::cout << audio_action_name_[i] << " ->res: " << 
-					(sounds_file_[i]->getStatus() == sf::Sound::Status::Playing) 
-					<< std::endl;
-
-				std::cout << audio_action_name_[i] << ": " << std::endl;
-				std::cout << "\t" << (*Sounds_buffer_[i]).getDuration().asSeconds() 
-					<< " seconds" << std::endl;
-				std::cout << "\t" << (*Sounds_buffer_[i]).getSampleRate() 
-					<< " samples / sec" << std::endl;
-				std::cout << "\t" << (*Sounds_buffer_[i]).getChannelCount()
-					<< " channels" << std::endl << std::endl;
-				//* * * * *
+	for (int i = 0; i < (int)Audio_action_name_.size(); i++) {
+		if (Audio_action_name_[i] == audio_action) {
+			bool need_play_sound = true;
+			for (int j = 0; j < (int)Audio_action_playing_name_.size(); j++)
+				if (Audio_action_name_[i] == Audio_action_playing_name_[j]) {
+					need_play_sound = false;
+					break;
+				}
+			if (need_play_sound) {
+				sf::SoundBuffer* sound_buffer =
+					this->GetSoundsBuffer(Audio_action_file_name_[i]);
+				sf::Sound* sound = new sf::Sound();
+				sound->setBuffer(*sound_buffer);
+				sound->setVolume(Audio_action_volume[i]);
+				Audio_action_playing_name_.push_back(audio_action);
+				Sounds_file_.push_back(sound);
+				Sounds_file_.back()->setLoop(looped);
+				Sounds_file_.back()->play();
+				result = true;
 			}
-			else sf::sleep(sf::milliseconds(200)); //Pauses for CPU less loading
-			sounds_file_[i]->setLoop(looped);
-			
-			result = true;
 		}
 	}
 	return result;
@@ -52,10 +48,15 @@ bool AudioObject::PlayAudioAction(std::string const& audio_action, bool looped) 
 
 bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 	bool result = false;
-	for (int i = 0; i < (int)audio_action_name_.size(); i++) {
-		if (audio_action_name_[i] == audio_action) {
-			(*sounds_file_[i]).setLoop(false);
-			(*sounds_file_[i]).stop();
+	for (int i = 0; i < (int)Audio_action_playing_name_.size(); i++) {
+		if (Audio_action_playing_name_[i] == audio_action || 
+			(Sounds_file_[i]->getStatus() != sf::Sound::Status::Playing)) {
+			Sounds_file_[i]->setLoop(false);
+			Sounds_file_[i]->stop();
+			delete Sounds_file_[i];
+			Sounds_file_.erase(Sounds_file_.begin() + i);
+			Audio_action_playing_name_.erase(Audio_action_playing_name_.begin() + i);
+			i--;
 			result = true;
 		}
 	}
@@ -72,25 +73,14 @@ AudioObject::AudioObject(int const& id_object,
 	std::string const& texture, int const& frame_count_x, int const& frame_count_y) : 
 	VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y) {
-	this->AddAudioAction("tank_move", "Data/Audio/move/tank_move.ogg");
-	this->AddAudioAction("tank_rotate", "Data/Audio/move/tank_move_rotation.ogg");
-	this->AddAudioAction("tank_dead", "Data/Audio/explosion/tank_dead.ogg");
-	this->AddAudioAction("tank_shot", "Data/Audio/explosion/bullet_shot.ogg");
-	this->AddAudioAction("explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 	Camera_ = nullptr;
 }
 
 void AudioObject::AddAudioAction(std::string const& audio_action_name,
-									std::string const& audio_file, int const& volume){
-	sf::SoundBuffer* sound_buffer = this->GetSoundsBuffer(audio_file);
-	if (sound_buffer != nullptr) {
-		audio_action_name_.push_back(audio_action_name);
-
-		sf::Sound* sound = new sf::Sound();
-		sound->setBuffer(*sound_buffer);
-		sound->setVolume(volume);
-		sounds_file_.push_back(sound);
-	}
+									std::string const& audio_file, float const& volume){
+	Audio_action_name_.push_back(audio_action_name);
+	Audio_action_file_name_.push_back(audio_file);
+	Audio_action_volume.push_back(volume);
 }
 
 bool AudioObject::StartAudioAction(std::string const& audio_action, bool looped){
@@ -102,6 +92,10 @@ bool AudioObject::StartAudioAction(std::string const& audio_action, bool looped)
 bool AudioObject::StopAudioAction(std::string const& audio_action){
 	Stop_audio_action_.push(audio_action);
 	return true;
+}
+
+bool AudioObject::PlaysSounds() {
+	return Sounds_file_.size() > 0;
 }
 
 void AudioObject::SetCamera(sf::View* Camera) { Camera_ = Camera; }
@@ -129,6 +123,7 @@ void AudioObject::RecalculateState(float const& game_time) {
 		Start_audio_action_.pop();
 		Start_looped_.pop();
 	}
+	this->StopPlayingAudioAction(""); //for deleting ended sound objects
 	while (!Stop_audio_action_.empty()) {
 		this->StopPlayingAudioAction(Stop_audio_action_.front());
 		Stop_audio_action_.pop();
@@ -158,7 +153,7 @@ bool AudioObject::SetDataFromPacket(sf::Packet& Packet) {
 }
 
 AudioObject::~AudioObject(){
-	for (int i = 0; i < (int)audio_action_name_.size(); i++) {
-		if (sounds_file_.at(i)) delete sounds_file_[i]; //test mode of access verification
+	for (int i = 0; i < (int)Sounds_file_.size(); i++) {
+		if (Sounds_file_.at(i)) delete Sounds_file_[i]; //test mode of access verification
 	}
 }

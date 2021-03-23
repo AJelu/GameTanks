@@ -248,7 +248,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			
 			if ((*it)->GetGameType() == "Shot_objects" &&
 				(*it)->GetLifeLevel() == 0) {
-				if ((*it)->AnimationEnd(true)) {
+				if ((*it)->AnimationEnd(true) && !(*it)->PlaysSounds()) {
 					Shot_objects_.remove((MovebleObject*)(*it));
 					All_objects_.erase(it);
 					delete (*it);
@@ -269,10 +269,13 @@ void BaseLevel::CalculateCollisionOnLevel() {
 							if (!(*it)->Collision((*it2))) {
 								if		((*it)->GetGameType() == "Shot_objects" &&
 										(*it2)->GetGameType() == "Shot_objects") {
-									(*it)->SetLifeLevel(0);
-									((MovebleObject*)(*it))->SetDistanceMove(0);
-									(*it2)->SetLifeLevel(0);
-									((MovebleObject*)(*it2))->SetDistanceMove(0);
+									if ((*it)->GetLifeLevel() != 0
+											&& (*it2)->GetLifeLevel()) {
+										(*it)->SetLifeLevel(0);
+										((MovebleObject*)(*it))->SetDistanceMove(0);
+										(*it2)->SetLifeLevel(0);
+										((MovebleObject*)(*it2))->SetDistanceMove(0);
+									}
 								}
 								else if ((*it)->GetGameType() != "Shot_objects" &&
 										(*it2)->GetGameType() != "Shot_objects") {
@@ -284,6 +287,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 									if ((*it2)->GetGameType() != "Static_objects") {
 										((MovebleObject*)(*it2))->SetDistanceMove(0);
 									}
+									(*it)->StartAudioAction("collision");
+									(*it2)->StartAudioAction("collision");
 									recalc_all = true;
 								}
 								else if ((*it)->GetGameType() == "Shot_objects" ||
@@ -298,6 +303,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 										object = (*it);
 									}
 									if (object->GetLifeLevel() != 0) {
+										if (object->GetGameType() == "Static_objects")
+											object->StartAudioAction("collision");
 										//add current point:
 										if (shot->GetPerrent() != nullptr) {
 											float procent = 
@@ -331,6 +338,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				if ((*it)->GetGameType() != "Static_objects") {
 					(*it)->RestorePreviousState();
 					((MovebleObject*)(*it))->SetDistanceMove(0);
+					(*it)->StartAudioAction("collision");
 					recalc_all = true;
 				}
 			}
@@ -421,7 +429,6 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 				- (size_level_border_ + Game_object->GetSafeDistance()) * 2))
 		));
 		if (this->SafePointSpawn(Game_object)) {
-			std::cout << "good respawn: " << i << ";" << std::endl;
 			return true;
 		}
 	}
