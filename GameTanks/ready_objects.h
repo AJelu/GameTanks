@@ -2,6 +2,14 @@
 
 #include "objects.h"
 
+//TEST:
+static sf::Sound tank_move_, tank_rotate_, tank_dead_;
+static sf::SoundBuffer buff_tank_move_, buff_tank_rotate_, buff_tank_dead_;
+
+static sf::Sound bullet_shot_, bullet_explosion_;
+static sf::SoundBuffer buff_bullet_shot_, buff_bullet_explosion_;
+//+++
+
 //move objects:
 class Bullet : public MovebleObject {
 private:

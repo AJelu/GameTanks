@@ -60,9 +60,7 @@ void Engine::Font() { Main_font_.loadFromFile("Data/Font/Font.ttf"); }
 
 Engine::~Engine() { 
     thread_lan_.join();
-    /*
     for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin(); 
         it != list_clients_.end(); it++)
         delete* it;
-    */
 }

@@ -23,13 +23,27 @@ bool AudioObject::PlayAudioAction(std::string const& audio_action, bool looped) 
 	bool result = false;
 	for (int i = 0; i < (int)audio_action_name_.size(); i++) {
 		if (audio_action_name_[i] == audio_action) {
+			
 			if (sounds_file_[i]->getStatus() != sf::Sound::Status::Playing) {
 				sounds_file_[i]->play();
+
+				//* This is for tesing:
 				std::cout << audio_action_name_[i] << " ->res: " << 
 					(sounds_file_[i]->getStatus() == sf::Sound::Status::Playing) 
 					<< std::endl;
+
+				std::cout << audio_action_name_[i] << ": " << std::endl;
+				std::cout << "\t" << (*Sounds_buffer_[i]).getDuration().asSeconds() 
+					<< " seconds" << std::endl;
+				std::cout << "\t" << (*Sounds_buffer_[i]).getSampleRate() 
+					<< " samples / sec" << std::endl;
+				std::cout << "\t" << (*Sounds_buffer_[i]).getChannelCount()
+					<< " channels" << std::endl << std::endl;
+				//* * * * *
 			}
+			else sf::sleep(sf::milliseconds(200)); //Pauses for CPU less loading
 			sounds_file_[i]->setLoop(looped);
+			
 			result = true;
 		}
 	}
@@ -58,6 +72,11 @@ AudioObject::AudioObject(int const& id_object,
 	std::string const& texture, int const& frame_count_x, int const& frame_count_y) : 
 	VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y) {
+	this->AddAudioAction("tank_move", "Data/Audio/move/tank_move.ogg");
+	this->AddAudioAction("tank_rotate", "Data/Audio/move/tank_move_rotation.ogg");
+	this->AddAudioAction("tank_dead", "Data/Audio/explosion/tank_dead.ogg");
+	this->AddAudioAction("tank_shot", "Data/Audio/explosion/bullet_shot.ogg");
+	this->AddAudioAction("explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 	Camera_ = nullptr;
 }
 

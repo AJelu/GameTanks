@@ -92,7 +92,6 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot) {
 			temp_position_correcrtor.y *= -1;
 			shot->SetCoordinate(this->GetCoordinateCentre() + temp_position_correcrtor);
 			shot->SetLifeLevel(this->GetLifeShot());
-			this->StartAudioAction("shot", false);
 			return shot;
 		}
 	}

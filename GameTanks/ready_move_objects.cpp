@@ -3,13 +3,15 @@
 void Bullet::ActionDie() {
 	this->ClearAnimarionList(true);
 	this->StartPlayAnimation(1, 1, 8, 40); 
-	this->StartAudioAction("action_bullet_explosion");
+	this->StartAudioAction("explosion");
+	//bullet_explosion_.play();
 }
 
 void Bullet::ActionLife() {
 	this->ClearAnimarionList(true);
 	this->ActionMoving(0);
-	this->StartAudioAction("action_bullet_shot");
+	this->StartAudioAction("tank_shot");
+	//bullet_shot_.play();
 }
 
 void Bullet::ActionMoving(float const& distance) { 
@@ -29,10 +31,7 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->ActionLife();
-	this->AddAudioAction("action_bullet_shot", "Data/Audio/explosion/bullet_shot.ogg");
-	this->AddAudioAction("action_bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 }
-
 
 TypedTank::TypedTank(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
@@ -48,15 +47,27 @@ TypedTank::TypedTank(int const& id_object,
 		12, 4, max_life_level,
 		speed, freeze_time, rotation_speed, point_create_shot_by_vector,
 		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ 
-	this->AddAudioAction("action_tank_move", "Data/Audio/move/tank_move.ogg");
-	this->AddAudioAction("action_tank_rotate", "Data/Audio/move/tank_move.ogg");
-	this->AddAudioAction("action_tank_dead", "Data/Audio/explosion/tank_dead.ogg");
+	
+	/*/TEST:
+	buff_tank_move_.loadFromFile("Data/Audio/move/tank_move.ogg");
+	buff_tank_rotate_.loadFromFile("Data/Audio/move/tank_move.ogg");
+	buff_tank_dead_.loadFromFile("Data/Audio/explosion/tank_dead.ogg");
+	tank_move_.setBuffer(buff_tank_move_);
+	tank_rotate_.setBuffer(buff_tank_rotate_);
+	tank_dead_.setBuffer(buff_tank_dead_);
+
+	buff_bullet_shot_.loadFromFile("Data/Audio/explosion/bullet_shot.ogg");
+	buff_bullet_explosion_.loadFromFile("Data/Audio/explosion/bullet_explosion.ogg");
+	bullet_shot_.setBuffer(buff_bullet_shot_);
+	bullet_explosion_.setBuffer(buff_bullet_explosion_);
+	//+++*/
 }
 
 void TypedTank::ActionDie() {
 	this->ClearAnimarionList();
 	this->StartPlayAnimation(2, 1, 12, 70);
-	this->StartAudioAction("action_tank_dead");
+	this->StartAudioAction("tank_dead");
+	//tank_dead_.play();
 }
 
 void TypedTank::ActionLife() {
@@ -65,7 +76,8 @@ void TypedTank::ActionLife() {
 }
 
 void TypedTank::ActionStartMove() {
-	this->StartAudioAction("action_tank_move", true);
+	this->StartAudioAction("tank_move", true);
+	//tank_move_.play();
 }
 
 void TypedTank::ActionMoving(float const& distance) {
@@ -76,11 +88,13 @@ void TypedTank::ActionMoving(float const& distance) {
 }
 
 void TypedTank::ActionEndMove() {
-	this->StopAudioAction("action_tank_move");
+	this->StopAudioAction("tank_move");
+	//tank_move_.stop();
 }
 
 void TypedTank::ActionStartRotate() {
-	this->StartAudioAction("action_tank_rotate", true);
+	this->StartAudioAction("tank_rotate", true);
+	//tank_rotate_.play();
 }
 
 void TypedTank::ActionRotating(float const& distance) {
@@ -91,7 +105,8 @@ void TypedTank::ActionRotating(float const& distance) {
 }
 
 void TypedTank::ActionEndRotate() {
-	this->StopAudioAction("action_tank_rotate");
+	this->StopAudioAction("tank_rotate");
+	//tank_rotate_.stop();
 }
 
 RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_y,
