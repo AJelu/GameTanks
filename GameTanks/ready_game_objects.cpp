@@ -8,6 +8,13 @@ CommonGameObject::CommonGameObject(int const& id_object,
 	: GameObject(id_object, coordinate_centre, offset_sprite_coordinate,
 		texture, frame_count_x, frame_count_y, max_life_level){}
 
+void CommonGameObject::ActionDie() {
+
+}
+
+void CommonGameObject::ActionLife() {
+
+}
 
 BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(

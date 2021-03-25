@@ -119,6 +119,9 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
 		int const& max_life_level);
+
+	void ActionDie() override;
+	void ActionLife() override;
 };
 
 class BarellBrown : public CommonGameObject {
