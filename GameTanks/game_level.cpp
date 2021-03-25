@@ -4,6 +4,7 @@ GameLevel::GameLevel() : BaseLevel() {
 	/* Initialization tile map and border: */
 	this->SetBackgroundTexture("Data/Maps/Map.png");
 	this->SetBorderTexture("Data/Maps/Map_border.png", 50);
+	this->SetBackgroundMusic("Data/Audio/music/music_in_game.ogg", 10);
 
 	this->Player_ = new Tank2(1, 200, 200);
 	this->AddPlayerObject(Player_);

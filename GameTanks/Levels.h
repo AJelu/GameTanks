@@ -46,6 +46,9 @@ private:
 	sf::Texture Texture_border_;
 	sf::Sprite Sprite_border_;
 
+	//background music:
+	sf::Music music_background_;
+
 	float max_safe_distance = 0;
 
 	void CalculateCollisionOnLevel();
@@ -68,6 +71,7 @@ public:
 
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
+	void SetBackgroundMusic(std::string music_address, int const& volume);
 
 	sf::Packet GetPacketToSendAllClient();
 	

@@ -127,6 +127,13 @@ void BaseLevel::SetBorderTexture(std::string texture_address, int const& size_le
 	size_level_border_ = size_level_border_;
 }
 
+void BaseLevel::SetBackgroundMusic(std::string music_address, int const& volume) {
+	music_background_.openFromFile(music_address);
+	music_background_.play();
+	music_background_.setVolume(volume);
+	music_background_.setLoop(true);
+}
+
 sf::Packet BaseLevel::GetPacketToSendAllClient() {
 	return sf::Packet(); /////////////////////////////////////////////////////////////////////////
 }
