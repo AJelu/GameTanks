@@ -98,7 +98,7 @@ private:
 public:
 	GameLevel();
 
-	template <class TypeObject> void RespawnObject(TypeObject* object, int const& quantity,
+	template <class TypeObject> void SpawnObject(TypeObject* object, int const& quantity,
 		int const& id_object, float const& spawn_x, float const& spawn_y);
 	
 	bool UpdateState(float& game_timer) override;

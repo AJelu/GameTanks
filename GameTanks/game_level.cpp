@@ -20,64 +20,64 @@ GameLevel::GameLevel() : BaseLevel() {
 	
 	/* Respawn static objects: */
 	BarellBrown* static_barell_brown = nullptr;
-	this->RespawnObject(static_barell_brown, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_brown, 50, 1, 200, 200);
 
 	BarellBroken* static_barell_broken = nullptr;
-	this->RespawnObject(static_barell_broken, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_broken, 50, 1, 200, 200);
 
 	BarellGreen* static_barell_green = nullptr;
-	this->RespawnObject(static_barell_green, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_green, 50, 1, 200, 200);
 
 	BlockGround* static_block_ground = nullptr;
-	this->RespawnObject(static_block_ground, 50, 1, 200, 200);
+	this->SpawnObject(static_block_ground, 50, 1, 200, 200);
 
 	BlockGrass* static_block_grass = nullptr;
-	this->RespawnObject(static_block_grass, 50, 1, 200, 200);
+	this->SpawnObject(static_block_grass, 50, 1, 200, 200);
 
 	CactusTypeOne* static_cactus_type_one = nullptr;
-	this->RespawnObject(static_cactus_type_one, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_one, 50, 1, 200, 200);
 
 	CactusTypeTwo* static_cactus_type_two = nullptr;
-	this->RespawnObject(static_cactus_type_two, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_two, 50, 1, 200, 200);
 
 	CactusTypeThree* static_cactus_type_three = nullptr;
-	this->RespawnObject(static_cactus_type_three, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_three, 50, 1, 200, 200);
 
 	Log* static_log = nullptr;
-	this->RespawnObject(static_log, 50, 1, 200, 200);
+	this->SpawnObject(static_log, 50, 1, 200, 200);
 
 	Stump* static_stump = nullptr;
-	this->RespawnObject(static_stump, 40, 1, 200, 200);
+	this->SpawnObject(static_stump, 40, 1, 200, 200);
 
 	TreeTypeOne* static_tree_type_one = nullptr;
-	this->RespawnObject(static_tree_type_one, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_one, 75, 1, 200, 200);
 
 	TreeTypeTwo* static_tree_type_two = nullptr;
-	this->RespawnObject(static_tree_type_two, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_two, 75, 1, 200, 200);
 
 	TreeTypeThree* static_tree_type_three = nullptr;
-	this->RespawnObject(static_tree_type_three, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_three, 75, 1, 200, 200);
 
 	TreeTypeFour* static_tree_type_four = nullptr;
-	this->RespawnObject(static_tree_type_four, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_four, 75, 1, 200, 200);
 
 	TreeTypeFive* static_tree_type_five = nullptr;
-	this->RespawnObject(static_tree_type_five, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_five, 75, 1, 200, 200);
 
 	TreeTypeSix* static_tree_type_six = nullptr;
-	this->RespawnObject(static_tree_type_six, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_six, 75, 1, 200, 200);
 
 	TreeTypeSeven* static_tree_type_seven = nullptr;
-	this->RespawnObject(static_tree_type_seven, 40, 1, 200, 200);
+	this->SpawnObject(static_tree_type_seven, 40, 1, 200, 200);
 
 	TreeTypeEight* static_tree_type_eight = nullptr;
-	this->RespawnObject(static_tree_type_eight, 40, 1, 200, 200);
+	this->SpawnObject(static_tree_type_eight, 40, 1, 200, 200);
 
 	TreeTypeNine* static_tree_type_nine = nullptr;
-	this->RespawnObject(static_tree_type_nine, 40, 1, 200, 200);
+	this->SpawnObject(static_tree_type_nine, 40, 1, 200, 200);
 
 	Well* static_well = nullptr;
-	this->RespawnObject(static_well, 40, 1, 200, 200);
+	this->SpawnObject(static_well, 40, 1, 200, 200);
 	/*------------------------------*/
 
 	float a = 20, m = 3;
@@ -131,7 +131,7 @@ GameLevel::GameLevel() : BaseLevel() {
 }
 
 template <class TypeObject>
-void GameLevel::RespawnObject(TypeObject* object, int const& quantity,
+void GameLevel::SpawnObject(TypeObject* object, int const& quantity,
 	int const& id_object, float const& spawn_x, float const& spawn_y) {
 
 	for (int i = 0; i < quantity; i++)
