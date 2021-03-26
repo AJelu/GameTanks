@@ -7,12 +7,12 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->SetBackgroundMusic("Data/Audio/music/music_in_game.ogg", 10);
 
 	/* Respawn player: */
-	this->Player_ = new Tank2(1, 200, 200);
+	this->Player_ = new TankBrown(1, 200, 200);
 	this->AddPlayerObject(Player_);
 	this->SetWatchObject(Player_);
 
 	/* Respawn test bonus: */
-	this->SetBonusObject(new Tank4(1, 500, 500));
+	this->SetBonusObject(new TankBlack(1, 500, 500));
 
 	/* Respawn enemy: */
 	TankObject* tank_enemy = nullptr;
@@ -20,13 +20,13 @@ GameLevel::GameLevel() : BaseLevel() {
 	
 	/* Respawn static objects: */
 	BarellBrown* static_barell_brown = nullptr;
-	this->SpawnObject(static_barell_brown, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_brown, 60, 1, 200, 200);
 
 	BarellBroken* static_barell_broken = nullptr;
-	this->SpawnObject(static_barell_broken, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_broken, 60, 1, 200, 200);
 
 	BarellGreen* static_barell_green = nullptr;
-	this->SpawnObject(static_barell_green, 50, 1, 200, 200);
+	this->SpawnObject(static_barell_green, 60, 1, 200, 200);
 
 	BlockGround* static_block_ground = nullptr;
 	this->SpawnObject(static_block_ground, 50, 1, 200, 200);
@@ -35,13 +35,13 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->SpawnObject(static_block_grass, 50, 1, 200, 200);
 
 	CactusTypeOne* static_cactus_type_one = nullptr;
-	this->SpawnObject(static_cactus_type_one, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_one, 40, 1, 200, 200);
 
 	CactusTypeTwo* static_cactus_type_two = nullptr;
-	this->SpawnObject(static_cactus_type_two, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_two, 40, 1, 200, 200);
 
 	CactusTypeThree* static_cactus_type_three = nullptr;
-	this->SpawnObject(static_cactus_type_three, 50, 1, 200, 200);
+	this->SpawnObject(static_cactus_type_three, 40, 1, 200, 200);
 
 	Log* static_log = nullptr;
 	this->SpawnObject(static_log, 50, 1, 200, 200);
@@ -50,22 +50,22 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->SpawnObject(static_stump, 40, 1, 200, 200);
 
 	TreeTypeOne* static_tree_type_one = nullptr;
-	this->SpawnObject(static_tree_type_one, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_one, 90, 1, 200, 200);
 
 	TreeTypeTwo* static_tree_type_two = nullptr;
-	this->SpawnObject(static_tree_type_two, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_two, 90, 1, 200, 200);
 
 	TreeTypeThree* static_tree_type_three = nullptr;
-	this->SpawnObject(static_tree_type_three, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_three, 90, 1, 200, 200);
 
 	TreeTypeFour* static_tree_type_four = nullptr;
-	this->SpawnObject(static_tree_type_four, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_four, 90, 1, 200, 200);
 
 	TreeTypeFive* static_tree_type_five = nullptr;
-	this->SpawnObject(static_tree_type_five, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_five, 90, 1, 200, 200);
 
 	TreeTypeSix* static_tree_type_six = nullptr;
-	this->SpawnObject(static_tree_type_six, 75, 1, 200, 200);
+	this->SpawnObject(static_tree_type_six, 90, 1, 200, 200);
 
 	TreeTypeSeven* static_tree_type_seven = nullptr;
 	this->SpawnObject(static_tree_type_seven, 40, 1, 200, 200);

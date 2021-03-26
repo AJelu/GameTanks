@@ -118,7 +118,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 MovebleObject* RedTank::Shot() { return new Bullet(1, this); }
 
 
-Tank2::Tank2(int const& id_object, float const& spawn_x, float const& spawn_y,
+TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
@@ -137,10 +137,10 @@ Tank2::Tank2(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* Tank2::Shot() { return new Bullet(1, this); }
+MovebleObject* TankBrown::Shot() { return new Bullet(1, this); }
 
 
-Tank3::Tank3(int const& id_object, float const& spawn_x, float const& spawn_y,
+TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
@@ -159,10 +159,10 @@ Tank3::Tank3(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* Tank3::Shot() { return new Bullet(1, this); }
+MovebleObject* TankWhite::Shot() { return new Bullet(1, this); }
 
 
-Tank4::Tank4(int const& id_object, float const& spawn_x, float const& spawn_y,
+TankBlack::TankBlack(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
@@ -181,10 +181,10 @@ Tank4::Tank4(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* Tank4::Shot() { return new Bullet(1, this); }
+MovebleObject* TankBlack::Shot() { return new Bullet(1, this); }
 
 
-Tank5::Tank5(int const& id_object, float const& spawn_x, float const& spawn_y,
+TankYellow::TankYellow(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
@@ -203,10 +203,10 @@ Tank5::Tank5(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* Tank5::Shot() { return new Bullet(1, this); }
+MovebleObject* TankYellow::Shot() { return new Bullet(1, this); }
 
 
-Tank6::Tank6(int const& id_object, float const& spawn_x, float const& spawn_y,
+TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y), //coordinate centr
@@ -225,4 +225,4 @@ Tank6::Tank6(int const& id_object, float const& spawn_x, float const& spawn_y,
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* Tank6::Shot() { return new Bullet(1, this); }
+MovebleObject* TankGreen::Shot() { return new Bullet(1, this); }
