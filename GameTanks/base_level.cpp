@@ -124,7 +124,7 @@ void BaseLevel::SetBorderTexture(std::string texture_address, int const& size_le
 	Sprite_border_.setPosition(0, 0);
 	size_level_width_ = Texture_border_.getSize().x;
 	size_level_height_ = Texture_border_.getSize().y;
-	size_level_border_ = size_level_border_;
+	size_level_border_ = size_level_border;
 }
 
 sf::Packet BaseLevel::GetPacketToSendAllClient() {
@@ -428,6 +428,7 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 			float(rand() % int(size_level_height_
 				- (size_level_border_ + Game_object->GetSafeDistance()) * 2))
 		));
+		Game_object->SetRotation(float(rand() % 360));
 		if (this->SafePointSpawn(Game_object)) {
 			return true;
 		}
