@@ -11,73 +11,91 @@ GameLevel::GameLevel() : BaseLevel() {
 	this->AddPlayerObject(Player_);
 	this->SetWatchObject(Player_);
 
+
 	/* Respawn test bonus: */
 	this->SetBonusObject(new TankBlack(1, 500, 500));
 
+
 	/* Respawn enemy: */
-	TankObject* tank_enemy = nullptr;
-	for (int i = 0; i < 50; i++) this->AddEnemyObject(tank_enemy = new RedTank(1, 300, 400));
-	
+	RedTank* red_tank_enemy = nullptr;
+	this->SpawnEnemyObject(red_tank_enemy, 10, 1, 300, 400);
+
+	TankBrown* brown_tank_enemy = nullptr;
+	this->SpawnEnemyObject(brown_tank_enemy, 10, 1, 300, 400);
+
+	TankWhite* white_tank_enemy = nullptr;
+	this->SpawnEnemyObject(white_tank_enemy, 10, 1, 300, 400);
+
+	TankBlack* black_tank_enemy = nullptr;
+	this->SpawnEnemyObject(black_tank_enemy, 10, 1, 300, 400);
+
+	TankYellow* yellow_tank_enemy = nullptr;
+	this->SpawnEnemyObject(yellow_tank_enemy, 10, 1, 300, 400);
+
+	TankGreen* green_tank_enemy = nullptr;
+	this->SpawnEnemyObject(green_tank_enemy, 10, 1, 300, 400);
+
+
 	/* Respawn static objects: */
 	BarellBrown* static_barell_brown = nullptr;
-	this->SpawnObject(static_barell_brown, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_brown, 60, 1, 200, 200);
 
 	BarellBroken* static_barell_broken = nullptr;
-	this->SpawnObject(static_barell_broken, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_broken, 60, 1, 200, 200);
 
 	BarellGreen* static_barell_green = nullptr;
-	this->SpawnObject(static_barell_green, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_green, 60, 1, 200, 200);
 
 	BlockGround* static_block_ground = nullptr;
-	this->SpawnObject(static_block_ground, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_block_ground, 50, 1, 200, 200);
 
 	BlockGrass* static_block_grass = nullptr;
-	this->SpawnObject(static_block_grass, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_block_grass, 50, 1, 200, 200);
 
 	CactusTypeOne* static_cactus_type_one = nullptr;
-	this->SpawnObject(static_cactus_type_one, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_cactus_type_one, 40, 1, 200, 200);
 
 	CactusTypeTwo* static_cactus_type_two = nullptr;
-	this->SpawnObject(static_cactus_type_two, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_cactus_type_two, 40, 1, 200, 200);
 
 	CactusTypeThree* static_cactus_type_three = nullptr;
-	this->SpawnObject(static_cactus_type_three, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_cactus_type_three, 40, 1, 200, 200);
 
 	Log* static_log = nullptr;
-	this->SpawnObject(static_log, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_log, 50, 1, 200, 200);
 
 	Stump* static_stump = nullptr;
-	this->SpawnObject(static_stump, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_stump, 40, 1, 200, 200);
 
 	TreeTypeOne* static_tree_type_one = nullptr;
-	this->SpawnObject(static_tree_type_one, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_one, 90, 1, 200, 200);
 
 	TreeTypeTwo* static_tree_type_two = nullptr;
-	this->SpawnObject(static_tree_type_two, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_two, 90, 1, 200, 200);
 
 	TreeTypeThree* static_tree_type_three = nullptr;
-	this->SpawnObject(static_tree_type_three, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_three, 90, 1, 200, 200);
 
 	TreeTypeFour* static_tree_type_four = nullptr;
-	this->SpawnObject(static_tree_type_four, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_four, 90, 1, 200, 200);
 
 	TreeTypeFive* static_tree_type_five = nullptr;
-	this->SpawnObject(static_tree_type_five, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_five, 90, 1, 200, 200);
 
 	TreeTypeSix* static_tree_type_six = nullptr;
-	this->SpawnObject(static_tree_type_six, 90, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_six, 90, 1, 200, 200);
 
 	TreeTypeSeven* static_tree_type_seven = nullptr;
-	this->SpawnObject(static_tree_type_seven, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_seven, 40, 1, 200, 200);
 
 	TreeTypeEight* static_tree_type_eight = nullptr;
-	this->SpawnObject(static_tree_type_eight, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_eight, 40, 1, 200, 200);
 
 	TreeTypeNine* static_tree_type_nine = nullptr;
-	this->SpawnObject(static_tree_type_nine, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_nine, 40, 1, 200, 200);
 
 	Well* static_well = nullptr;
-	this->SpawnObject(static_well, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_well, 40, 1, 200, 200);
 	/*------------------------------*/
 
 	float a = 20, m = 3;
@@ -131,12 +149,21 @@ GameLevel::GameLevel() : BaseLevel() {
 }
 
 template <class TypeObject>
-void GameLevel::SpawnObject(TypeObject* object, int const& quantity,
+void GameLevel::SpawnStaticObject(TypeObject* object, int const& quantity,
 	int const& id_object, float const& spawn_x, float const& spawn_y) {
 
 	for (int i = 0; i < quantity; i++)
 		this->AddStaticObject(object = new TypeObject(id_object, spawn_x, spawn_y));
 }
+
+template <class TypeObject>
+void GameLevel::SpawnEnemyObject(TypeObject* object, int const& quantity,
+	int const& id_object, float const& spawn_x, float const& spawn_y) {
+
+	for (int i = 0; i < quantity; i++)
+		this->AddEnemyObject(object = new TypeObject(id_object, spawn_x, spawn_y));
+}
+
 
 bool GameLevel::UpdateState(float& game_timer) {
 	bool result = BaseLevel::UpdateState(game_timer);

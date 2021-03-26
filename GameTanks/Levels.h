@@ -95,11 +95,15 @@ private:
 	TankObject* Player_;
 	UiObject* Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
 		* Shot_distance_, * Time_to_next_shot_, * Shot_life_;
+
+	template <class TypeObject> void SpawnStaticObject(TypeObject* object, int const& quantity,
+		int const& id_object, float const& spawn_x, float const& spawn_y);
+
+	template <class TypeObject> void SpawnEnemyObject(TypeObject* object, int const& quantity,
+		int const& id_object, float const& spawn_x, float const& spawn_y);
+
 public:
 	GameLevel();
-
-	template <class TypeObject> void SpawnObject(TypeObject* object, int const& quantity,
-		int const& id_object, float const& spawn_x, float const& spawn_y);
 	
 	bool UpdateState(float& game_timer) override;
 
