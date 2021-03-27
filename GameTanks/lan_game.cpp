@@ -62,7 +62,7 @@ void Engine::ServerManager() {
 				get_packet.clear();
 			}
 			else {
-				for (int i = 0; i < list_clients_.size(); i++) {
+				for (int i = 0; i < (int)list_clients_.size(); i++) {
 					if (tcp_selector_.isReady(*list_clients_[i])) {
 						sf::Packet get_packet, mailings_Packet;
 
@@ -79,7 +79,7 @@ void Engine::ServerManager() {
 
 							//Send packet:
 							mailings_Packet << connect_message;
-							for (int j = 0; j < list_clients_.size(); j++) {
+							for (int j = 0; j < (int)list_clients_.size(); j++) {
 								std::cout << "Mailing packets to all clients!" << std::endl;
 								if (i != j) list_clients_[j]->send(mailings_Packet); 
 							} //if (i != j) - test for exchange pakets only clients

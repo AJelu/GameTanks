@@ -71,7 +71,7 @@ public:
 
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
-	void SetBackgroundMusic(std::string music_address, int const& volume);
+	void SetBackgroundMusic(std::string music_address, float const& volume);
 
 	sf::Packet GetPacketToSendAllClient();
 	

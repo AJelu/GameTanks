@@ -163,6 +163,7 @@ public:
 class Star : public CommonGameObject {
 public:
 	Star(int const& id_object, float const& spawn_x, float const& spawn_y);
+	void ActionLife() override;
 };
 
 class Stump : public CommonGameObject {

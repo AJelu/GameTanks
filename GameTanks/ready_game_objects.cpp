@@ -27,7 +27,7 @@ BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const
 		1) {									//max life level
 	
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3, 0.3));
+	this->SetScale(sf::Vector2f(0.3f, 0.3f));
 }
 
 BarellBroken::BarellBroken(int const& id_object, float const& spawn_x, float const& spawn_y)
@@ -39,7 +39,7 @@ BarellBroken::BarellBroken(int const& id_object, float const& spawn_x, float con
 		1) {									//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3, 0.3));
+	this->SetScale(sf::Vector2f(0.3f, 0.3f));
 }
 
 BarellGreen::BarellGreen(int const& id_object, float const& spawn_x, float const& spawn_y)
@@ -51,7 +51,7 @@ BarellGreen::BarellGreen(int const& id_object, float const& spawn_x, float const
 		1) {									//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3, 0.3));
+	this->SetScale(sf::Vector2f(0.3f, 0.3f));
 }
 
 BlockGround::BlockGround(int const& id_object, float const& spawn_x, float const& spawn_y)
@@ -63,7 +63,7 @@ BlockGround::BlockGround(int const& id_object, float const& spawn_x, float const
 		3) {									//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 40));
-	this->SetScale(sf::Vector2f(1, 1));
+	this->SetScale(sf::Vector2f(1.f, 1.f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_big.ogg");
 }
 
@@ -142,6 +142,12 @@ Star::Star(int const& id_object, float const& spawn_x, float const& spawn_y)
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->SetScale(sf::Vector2f(0.5, 0.5));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/star_up.ogg");
+	ActionLife();
+}
+
+void Star::ActionLife() {
+	CommonGameObject::ActionLife();
+	this->StartPlayAnimation(3, 12, 1, 80, true);
 }
 
 Stump::Stump(int const& id_object, float const& spawn_x, float const& spawn_y)

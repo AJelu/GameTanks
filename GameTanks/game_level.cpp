@@ -13,7 +13,7 @@ GameLevel::GameLevel() : BaseLevel() {
 
 
 	/* Respawn test bonus: */
-	this->SetBonusObject(new TankBlack(1, 500, 500));
+	this->SetBonusObject(new Star(1, 500, 500));
 
 
 	/* Respawn enemy: */
