@@ -109,8 +109,10 @@ public:
 	CommonGameObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate,
-		std::string const& texture, int const& frame_count_x, int const& frame_count_y,
+		std::string const& texture,
 		int const& max_life_level);
+	void ActionDie() override;
+	void ActionLife() override;
 };
 
 class BarellBrown : public CommonGameObject {
@@ -129,41 +131,26 @@ public:
 };
 
 class BlockGround : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	BlockGround(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class BlockGrass : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	BlockGrass(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class CactusTypeOne : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	CactusTypeOne(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class CactusTypeTwo : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	CactusTypeTwo(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class CactusTypeThree : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	CactusTypeThree(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
@@ -184,81 +171,51 @@ public:
 };
 
 class TreeTypeOne : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeOne(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeTwo : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeTwo(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeThree : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeThree(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeFour : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeFour(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeFive : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeFive(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeSix : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeSix(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeSeven : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeSeven(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeEight : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeEight(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class TreeTypeNine : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	TreeTypeNine(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
 
 class Well : public CommonGameObject {
-private:
-	void ActionDie() override;
-
 public:
 	Well(int const& id_object, float const& spawn_x, float const& spawn_y);
 };
