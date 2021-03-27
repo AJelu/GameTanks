@@ -108,13 +108,13 @@ void AudioObject::RecalculateState(float const& game_time) {
 	bool in_range = false;
 	if ((Camera_ != nullptr)) {
 		if (((Camera_->getCenter().x - Camera_->getSize().x / 2)
-				< this->GetCoordinateCentre().x) && 
+				< this->GetCoordinateCentre().x + this->GetWidthSprite(true)) && 
 			((Camera_->getCenter().x + Camera_->getSize().x / 2)
-				> this->GetCoordinateCentre().x) &&
+				> this->GetCoordinateCentre().x - this->GetWidthSprite(true)) &&
 			((Camera_->getCenter().y - Camera_->getSize().y / 2)
-				< this->GetCoordinateCentre().y) &&
+				< this->GetCoordinateCentre().y + this->GetHeightSprite(true)) &&
 			((Camera_->getCenter().y + Camera_->getSize().y / 2)
-				> this->GetCoordinateCentre().y))
+				> this->GetCoordinateCentre().y - this->GetHeightSprite(true)))
 			in_range = true;
 	}
 	while (!Start_audio_action_.empty()) {

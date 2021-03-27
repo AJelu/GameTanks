@@ -18,6 +18,11 @@ void CommonGameObject::ActionLife() {
 	this->StartPlayAnimation(1, 12, 1, 20);
 }
 
+void CommonGameObject::ActionChangeLifeLevel(int const& life_level) {
+	int frame = 12 - int((((float)life_level) / (float)this->GetMaxLifeLevel()) * 11.0f) + 1;
+	this->StartPlayAnimation(3, frame, frame, 20);
+}
+
 BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(
 		id_object,

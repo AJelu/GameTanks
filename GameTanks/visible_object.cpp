@@ -41,8 +41,6 @@ sf::Texture* VisibleObject::GetTexture(std::string texture_name)
 	return nullptr;
 }
 
-void VisibleObject::SetNeedRedrawImage() { need_redraw_image_ = true; }
-
 //rotate vector be lengh 1 
 bool VisibleObject::RecalculateVector() {
 	float length_vector = 
@@ -184,8 +182,6 @@ void VisibleObject::RecalculateState(float const& game_time){
 }
 
 //get object parameters
-bool VisibleObject::GetNeedRedrawImage() { return need_redraw_image_; };
-
 const sf::Vector2f& VisibleObject::GetCoordinateCentre() { return Sprite_object_.getPosition(); }
 
 int VisibleObject::GetHeightSprite(bool get_scale_size) {
@@ -348,7 +344,6 @@ void VisibleObject::Draw(sf::RenderWindow& window) {
 	if ((Sprite_object_.getTexture()) != Texture_object_)
 		Sprite_object_.setTexture(*Texture_object_);
 	window.draw(Sprite_object_);
-	need_redraw_image_ = false;
 }
 
 VisibleObject::~VisibleObject() {

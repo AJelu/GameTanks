@@ -113,6 +113,7 @@ public:
 		int const& max_life_level);
 	void ActionDie() override;
 	void ActionLife() override;
+	void ActionChangeLifeLevel(int const& life_level) override;
 };
 
 class BarellBrown : public CommonGameObject {

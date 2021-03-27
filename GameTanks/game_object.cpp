@@ -33,7 +33,8 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 
 	if (life_level_ != new_life_level) {
 		if (new_life_level == 0)	this->ActionDie();
-		if (life_level_ == 0)		this->ActionLife();
+		else if (life_level_ == 0)	this->ActionLife();
+		else						this->ActionChangeLifeLevel(new_life_level);
 
 		life_level_ = new_life_level;
 	}
@@ -88,6 +89,8 @@ int GameObject::GetBasePoint() { return base_point_; }
 int GameObject::GetCurrentPoint() { return current_point_; }
 
 void GameObject::ActionDie() { }
+
+void GameObject::ActionChangeLifeLevel(int const& life_level) { }
 
 void GameObject::ActionLife() { }
 
