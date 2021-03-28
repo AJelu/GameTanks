@@ -40,8 +40,6 @@ private:
 
 	sf::Texture* GetTexture(std::string texture_name);
 
-	bool need_redraw_image_; //using for redraw screen. if have changing - true
-
 	sf::Vector2f offset_sprite_coordinate_;
 
 	//for animates
@@ -69,7 +67,6 @@ private:
 	float previous_gradus_ = 0; //float CalculateGradus();
 	//end for optimization;
 
-	void SetNeedRedrawImage();
 	bool RecalculateVector();
 	bool ShowTile(); //show current frame texture
 	bool SetTile(int const& tile_level, int const& tile_number); //set show choosed frame texture
@@ -317,6 +314,7 @@ public:
 
 	//for animation
 	virtual void ActionDie(); ///need override in daughter
+	virtual void ActionChangeLifeLevel(int const& life_level); ///need override in daughter
 	virtual void ActionLife(); ///need override in daughter
 
 	//for lan
