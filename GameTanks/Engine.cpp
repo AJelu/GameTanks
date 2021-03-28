@@ -2,8 +2,8 @@
 #include "engine.h"
 
 Engine::Engine() 
-    : thread_lan_(&Engine::LanGame, this)//, thread_draw_(&Engine::EngineDraw, this)
-{
+    : thread_lan_(&Engine::LanGame, this) {
+
     std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
 }

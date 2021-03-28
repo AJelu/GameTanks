@@ -1,32 +1,35 @@
 #include "engine.h"
 
 void Engine::LanGame() { //Test work with connection:
+	//game_restart_ = true;
 
-	//Show IP address:
-	sf::IpAddress ip_local_ = sf::IpAddress::getLocalAddress();
-	sf::IpAddress ip_public_ = sf::IpAddress::getPublicAddress(); //Get local IP
-	std::cout << "Address local: " << ip_local_ 
+	//while (Main_window_.isOpen()) {
+		//game_restart_ = false;
+
+		//Show IP address:
+		sf::IpAddress ip_local_ = sf::IpAddress::getLocalAddress();
+		sf::IpAddress ip_public_ = sf::IpAddress::getPublicAddress(); //Get local IP
+		std::cout << "Address local: " << ip_local_
 			<< "; Address public: " << ip_public_ << std::endl << std::endl;
 
+		/* Determining the type of connection: */
+		std::string connect_type;
+		do {
+			std::cout << "Select type to connect: (s): server; (c): client; "
+				<< "(q) - quit game; ";
+			std::cin >> connect_type;
+			system("cls");
 
-	/* Determining the type of connection: */
-	std::string connect_type;
-	do {
-		std::cout << "Select type to connect: (s): server; (c): client; " 
-					<< "(q) - quit game; ";
-		std::cin >> connect_type;
-		system("cls");
+			if (connect_type == "s") { im_server_ = true; break; }
+			else if (connect_type == "c") { im_server_ = false; break; }
+			else if (connect_type == "q") exit(0);
+			else std::cout << "The wrong type is selected!" << std::endl;
+		} while (true);
 
-		if (connect_type == "s") { im_server_ = true; break; }
-		else if (connect_type == "c") { im_server_ = false; break; }
-		else if (connect_type == "q") exit(0);
-		else std::cout << "The wrong type is selected!" << std::endl;
-	} while (true);
-
-
-	/* Establishing a connection: */
-	if (im_server_) this->ServerManager();
-	else this->ClientManager();
+		/* Establishing a connection: */
+		if (im_server_) this->ServerManager();
+		else this->ClientManager();
+	//}
 }
 
 void Engine::ServerManager() {
@@ -59,6 +62,7 @@ void Engine::ServerManager() {
 
 				list_clients_.push_back(socket);
 				tcp_selector_.add(*socket);
+				
 				get_packet.clear();
 			}
 			else {
@@ -71,18 +75,18 @@ void Engine::ServerManager() {
 
 							std::string connect_message;
 							get_packet >> connect_message; //unpack packet
-							std::cout << "Server recieve packet from client <" << i 
+							std::cout << "Package received successfully <" << i 
 								<< ">: " << connect_message << "\t ip: " 
 								<< (*list_clients_[i]).getRemoteAddress() << std::endl;
-							
+
 							get_packet.clear();
 
-							//Send packet:
+							//Send packet: ->SendMessageToClient()
 							mailings_Packet << connect_message;
 							for (int j = 0; j < (int)list_clients_.size(); j++) {
 								std::cout << "Mailing packets to all clients!" << std::endl;
-								if (i != j) list_clients_[j]->send(mailings_Packet); 
-							} //if (i != j) - test for exchange pakets only clients
+								list_clients_[j]->send(mailings_Packet); 
+							} 
 
 							mailings_Packet.clear();
 						}
@@ -94,7 +98,6 @@ void Engine::ServerManager() {
 } //Receive input and send BaseLevel
 
 void Engine::ClientManager() {
-
 	int index_packet = 0; /* Testing index packet */
 
 	do {
@@ -103,37 +106,16 @@ void Engine::ClientManager() {
 
 		if (tcp_socket_.connect(ip_enter_, 7777) == sf::Socket::Done) {
 			tcp_socket_.setBlocking(false);
-			while (Main_window_.isOpen()) {
-				
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-				index_packet += 1;
+			sf::Packet send_packet;
+			std::string connect_message = "connect packet " + std::to_string(index_packet);
+			send_packet << connect_message;
+			tcp_socket_.send(send_packet);
+			send_packet.clear();
 
-				//Send packet:
-				sf::Packet send_packet;
-				std::string connect_message = "client packet " + std::to_string(index_packet);
-
-				send_packet << connect_message;
-				tcp_socket_.send(send_packet);
-				
-				//Clear packet
-				send_packet.clear();
-
-				//Receive packet:
-				sf::Packet get_packet;
-				if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
-					std::string recieve_message;
-					get_packet >> recieve_message; //unpack packet
-					std::cout << "Client recieve packet from server "
-						<< recieve_message << "; \tip: "
-						<< tcp_socket_.getRemoteAddress()
-						<< std::endl;
-
-					get_packet.clear();
-				}
-			}
+			break;
 		}
-		else {
+		else if (tcp_socket_.connect(ip_enter_, 7777) != sf::Socket::Done) {
 			std::cout << "Cannot connect to the server... Try again? Enter (y): yes; (n): no; ";
 			std::string connect;
 			std::cin >> connect;
@@ -141,15 +123,14 @@ void Engine::ClientManager() {
 			system("cls");
 		}
 	} while (true);
-	exit(0);
-} //Receive BaseLevel
+}
 
 //Get Intafomration to go client: BaseLevel->GetObjectToSendClient
 
-bool Engine::SendMessageToClient() {
-	//data put on packet: packet << data
-	//tcp_socket_.send(packet_);
-	return false;
+void Engine::SendMessageToClient(sf::Packet& send_packet) {
+	if (tcp_socket_.send(send_packet) == sf::Socket::Done)
+		std::cout << "Package sent successfully!" << std::endl;
+	else std::cout << "Package was not sent!" << std::endl;
 }
 
 bool Engine::RecvMessageFromServer() {

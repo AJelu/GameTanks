@@ -13,6 +13,16 @@ public:
 	Bullet(int const& id_object, GameObject* Parrent = nullptr);
 };
 
+class DoubleBullet : public MovebleObject {
+private:
+	void ActionDie() override;
+	void ActionLife() override;
+	void ActionMoving(float const& distance) override;
+
+public:
+	DoubleBullet(int const& id_object, GameObject* Parrent = nullptr);
+};
+
 class TypedTank abstract : public TankObject {
 public:
 	TypedTank(int const& id_object,

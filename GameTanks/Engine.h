@@ -25,7 +25,7 @@ private:
 
 	std::thread thread_lan_;
 
-	bool im_server_;
+	bool im_server_;// game_restart_;
 
 	void GameTimer(float& timer); // create main game timer
 	void GameSpeed(float& timer); // regulates the speed of the game
@@ -43,10 +43,12 @@ private:
 	sf::TcpSocket tcp_socket_;
 	std::vector<sf::TcpSocket*> list_clients_;
 
+	std::string send_message;
+
 	void ServerManager();
 	void ClientManager();
 
-	bool SendMessageToClient();
+	void SendMessageToClient(sf::Packet& send_packet);
 	bool RecvMessageFromServer();
 	/*-----------------------------*/
 

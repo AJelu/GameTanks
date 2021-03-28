@@ -96,6 +96,9 @@
     <ClCompile Include="ready_game_objects.cpp">
       <Filter>Source Files\READY_OBJECTS</Filter>
     </ClCompile>
+    <ClCompile Include="ready_objects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collisions.h">

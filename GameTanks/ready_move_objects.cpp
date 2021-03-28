@@ -1,8 +1,25 @@
 #include "ready_objects.h"
 
+Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
+	id_object,
+	sf::Vector2f(0, 0), //coordinate centr
+	sf::Vector2f(96, 96), //offset
+	"Data/Bullet/Boom_3.png", //texture
+	9, 2,	//frame count
+	1000000,//max life level
+	500,	//speed move
+	0,		//freeze time
+	100,	//rotation speed
+	Parrent) {
+	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", 50);
+	this->AddAudioAction("Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
+	this->ActionLife();
+}
+
 void Bullet::ActionDie() {
 	this->ClearAnimarionList(true);
-	this->StartPlayAnimation(1, 1, 9, 40); 
+	this->StartPlayAnimation(1, 1, 9, 40);
 	this->StartAudioAction("Bullet_explosion");
 }
 
@@ -12,11 +29,11 @@ void Bullet::ActionLife() {
 	this->StartAudioAction("Bullet_shot");
 }
 
-void Bullet::ActionMoving(float const& distance) { 
-	this->StartPlayAnimation(2, 1, 8, 20); 
+void Bullet::ActionMoving(float const& distance) {
+	this->StartPlayAnimation(2, 1, 8, 20);
 }
 
-Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
+DoubleBullet::DoubleBullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	id_object,
 	sf::Vector2f(0, 0), //coordinate centr
 	sf::Vector2f(96, 96), //offset
@@ -137,8 +154,11 @@ TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& sp
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
-MovebleObject* TankBrown::Shot() { return new Bullet(1, this); }
-
+MovebleObject* TankBrown::Shot() {
+	Bullet* b = new Bullet(1, this);
+	b->SetScale(sf::Vector2f(0.8, 0.8));
+	return b;
+}
 
 TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
