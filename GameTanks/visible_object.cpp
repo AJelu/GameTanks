@@ -73,7 +73,6 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 	tile_level_ = tile_level;
 	tile_frame_current_ = tile_number;
 	this->ShowTile();
-	this->SetNeedRedrawImage();
 	return true;
 }
 
@@ -207,7 +206,6 @@ void VisibleObject::RestorePreviousState() {
 	gradus_ = previous_gradus_;
 	this->RecalculateVector();
 	Sprite_object_.setRotation(this->CalculateGradus());
-	this->SetNeedRedrawImage();
 }
 
 void VisibleObject::SafeState() {
@@ -224,7 +222,6 @@ const sf::Vector2f& VisibleObject::GetOffsetSprite(bool get_scale_size) {
 
 void VisibleObject::SetCoordinate(sf::Vector2f const& coordinate_centre) {
 	Sprite_object_.setPosition(coordinate_centre);
-	this->SetNeedRedrawImage();
 }
 
 void VisibleObject::MoveByVector(float const& length_move) {
@@ -286,7 +283,6 @@ void VisibleObject::SetRotationVector(float const& vector_x, float const& vector
 	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
 	gradus_ = rotation_by_gradus;
 	Sprite_object_.setRotation(this->CalculateGradus());
-	this->SetNeedRedrawImage();
 }
 
 void VisibleObject::VectorRotation(float const& rotation_degree) {
@@ -337,7 +333,6 @@ bool VisibleObject::SetTexture(std::string const& texture,
 void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate) {
 	offset_sprite_coordinate_ = offset_sprite_coordinate;
 	Sprite_object_.setOrigin(offset_sprite_coordinate_);
-	this->SetNeedRedrawImage();
 }
 
 void VisibleObject::Draw(sf::RenderWindow& window) {
