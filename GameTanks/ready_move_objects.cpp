@@ -27,7 +27,7 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	0,		//freeze time
 	100,	//rotation speed
 	Parrent) {
-	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", 50);
+	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->ActionLife();
@@ -48,10 +48,11 @@ TypedTank::TypedTank(int const& id_object,
 		speed, freeze_time, rotation_speed, point_create_shot_by_vector,
 		shot_life, speed_shot, shot_distance, time_freeze_shot, Parrent){ 
 
-	this->AddAudioAction("TypedTank_move", "Data/Audio/move/tank_move.ogg", 50);
-	this->AddAudioAction("TypedTank_rotate", "Data/Audio/move/tank_move_rotation.ogg", 50);
+	this->AddAudioAction("TypedTank_move", "Data/Audio/move/tank_move.ogg", true, 50);
+	this->AddAudioAction("TypedTank_rotate", "Data/Audio/move/tank_move_rotation.ogg", 
+		true, 50);
 	this->AddAudioAction("TypedTank_dead", "Data/Audio/explosion/tank_dead.ogg");
-	this->AddAudioAction("collision", "Data/Audio/collision/collision_tank.ogg", 40);
+	this->AddAudioAction("collision", "Data/Audio/collision/collision_tank.ogg", false, 40);
 }
 
 void TypedTank::ActionDie() {
@@ -66,7 +67,7 @@ void TypedTank::ActionLife() {
 }
 
 void TypedTank::ActionStartMove() {
-	this->StartAudioAction("TypedTank_move", true);
+	this->StartAudioAction("TypedTank_move");
 }
 
 void TypedTank::ActionMoving(float const& distance) {
@@ -81,7 +82,7 @@ void TypedTank::ActionEndMove() {
 }
 
 void TypedTank::ActionStartRotate() {
-	this->StartAudioAction("TypedTank_rotate", true);
+	this->StartAudioAction("TypedTank_rotate");
 }
 
 void TypedTank::ActionRotating(float const& distance) {

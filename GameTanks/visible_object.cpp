@@ -73,7 +73,6 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 	tile_level_ = tile_level;
 	tile_frame_current_ = tile_number;
 	this->ShowTile();
-	this->SetNeedRedrawImage();
 	return true;
 }
 
@@ -89,6 +88,7 @@ void VisibleObject::ClearAnimarionList(bool const& all) {
 	if (all) {
 		tile_frame_current_ = animation_frame_end_;
 		current_frame_animation_time_ = animation_speed_for_frame_ + 1;
+		this->SetNeedSynchByLan(true);
 	}
 }
 
@@ -169,10 +169,10 @@ void VisibleObject::RecalculateState(float const& game_time){
 			q_animation_frame_start_.erase(q_animation_frame_start_.begin());
 			q_animation_frame_end_.erase(q_animation_frame_end_.begin());
 			q_animation_speed_for_frame_.erase(q_animation_speed_for_frame_.begin());
-			/////// <------insert here lan code for add animation list;
 			//set first tile animation
 			current_frame_animation_time_ = 0;
 			this->SetTile(tile_level_, animation_frame_start_);
+			this->SetNeedSynchByLan(true);
 		}
 		else if (looped_) {//restart animation
 			current_frame_animation_time_ = 0;
@@ -207,7 +207,7 @@ void VisibleObject::RestorePreviousState() {
 	gradus_ = previous_gradus_;
 	this->RecalculateVector();
 	Sprite_object_.setRotation(this->CalculateGradus());
-	this->SetNeedRedrawImage();
+	this->SetNeedSynchByLan(true);
 }
 
 void VisibleObject::SafeState() {
@@ -217,14 +217,14 @@ void VisibleObject::SafeState() {
 	previous_gradus_ = gradus_;
 }
 
-const sf::Vector2f& VisibleObject::GetOffsetSprite(bool get_scale_size) {
+const sf::Vector2f VisibleObject::GetOffsetSprite(bool get_scale_size) {
 	return sf::Vector2f(offset_sprite_coordinate_.x * Sprite_object_.getScale().x,
 		offset_sprite_coordinate_.y * Sprite_object_.getScale().y);
 }
 
 void VisibleObject::SetCoordinate(sf::Vector2f const& coordinate_centre) {
 	Sprite_object_.setPosition(coordinate_centre);
-	this->SetNeedRedrawImage();
+	this->SetNeedSynchByLan(true);
 }
 
 void VisibleObject::MoveByVector(float const& length_move) {
@@ -244,25 +244,48 @@ std::string VisibleObject::ClassName() { return "VisibleObject"; }
 
 bool VisibleObject::CreatePacket(sf::Packet& Packet) {
 	BaseObject::CreatePacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet << offset_sprite_coordinate_.x << offset_sprite_coordinate_.y;
+	Packet << this->GetCoordinateCentre().x << this->GetCoordinateCentre().y;
+
+	Packet << tile_level_ << tile_frame_current_;
+	Packet << animation_frame_start_ << animation_frame_end_;
+	Packet << looped_;
+	Packet << animation_speed_for_frame_;
+	Packet << current_frame_animation_time_;
+	//
+	//queue?
+	//
+	Packet << vector_rotate_x_ << vector_rotate_y_;
+
 	return false;
 }
 
 bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
 	BaseObject::SetDataFromPacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet >> offset_sprite_coordinate_.x >> offset_sprite_coordinate_.y;
+	this->SetOffsetSprite(offset_sprite_coordinate_);
+	float t_vector_rotate_x_, t_vector_rotate_y_;
+	Packet >> t_vector_rotate_x_ >> t_vector_rotate_y_;
+	this->SetCoordinate(sf::Vector2f(t_vector_rotate_x_, t_vector_rotate_y_));
+
+	Packet >> tile_level_ >> tile_frame_current_;
+	Packet >> animation_frame_start_ >> animation_frame_end_;
+	Packet >> looped_;
+	Packet >> animation_speed_for_frame_;
+	Packet >> current_frame_animation_time_;
+	this->ShowTile();
+	//
+	//queue?
+	//
+	t_vector_rotate_x_, t_vector_rotate_y_;
+	Packet >> t_vector_rotate_x_ >> t_vector_rotate_y_;
+	this->SetRotationVector(t_vector_rotate_x_, t_vector_rotate_y_);
 	return false;
 }
 
 void VisibleObject::SetRotationVector(float const& vector_x, float const& vector_y) {
+	if ((vector_rotate_x_ == vector_x) && (vector_rotate_y_ == vector_y)) return;
+
 	vector_rotate_x_ = vector_x;
 	vector_rotate_y_ = vector_y;
 	this->RecalculateVector(); 
@@ -286,7 +309,7 @@ void VisibleObject::SetRotationVector(float const& vector_x, float const& vector
 	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
 	gradus_ = rotation_by_gradus;
 	Sprite_object_.setRotation(this->CalculateGradus());
-	this->SetNeedRedrawImage();
+	this->SetNeedSynchByLan(true);
 }
 
 void VisibleObject::VectorRotation(float const& rotation_degree) {
@@ -337,7 +360,7 @@ bool VisibleObject::SetTexture(std::string const& texture,
 void VisibleObject::SetOffsetSprite(sf::Vector2f const& offset_sprite_coordinate) {
 	offset_sprite_coordinate_ = offset_sprite_coordinate;
 	Sprite_object_.setOrigin(offset_sprite_coordinate_);
-	this->SetNeedRedrawImage();
+	this->SetNeedSynchByLan(true);
 }
 
 void VisibleObject::Draw(sf::RenderWindow& window) {

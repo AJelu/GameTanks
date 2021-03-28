@@ -37,6 +37,7 @@ void TankObject::DeleteBonusFromObject(Bonuses * bonus) {
 	this->SetLifeShot(		bonus->GetOriginalShotLife());
 	//this->SetLifeLevel(	bonus->GetOriginalLifeLevel());
 	//this->SetMaxLifeLevel(	bonus->GetOriginalMaxLifeLevel());
+	this->SetNeedSynchByLan(true);
 }
 
 void TankObject::AddBonusToObject(Bonuses* bonus) {
@@ -66,6 +67,7 @@ void TankObject::AddBonusToObject(Bonuses* bonus) {
 	this->SetMaxLifeLevel(	bonus->GetMaxLifeLevel());
 	this->SetLifeLevel(		bonus->GetLifeLevel());
 	Bonus_ = bonus;
+	this->SetNeedSynchByLan(true);
 }
 
 void TankObject::AddBonus(Bonuses* bonus) {
@@ -156,20 +158,20 @@ std::string TankObject::ClassName() { return "TankObject"; }
 
 bool TankObject::CreatePacket(sf::Packet& Packet) {
 	MovebleObject::CreatePacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet << speed_shot_ << shot_distance_ << time_to_next_shot_ << time_freeze_shot_;
+	Packet << shot_life_;
+	//
+	//Bonus_
+	//
 	return false;
 }
 
 bool TankObject::SetDataFromPacket(sf::Packet& Packet) {
 	MovebleObject::SetDataFromPacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet >> speed_shot_ >> shot_distance_ >> time_to_next_shot_ >> time_freeze_shot_;
+	Packet >> shot_life_;
+	//
+	//Bonus_
+	//
 	return false;
 }

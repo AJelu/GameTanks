@@ -18,6 +18,8 @@ class BaseObject{
 private:
 	int id_object_; //for synchronize by lan
 
+	bool need_synch_by_lan_ = true;
+
 public:
 	BaseObject();
 	BaseObject(int const& id_object);
@@ -27,8 +29,12 @@ public:
 	void SetIdObject(int const& id_object);
 
 	virtual std::string ClassName();
-	virtual bool CreatePacket(sf::Packet& Packet);
-	virtual bool SetDataFromPacket(sf::Packet& Packet);
+	virtual bool CreatePacket(sf::Packet& Packet); // set paran in packed
+	virtual bool SetDataFromPacket(sf::Packet& Packet); // get paran from packed
+
+	//need lan synch (get/set)
+	bool GetNeedSynchByLan();
+	virtual void SetNeedSynchByLan(bool const& need_synch_by_lan);
 
 	virtual ~BaseObject();
 };
@@ -88,9 +94,8 @@ public:
 	virtual void RecalculateState(float const& game_time);
 
 	//get object parameters
-	bool GetNeedRedrawImage(); //return true if need update image
 	const sf::Vector2f& GetCoordinateCentre();
-	const sf::Vector2f& GetOffsetSprite(bool get_scale_size = false);
+	const sf::Vector2f GetOffsetSprite(bool get_scale_size = false);
 	int GetHeightSprite(bool get_scale_size = false);
 	int GetWidthSprite(bool get_scale_size = false);
 	float GetVectorX();
@@ -137,6 +142,7 @@ private:
 	//all audio action
 	std::vector <std::string> Audio_action_name_;
 	std::vector <std::string> Audio_action_file_name_;
+	std::vector <bool> Audio_action_looped_;
 	std::vector <float> Audio_action_volume;
 
 	//playing sounds
@@ -145,12 +151,15 @@ private:
 
 	//queues for start and stop play sound
 	std::queue <std::string> Start_audio_action_;
-	std::queue <bool> Start_looped_;
 	std::queue <std::string> Stop_audio_action_;
+
+	//for lan
+	std::list <int> Need_send_start_to_lan_;
+	std::list <int> Need_send_stop_to_lan_;
 
 	sf::View* Camera_;
 
-	bool PlayAudioAction(std::string const& audio_action, bool looped = false);
+	bool PlayAudioAction(bool const& play, std::string const& audio_action);
 	bool StopPlayingAudioAction(std::string const& audio_action);
 
 public:
@@ -160,9 +169,9 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate,
 		std::string const& texture, int const& frame_count_x, int const& frame_count_y);
 	void AddAudioAction(std::string const& audio_action_name,
-		std::string const& audio_file, float const& volume = 100);
+		std::string const& audio_file, bool looped = false, float const& volume = 100);
 
-	bool StartAudioAction(std::string const& audio_action, bool looped = false);
+	bool StartAudioAction(std::string const& audio_action);
 	bool StopAudioAction(std::string const& audio_action);
 
 	bool PlaysSounds();
@@ -177,6 +186,7 @@ public:
 	std::string ClassName() override;
 	bool CreatePacket(sf::Packet& Packet) override;
 	bool SetDataFromPacket(sf::Packet& Packet) override;
+	void SetNeedSynchByLan(bool const& need_synch_by_lan) override;
 
 	~AudioObject() override;
 };
@@ -309,7 +319,7 @@ public:
 	void CollisionOff();//ignore all collisions
 	void CollisionOn();
 
-	std::string GetGameType();//ignore all collisions
+	std::string GetGameType();
 	void SetGameType(std::string const& game_type);
 
 	//for animation

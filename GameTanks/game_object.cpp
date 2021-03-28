@@ -2,8 +2,8 @@
 #include <cmath>
 
 GameObject::GameObject() : AudioObject() {
-	this->SetLifeLevel(1);
 	this->SetMaxLifeLevel(1);
+	this->SetLifeLevel(1);
 	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = nullptr;
@@ -17,8 +17,8 @@ GameObject::GameObject(int const& id_object,
 			int const& max_life_level, GameObject* Parrent)
 			: AudioObject(id_object, coordinate_centre, offset_sprite_coordinate,
 				texture, frame_count_x, frame_count_y) {
-	this->SetLifeLevel(max_life_level);
 	this->SetMaxLifeLevel(max_life_level);
+	this->SetLifeLevel(max_life_level);
 	this->CollisionOn();
 	max_collision_distance_ = 0;
 	Parrent_ = Parrent;
@@ -37,13 +37,15 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 		else						this->ActionChangeLifeLevel(new_life_level);
 
 		life_level_ = new_life_level;
+		this->SetNeedSynchByLan(true);
 	}
 }
 
 void GameObject::SetMaxLifeLevel(int const& max_life_level) {
 	if (max_life_level > 0) {
 		max_life_level_ = max_life_level;
-		if (max_life_level_ > this->GetLifeLevel()) this->SetLifeLevel(max_life_level_);
+		if (max_life_level_ < this->GetLifeLevel()) this->SetLifeLevel(max_life_level_);
+		this->SetNeedSynchByLan(true);
 	}
 }
 
@@ -67,12 +69,16 @@ float GameObject::GetSafeDistance(){
 
 GameObject* GameObject::GetPerrent() { return Parrent_; }
 
-void GameObject::SetBasePoint(int const& base_point) { base_point_ = base_point; }
+void GameObject::SetBasePoint(int const& base_point) { 
+	base_point_ = base_point;
+	this->SetNeedSynchByLan(true);
+}
 
 void GameObject::SetCurrentPoint(int const& current_point, bool const& add_to_previous) {
 	if (add_to_previous)	current_point_ += current_point;
 	else					current_point_ = current_point;
 	if (current_point_ < 0) current_point_ = 0;
+	this->SetNeedSynchByLan(true);
 }
 
 void GameObject::RestoreLife() { this->SetLifeLevel(max_life_level_); }
@@ -180,27 +186,24 @@ void GameObject::CollisionOn() { collision_off_ = false; }
 
 std::string GameObject::GetGameType() { return game_type_; }
 
-void GameObject::SetGameType(std::string const& game_type) { game_type_ = game_type; }
+void GameObject::SetGameType(std::string const& game_type) { 
+	game_type_ = game_type;
+	this->SetNeedSynchByLan(true);
+}
 
 std::string GameObject::ClassName() { return "GameObject"; }
 
 bool GameObject::CreatePacket(sf::Packet& Packet) {
 	AudioObject::CreatePacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet << life_level_ << max_life_level_ << base_point_ << current_point_;
+	Packet << game_type_;
 	return false;
 }
 
 bool GameObject::SetDataFromPacket(sf::Packet& Packet) {
 	AudioObject::SetDataFromPacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet >> life_level_ >> max_life_level_ >> base_point_ >> current_point_;
+	Packet >> game_type_;
 	return false;
 }
 

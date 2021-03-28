@@ -24,22 +24,31 @@ MovebleObject::MovebleObject(int const& id_object,
 }
 
 //set object parameters
-void MovebleObject::SetSpeedMove(float const& speed) { speed_ = speed; }
+void MovebleObject::SetSpeedMove(float const& speed) { 
+	speed_ = speed;
+	this->SetNeedSynchByLan(true);
+}
 
-void MovebleObject::SetFreezeTime(float const& freeze_time) { freeze_time_ = freeze_time; }
+void MovebleObject::SetFreezeTime(float const& freeze_time) { 
+	freeze_time_ = freeze_time;
+	this->SetNeedSynchByLan(true);
+}
 
 void MovebleObject::SetDistanceMove(float const& distance, bool const& add_to_previous) {
 	if (add_to_previous) distance_ += distance;
 	else distance_ = distance;
+	this->SetNeedSynchByLan(true);
 }
 
 void MovebleObject::SetRotationDegree(float const& rotation_degree, bool const& add_to_previous) {
 	if (add_to_previous) rotation_degree_ += rotation_degree;
 	else rotation_degree_ = rotation_degree;
+	this->SetNeedSynchByLan(true);
 }
 
 void MovebleObject::SetRotationSpeed(float const& rotation_speed) { 
-	rotation_speed_ = rotation_speed; 
+	rotation_speed_ = rotation_speed;
+	this->SetNeedSynchByLan(true);
 }
 
 //get object parameters
@@ -65,7 +74,8 @@ void MovebleObject::RecalculateState(float const& game_time) {
 	GameObject::RecalculateState(game_time);
 
 	if (freeze_time_ > 0 || this->GetLifeLevel() <= 0) {
-		distance_ = rotation_degree_ = 0;
+		this->SetDistanceMove(0);
+		this->SetRotationDegree(0);
 		if (this->GetLifeLevel() <= 0)	freeze_time_ = 1;
 		else							freeze_time_ -= game_time;
 	}
@@ -140,21 +150,15 @@ std::string MovebleObject::ClassName() { return "MovebleObject"; }
 
 bool MovebleObject::CreatePacket(sf::Packet& Packet) {
 	GameObject::CreatePacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet << speed_ << distance_ << freeze_time_;
+	Packet << rotation_speed_ << rotation_degree_;
 	return false;
 }
 
 bool MovebleObject::SetDataFromPacket(sf::Packet& Packet) {
 	GameObject::SetDataFromPacket(Packet);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="Packet"></param>
-	/// <returns></returns>
+	Packet >> speed_ >> distance_ >> freeze_time_;
+	Packet >> rotation_speed_ >> rotation_degree_;
 	return false;
 }
 
