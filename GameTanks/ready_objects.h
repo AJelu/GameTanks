@@ -11,6 +11,7 @@ private:
 
 public:
 	Bullet(int const& id_object, GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TypedTank abstract : public TankObject {
@@ -42,6 +43,7 @@ protected:
 public:
 	RedTank(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TankBrown : public TypedTank {
@@ -51,6 +53,7 @@ protected:
 public:
 	TankBrown(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TankWhite : public TypedTank {
@@ -60,6 +63,7 @@ protected:
 public:
 	TankWhite(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TankBlack : public TypedTank {
@@ -69,6 +73,7 @@ protected:
 public:
 	TankBlack(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TankYellow : public TypedTank {
@@ -78,6 +83,7 @@ protected:
 public:
 	TankYellow(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TankGreen : public TypedTank {
@@ -87,6 +93,7 @@ protected:
 public:
 	TankGreen(int const& id_object, float const& spawn_x, float const& spawn_y,
 		GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 
@@ -119,105 +126,126 @@ public:
 class BarellBrown : public CommonGameObject {
 public:
 	BarellBrown(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class BarellBroken : public CommonGameObject {
 public:
 	BarellBroken(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class BarellGreen : public CommonGameObject {
 public:
 	BarellGreen(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class BlockGround : public CommonGameObject {
 public:
 	BlockGround(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class BlockGrass : public CommonGameObject {
 public:
 	BlockGrass(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class CactusTypeOne : public CommonGameObject {
 public:
 	CactusTypeOne(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class CactusTypeTwo : public CommonGameObject {
 public:
 	CactusTypeTwo(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class CactusTypeThree : public CommonGameObject {
 public:
 	CactusTypeThree(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class Log : public CommonGameObject {
 public:
 	Log(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class Star : public CommonGameObject {
 public:
 	Star(int const& id_object, float const& spawn_x, float const& spawn_y);
 	void ActionLife() override;
+	std::string ClassName() override;
 };
 
 class Stump : public CommonGameObject {
 public:
 	Stump(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeOne : public CommonGameObject {
 public:
 	TreeTypeOne(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeTwo : public CommonGameObject {
 public:
 	TreeTypeTwo(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeThree : public CommonGameObject {
 public:
 	TreeTypeThree(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeFour : public CommonGameObject {
 public:
 	TreeTypeFour(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeFive : public CommonGameObject {
 public:
 	TreeTypeFive(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeSix : public CommonGameObject {
 public:
 	TreeTypeSix(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeSeven : public CommonGameObject {
 public:
 	TreeTypeSeven(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeEight : public CommonGameObject {
 public:
 	TreeTypeEight(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class TreeTypeNine : public CommonGameObject {
 public:
 	TreeTypeNine(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };
 
 class Well : public CommonGameObject {
 public:
 	Well(int const& id_object, float const& spawn_x, float const& spawn_y);
+	std::string ClassName() override;
 };

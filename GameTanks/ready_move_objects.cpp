@@ -33,6 +33,8 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	this->ActionLife();
 }
 
+std::string Bullet::ClassName() { return "Bullet"; }
+
 TypedTank::TypedTank(int const& id_object,
 	sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate,
@@ -116,6 +118,8 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 	this->SetBasePoint(200);
 }
 
+std::string RedTank::ClassName() { return "RedTank"; }
+
 MovebleObject* RedTank::Shot() { return new Bullet(1, this); }
 
 
@@ -137,6 +141,8 @@ TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& sp
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
+
+std::string TankBrown::ClassName() { return "TankBrown"; }
 
 MovebleObject* TankBrown::Shot() { return new Bullet(1, this); }
 
@@ -160,6 +166,8 @@ TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& sp
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
+std::string TankWhite::ClassName() { return "TankWhite"; }
+
 MovebleObject* TankWhite::Shot() { return new Bullet(1, this); }
 
 
@@ -181,6 +189,8 @@ TankBlack::TankBlack(int const& id_object, float const& spawn_x, float const& sp
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
+
+std::string TankBlack::ClassName() { return "TankBlack"; }
 
 MovebleObject* TankBlack::Shot() { return new Bullet(1, this); }
 
@@ -204,6 +214,8 @@ TankYellow::TankYellow(int const& id_object, float const& spawn_x, float const& 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
 
+std::string TankYellow::ClassName() { return "TankYellow"; }
+
 MovebleObject* TankYellow::Shot() { return new Bullet(1, this); }
 
 
@@ -225,5 +237,7 @@ TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& sp
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
+
+std::string TankGreen::ClassName() { return "TankGreen"; }
 
 MovebleObject* TankGreen::Shot() { return new Bullet(1, this); }
