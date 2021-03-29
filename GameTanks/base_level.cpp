@@ -129,6 +129,19 @@ bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
 	return false;
 }
 
+TankObject* BaseLevel::GetPlayer(int const& player_number) {
+	if (player_number >= 0 && player_number < Players_objects_.size())
+		return Players_objects_[player_number];
+	return nullptr;
+}
+
+GameObject* BaseLevel::GetObjectById(int const& id_object) {
+	for (auto item : All_objects_)
+		if (item->GetIdObject() == id_object)
+			return item;
+	return nullptr;
+}
+
 void BaseLevel::SetBackgroundTexture(std::string texture_address) {
 	Texture_background_.loadFromFile(texture_address);
 	Sprite_background_.setTexture(Texture_background_);
@@ -159,6 +172,7 @@ sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 	else { //just changes
 		while (!Need_sync_with_client_objects_.empty()) {
 			Need_sync_with_client_objects_.front()->CreatePacket(Paket);
+			Need_sync_with_client_objects_.front()->SetNeedSynchByLan(false);
 			Need_sync_with_client_objects_.pop_front();
 		}
 	}
@@ -168,9 +182,9 @@ sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 
 void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
 	int id;
-	std::string class_name;
+	std::string class_name = "";
 	bool finded_id;
-	while (Packet.getDataSize() > 0) {
+	while (Packet.endOfPacket()) {
 		Packet >> id >> class_name;
 		finded_id = false;
 		for (auto item : All_objects_) {
@@ -296,8 +310,11 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	// update animation for Static_objects_
 	for (i = 0; i < (int)Static_objects_.size(); i++) {
 		Static_objects_[i]->RecalculateState(game_timer);
-		/*if (Static_objects_[i]->GetNeedSynchByLan())
-			Need_sync_with_client_objects_.push_back(Static_objects_[i]);*///<<<<<<<<<<<<<<<
+		if (Static_objects_[i]->GetNeedSynchByLan() 
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(), 
+				Static_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Static_objects_[i]);
 	}
 	// update animation and state for Bonus_object_
 	if (Bonus_object_ != nullptr) 
@@ -306,19 +323,28 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 		Enemy_objects_[i]->RecalculateState(game_timer);
 		enemy_shot_time_[i] -= game_timer;
-		/*if (Enemy_objects_[i]->GetNeedSynchByLan())
-			Need_sync_with_client_objects_.push_back(Enemy_objects_[i]);*///<<<<<<<<<<<<<<<
+		if (Enemy_objects_[i]->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				Enemy_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Enemy_objects_[i]);
 	}
 	// update animation and state for Players_objects_
 	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		Players_objects_[i]->RecalculateState(game_timer);
-		/*if (Players_objects_[i]->GetNeedSynchByLan())
-			Need_sync_with_client_objects_.push_back(Players_objects_[i]);*///<<<<<<<<<<<<<<<
+		if (Players_objects_[i]->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				Players_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Players_objects_[i]);
 	}
 	for (MovebleObject* item : Shot_objects_) {
 		item->RecalculateState(game_timer);
-		/*if (item->GetNeedSynchByLan())
-			Need_sync_with_client_objects_.push_back(item);*///<<<<<<<<<<<<<<<
+		if (item->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				item) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(item);
 	}
 	// update animation for Ui_objects_
 	for (i = 0; i < (int)Ui_objects_.size(); i++)
@@ -343,6 +369,8 @@ bool BaseLevel::UpdateState(float& game_timer) {
 			Need_sync_with_client_objects_.remove(item);
 			delete item;
 		}
+		else if (item->GetDistanceMove() <= 0)
+			item->SetLifeLevel(0);
 	}
 
 	return true;
@@ -365,12 +393,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				((TankObject*)(*it))->AddBonus(new Bonuses());
 				this->RespawnObject(Bonus_object_);
 			}
-			
-			if ((*it)->GetGameType() == "Shot_objects" &&
-				((MovebleObject*)(*it))->GetDistanceMove() <= 0) {
-				(*it)->SetLifeLevel(0);
-			}
-			else
+
 			if ((*it)->GetGameType() == "Shot_objects" || (*it)->ObjectInRangeLevel(
 				size_level_width_, size_level_height_, size_level_border_)) {
 				auto it2(it); it2++;

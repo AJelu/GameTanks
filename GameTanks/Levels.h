@@ -74,6 +74,9 @@ public:
 	bool SetWatchObject(VisibleObject* Watch_object);
 	bool SetBonusObject(GameObject* Bonus_object);
 
+	TankObject* GetPlayer(int const& player_number);
+	GameObject* GetObjectById(int const& id_object);
+
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
 	void SetBackgroundMusic(std::string music_address, float const& volume);
@@ -99,6 +102,7 @@ public:
 class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
+	int player_id_ = 0;
 	UiObject* Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
 		* Shot_distance_, * Time_to_next_shot_, * Shot_life_;
 
@@ -109,7 +113,7 @@ private:
 		int const& id_object, float const& spawn_x, float const& spawn_y);
 
 public:
-	GameLevel(bool const& is_server = true);
+	GameLevel(int const& id_watch_object = 0);
 	
 	bool UpdateState(float& game_timer) override;
 
