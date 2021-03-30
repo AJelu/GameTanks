@@ -11,11 +11,13 @@ Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	0,										//freeze time
 	100,									//rotation speed
 	Parrent) {
-	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", 50);
+	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->ActionLife();
 }
+
+std::string Bullet::ClassName() { return "Bullet"; }
 
 void Bullet::ActionDie() {
 	this->ClearAnimarionList(true);
@@ -44,11 +46,13 @@ DoubleBullet::DoubleBullet(int const& id_object, GameObject* Parrent) : MovebleO
 	0,										//freeze time
 	100,									//rotation speed
 	Parrent) {
-	this->AddAudioAction("Double_Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", 50);
+	this->AddAudioAction("Double_Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Double_Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 12));
 	this->ActionLife();
 }
+
+std::string DoubleBullet::ClassName() { return "Bullet"; }
 
 void DoubleBullet::ActionDie() {
 	this->ClearAnimarionList(true);
@@ -152,6 +156,8 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 	this->SetBasePoint(200); //delete
 }
 
+std::string RedTank::ClassName() { return "RedTank"; }
+
 MovebleObject* RedTank::Shot() { 
 	Bullet* bullet = new Bullet(1, this);
 	bullet->SetScale(sf::Vector2f(0.88f, 0.88f));
@@ -178,6 +184,8 @@ TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& sp
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 50));
 }
+
+std::string TankBrown::ClassName() { return "TankBrown"; }
 
 MovebleObject* TankBrown::Shot() {
 	Bullet* bullet = new Bullet(1, this);
@@ -206,6 +214,8 @@ TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& sp
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, -10), 50));
 }
 
+std::string TankWhite::ClassName() { return "TankWhite"; }
+
 MovebleObject* TankWhite::Shot() { 
 	DoubleBullet* double_bullet = new DoubleBullet(1, this);
 	double_bullet->SetScale(sf::Vector2f(0.88f, 0.88f));
@@ -231,6 +241,8 @@ TankBlack::TankBlack(int const& id_object, float const& spawn_x, float const& sp
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
+
+std::string TankBlack::ClassName() { return "TankBlack"; }
 
 MovebleObject* TankBlack::Shot() { 
 	Bullet* bullet = new Bullet(1, this);
@@ -258,6 +270,8 @@ TankYellow::TankYellow(int const& id_object, float const& spawn_x, float const& 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 35), 18));
 }
+
+std::string TankYellow::ClassName() { return "TankYellow"; }
 
 MovebleObject* TankYellow::Shot() {
 	Bullet* bullet = new Bullet(1, this);

@@ -22,6 +22,7 @@ private:
 
 public:
 	DoubleBullet(int const& id_object, GameObject* Parrent = nullptr);
+	std::string ClassName() override;
 };
 
 class TypedTank abstract : public TankObject {
