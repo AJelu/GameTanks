@@ -1,7 +1,7 @@
 #include <iostream>
 #include "engine.h"
 
-Engine::Engine() 
+Engine::Engine()
     : thread_lan_(&Engine::LanGame, this) {
 
     std::this_thread::get_id(); // Get id thread of LanGame

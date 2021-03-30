@@ -1,10 +1,10 @@
 #include "engine.h"
 
 void Engine::LanGame() { //Test work with connection:
-	//game_restart_ = true;
+	game_restart_ = true;
 
-	//while (Main_window_.isOpen()) {
-		//game_restart_ = false;
+	while (game_restart_) {
+		game_restart_ = false; /*+++*/
 
 		//Show IP address:
 		sf::IpAddress ip_local_ = sf::IpAddress::getLocalAddress();
@@ -15,6 +15,7 @@ void Engine::LanGame() { //Test work with connection:
 		/* Determining the type of connection: */
 		std::string connect_type;
 		do {
+			if (game_restart_) break; /*++++++++*/
 			std::cout << "Select type to connect: (s): server; (c): client; "
 				<< "(q) - quit game; ";
 			std::cin >> connect_type;
@@ -29,41 +30,36 @@ void Engine::LanGame() { //Test work with connection:
 		/* Establishing a connection: */
 		if (im_server_) this->ServerManager();
 		else this->ClientManager();
-	//}
+	}
 }
 
 void Engine::ServerManager() {
 	
 	sf::TcpListener server;
-	
-	std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	server.listen(7777);
+	tcp_selector_.clear();
 	tcp_selector_.add(server);
-	std::cout << "I'm listening port 7777..." << std::endl;
+	std::cout << "Server started. Port: 7777" << std::endl;
 
 	while (Main_window_.isOpen()) {
 		if (tcp_selector_.wait()) {
+			CheckingDisconnectedClients();
 			if (tcp_selector_.isReady(server)) {
 				sf::TcpSocket* socket = new sf::TcpSocket;
-				server.accept(*socket);
+				if (server.accept(*socket) == sf::Socket::Done) {
 
-				sf::Packet get_packet;
-				std::string connect_message;
-
-				//New connect
-				if (socket->receive(get_packet) == sf::Socket::Done) 
-					get_packet >> connect_message;
-
-				std::cout << "New client connect! \t ip: "
-					<< socket->getRemoteAddress() << std::endl
-					<< "Server recieve connect packet from client: " 
-					<< connect_message
-					<< std::endl;
-
-				list_clients_.push_back(socket);
-				tcp_selector_.add(*socket);
-				
-				get_packet.clear();
+					//New connect
+					sf::Packet get_connect_packet;
+					if (socket->receive(get_connect_packet) == sf::Socket::Done) {
+						std::cout << "NEW CLIENT CONNECTED! \t IP: "
+							<< socket->getRemoteAddress() << std::endl;
+						//here send packet to client with id
+					}
+					list_clients_.push_back(socket);
+					tcp_selector_.add(*socket);
+					get_connect_packet.clear();
+				}
+				else delete socket;
 			}
 			else {
 				for (int i = 0; i < (int)list_clients_.size(); i++) {
@@ -79,27 +75,34 @@ void Engine::ServerManager() {
 								<< ">: " << connect_message << "\t ip: " 
 								<< (*list_clients_[i]).getRemoteAddress() << std::endl;
 
+							//processing packet on server
 							get_packet.clear();
 
-							//Send packet: ->SendMessageToClient()
-							mailings_Packet << connect_message;
-							for (int j = 0; j < (int)list_clients_.size(); j++) {
-								std::cout << "Mailing packets to all clients!" << std::endl;
-								list_clients_[j]->send(mailings_Packet); 
-							} 
-
-							mailings_Packet.clear();
+							//Test mailing packet to client
+							ServerMailingMessageToClients(mailings_Packet << connect_message);
 						}
 					}
 				}
 			}
 		}
 	}
-} //Receive input and send BaseLevel
+}
+
+void Engine::CheckingDisconnectedClients() {
+	for (int client = 0; client < (int)list_clients_.size(); client++) {
+		sf::Packet get_connect_packet;
+		if ((*list_clients_[client]).send(get_connect_packet) == sf::Socket::Disconnected) {
+			std::cout << "CLIENT DISCONNECT: " << "\t IP: "
+				<< (*list_clients_[client]).getRemoteAddress() << std::endl;
+			get_connect_packet.clear();
+			tcp_selector_.remove((*list_clients_[client]));
+			delete list_clients_[client];
+			list_clients_.erase(list_clients_.begin() + client);
+		}
+	}
+}
 
 void Engine::ClientManager() {
-	int index_packet = 0; /* Testing index packet */
-
 	do {
 		std::cout << "Connect to ip address: ";
 		std::cin >> ip_enter_;
@@ -107,14 +110,15 @@ void Engine::ClientManager() {
 		if (tcp_socket_.connect(ip_enter_, 7777) == sf::Socket::Done) {
 			tcp_socket_.setBlocking(false);
 
-			sf::Packet send_packet;
-			std::string connect_message = "connect packet " + std::to_string(index_packet);
-			send_packet << connect_message;
-			tcp_socket_.send(send_packet);
-			send_packet.clear();
+			sf::Packet send_connect_packet;
+			tcp_socket_.send(send_connect_packet);
+			send_connect_packet.clear();
 
-			break;
+			/* Receive packets: */
+			RecvMessageFromServer();
 		}
+		//else if (game_restart_) break; /*++++++++*/
+
 		else if (tcp_socket_.connect(ip_enter_, 7777) != sf::Socket::Done) {
 			std::cout << "Cannot connect to the server... Try again? Enter (y): yes; (n): no; ";
 			std::string connect;
@@ -127,14 +131,36 @@ void Engine::ClientManager() {
 
 //Get Intafomration to go client: BaseLevel->GetObjectToSendClient
 
-void Engine::SendMessageToClient(sf::Packet& send_packet) {
-	if (tcp_socket_.send(send_packet) == sf::Socket::Done)
+void Engine::ServerMailingMessageToClients(sf::Packet& mailings_Packet) {
+	for (int client = 0; client < (int)list_clients_.size(); client++) {
+		std::cout << "Mailing packet to client <" << client << ">" << std::endl;
+		if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done)
+			std::cout << "Mailing packages sent successfully!" << std::endl;
+		else std::cout << "Packages were not sent!" << std::endl;
+	}
+	mailings_Packet.clear();
+}
+
+void Engine::ClientSendMessageToServer(sf::Packet& mailings_Packet) {
+	if (tcp_socket_.send(mailings_Packet) == sf::Socket::Done)
 		std::cout << "Package sent successfully!" << std::endl;
 	else std::cout << "Package was not sent!" << std::endl;
 }
 
 bool Engine::RecvMessageFromServer() {
-	//tcp_socket_.receive(packet_);
-	//data unpack: packet >> data
-	return false;
+	
+	while (!game_restart_) {
+		sf::Packet get_packet;
+		if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
+			std::string recieve_message;
+
+			get_packet >> recieve_message; //unpack packet -<<-------<<------
+			std::cout << std::endl <<  "Recieve packet from server (" << recieve_message 
+				<< ") ip: " << tcp_socket_.getRemoteAddress() << std::endl;
+
+			get_packet.clear();
+		}
+	}
+	tcp_socket_.disconnect();
+	return true;
 }

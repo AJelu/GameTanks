@@ -1,7 +1,7 @@
 #include "engine.h"
 
 void Engine::EngineInpute() {
-    if (im_server_) {
+    if ((im_server_) && (!game_restart_)) {
         //Point_level.InputKeyboard(bool, key);
         //Point_level.InputMouse(event_type, mouse_position);
         Point_level_->InputEnemy();
@@ -25,37 +25,45 @@ void Engine::EngineInpute() {
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             Point_level_->InputKeyboard(0, sf::Keyboard::Down);
         }
-
-        //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) Point_level_->InputKeyboard(0, sf::Keyboard::Space);
     }
+    //Point_level_->InputKeyboard(0, sf::Keyboard::Space);
     else if (!im_server_) {
         sf::Packet send_packet;
-        
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             send_message = "Up";
-            SendMessageToClient(send_packet << send_message);
+            ClientSendMessageToServer(send_packet << send_message);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             send_message = "Left";
-            SendMessageToClient(send_packet << send_message);
+            ClientSendMessageToServer(send_packet << send_message);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             send_message = "Right";
-            SendMessageToClient(send_packet << send_message);
+            ClientSendMessageToServer(send_packet << send_message);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             send_message = "Down";
-            SendMessageToClient(send_packet << send_message);
+            ClientSendMessageToServer(send_packet << send_message);
         }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            send_message = "Space";
+            ClientSendMessageToServer(send_packet << send_message);
+        }  
         send_packet.clear();
     }
+
+    /* Testing restart connect server: */
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) game_restart_ = true;
+    /*---------------------------------*/
 
     sf::Event event;
     while (Main_window_.pollEvent(event)) {
