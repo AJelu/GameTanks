@@ -243,17 +243,8 @@ bool GameLevel::UpdateState(float& game_timer) {
 	return result;
 }
 
-int GameLevel::NextLevel() {
-	bool result = BaseLevel::NextLevel();
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <returns></returns>
-	return result;
-}
-
-bool GameLevel::ExitGame() {
-	bool result = BaseLevel::ExitGame();
+bool GameLevel::ExitLevel(sf::Packet& Result_level) {
+	bool result = BaseLevel::ExitLevel(Result_level);
 	/// <summary>
 	/// 
 	/// </summary>

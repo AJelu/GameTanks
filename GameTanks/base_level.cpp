@@ -130,7 +130,7 @@ bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
 }
 
 TankObject* BaseLevel::GetPlayer(int const& player_number) {
-	if (player_number >= 0 && player_number < Players_objects_.size())
+	if (player_number >= 0 && player_number < (int)Players_objects_.size())
 		return Players_objects_[player_number];
 	return nullptr;
 }
@@ -170,11 +170,16 @@ sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 		for (auto item : All_objects_) item->CreatePacket(Paket);
 	}
 	else { //just changes
+		while (delete_item_need_sync_with_client_objects_) {
+			//thread sleep "n"
+		}
+		read_need_sync_with_client_objects_ = true;
 		while (!Need_sync_with_client_objects_.empty()) {
 			Need_sync_with_client_objects_.front()->CreatePacket(Paket);
 			Need_sync_with_client_objects_.front()->SetNeedSynchByLan(false);
 			Need_sync_with_client_objects_.pop_front();
 		}
+		read_need_sync_with_client_objects_ = false;
 	}
 	if (Bonus_object_ != nullptr) Bonus_object_->CreatePacket(Paket);
 	return Paket;
@@ -361,17 +366,21 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		}
 	}
 
+	delete_item_need_sync_with_client_objects_ = true;
 	for (MovebleObject* item : Shot_objects_) {
-		if (item->GetLifeLevel() == 0 
-				&& item->AnimationEnd(true) && !item->PlaysSounds()) {
-			Shot_objects_.remove(item);
-			All_objects_.remove(item);
-			Need_sync_with_client_objects_.remove(item);
-			delete item;
+		if (item->GetLifeLevel() == 0
+			&& item->AnimationEnd(true) && !item->PlaysSounds()) {
+			if (!read_need_sync_with_client_objects_) {
+				Shot_objects_.remove(item);
+				All_objects_.remove(item);
+				Need_sync_with_client_objects_.remove(item);
+				delete item;
+			}
 		}
 		else if (item->GetDistanceMove() <= 0)
 			item->SetLifeLevel(0);
 	}
+	delete_item_need_sync_with_client_objects_ = false;
 
 	return true;
 }
@@ -405,7 +414,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 								if		((*it)->GetGameType() == "Shot_objects" &&
 										(*it2)->GetGameType() == "Shot_objects") {
 									if ((*it)->GetLifeLevel() != 0
-											&& (*it2)->GetLifeLevel()) {
+											&& (*it2)->GetLifeLevel() != 0) {
 										(*it)->SetLifeLevel(0);
 										((MovebleObject*)(*it))->SetDistanceMove(0);
 										(*it2)->SetLifeLevel(0);
@@ -574,12 +583,8 @@ bool BaseLevel::RespawnObject(GameObject* Game_object)
 	return false;
 }
 
-int BaseLevel::NextLevel() {
-	return 0; //////////////////////////////////////////////////////////////////
-}
-
-bool BaseLevel::ExitGame() {
-	return false; //////////////////////////////////////////////////////////////
+bool BaseLevel::ExitLevel(sf::Packet& Result_level) {
+	return false;
 }
 
 BaseLevel::~BaseLevel() {

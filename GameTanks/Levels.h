@@ -30,6 +30,8 @@ private:
 	std::list <GameObject*> Dies_objects_;
 
 	std::list <BaseObject*> Need_sync_with_client_objects_;
+	bool read_need_sync_with_client_objects_ = false,
+		delete_item_need_sync_with_client_objects_ = false;
 
 	//level size
 	int size_level_height_, size_level_width_, size_level_border_ = 0;
@@ -83,7 +85,7 @@ public:
 
 	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
 	void RecvPacketFromServer(sf::Packet& Packet);
-	int AddPlayerFromLan(); //return his watchings object
+	int AddPlayerFromLan(); //return id his watchings object
 
 	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);
 	virtual bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 
@@ -93,8 +95,7 @@ public:
 	virtual bool UpdateState(float& game_timer);
 	void CalculateCollisionOnLevel();
 
-	virtual int NextLevel();
-	virtual bool ExitGame();
+	virtual bool ExitLevel(sf::Packet& Result_level);
 	~BaseLevel();
 };
 
@@ -117,6 +118,5 @@ public:
 	
 	bool UpdateState(float& game_timer) override;
 
-	int NextLevel() override;
-	bool ExitGame() override;
+	bool ExitLevel(sf::Packet& Result_level) override;
 };
