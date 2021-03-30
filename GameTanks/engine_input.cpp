@@ -1,7 +1,7 @@
 #include "engine.h"
 
 void Engine::EngineInpute() {
-    if ((im_server_) && (!game_restart_)) {
+    if (status_server_ == StatusServer::SERVER) {
         //Point_level.InputKeyboard(bool, key);
         //Point_level.InputMouse(event_type, mouse_position);
         Point_level_->InputEnemy();
@@ -27,7 +27,7 @@ void Engine::EngineInpute() {
         }
     }
     //Point_level_->InputKeyboard(0, sf::Keyboard::Space);
-    else if (!im_server_) {
+    else if (status_server_ == StatusServer::CLIENT) {
         sf::Packet send_packet;
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
@@ -62,7 +62,8 @@ void Engine::EngineInpute() {
     }
 
     /* Testing restart connect server: */
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) game_restart_ = true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) 
+        status_server_ = StatusServer::NOT_DETERMINED;
     /*---------------------------------*/
 
     sf::Event event;

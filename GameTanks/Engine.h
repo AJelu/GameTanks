@@ -25,7 +25,8 @@ private:
 
 	std::thread thread_lan_;
 
-	bool im_server_, game_restart_;
+	enum class StatusServer { NOT_DETERMINED, SERVER, CLIENT };
+	StatusServer status_server_;
 
 	void GameTimer(float& timer); // create main game timer
 	void GameSpeed(float& timer); // regulates the speed of the game
@@ -45,10 +46,11 @@ private:
 
 	std::string send_message;
 
-	void ServerManager();
+	bool ServerManager();
 	void ClientManager();
 
 	void CheckingDisconnectedClients();
+	void CleaningClients();
 	void ServerMailingMessageToClients(sf::Packet& mailings_Packet);
 	void ClientSendMessageToServer(sf::Packet& mailings_Packet);
 	bool RecvMessageFromServer();
@@ -65,6 +67,10 @@ public:
 	int Start();
 	void Stop();
 
+	void SetStatusServer(std::string status_game_server);
+
+	int GetStatusServer();
+	
 	void ChangeLevel(BaseLevel* level);
 
 	~Engine();

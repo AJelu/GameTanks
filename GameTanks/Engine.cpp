@@ -2,7 +2,7 @@
 #include "engine.h"
 
 Engine::Engine()
-    : thread_lan_(&Engine::LanGame, this) {
+    : status_server_(StatusServer::NOT_DETERMINED), thread_lan_(&Engine::LanGame, this) {
 
     std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
@@ -55,6 +55,16 @@ void Engine::GameTimer(float& timer) {
 void Engine::GameSpeed(float& timer) { timer = timer / GAME_SPEED_CONTROLLER; }
 
 void Engine::ForcedResetGameTimer(float& timer) { if (timer > GAME_TIMER_LIMIT) timer = 0; }
+
+void Engine::SetStatusServer(std::string status_game_server) {
+    if (status_game_server == "SERVER") status_server_ = StatusServer::SERVER;
+    if (status_game_server == "CLIENT") status_server_ = StatusServer::CLIENT;
+    if (status_game_server == "NONE") status_server_ = StatusServer::NOT_DETERMINED;
+}
+
+int Engine::GetStatusServer() {
+    return (int)status_server_;
+}
 
 void Engine::Font() { Main_font_.loadFromFile("Data/Font/Font.ttf"); }
 
