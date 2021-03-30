@@ -29,10 +29,10 @@ BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Barell_01.png",			//texture
-		1) {									//max life level
+		30) {									//max life level
 	
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3f, 0.3f));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.35f, 0.35f));
 }
 
 std::string BarellBrown::ClassName() { return "BarellBrown"; }
@@ -43,10 +43,10 @@ BarellBroken::BarellBroken(int const& id_object, float const& spawn_x, float con
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Barell_02.png",			//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3f, 0.3f));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.35f, 0.35f));
 }
 
 std::string BarellBroken::ClassName() { return "BarellBroken"; }
@@ -57,10 +57,10 @@ BarellGreen::BarellGreen(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Barell_03.png",			//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 8));
-	this->SetScale(sf::Vector2f(0.3f, 0.3f));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.35f, 0.35f));
 }
 
 std::string BarellGreen::ClassName() { return "BarellGreen"; }
@@ -71,10 +71,10 @@ BlockGround::BlockGround(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(64, 64),					//offset
 		"Data/Static/Block_01.png",				//texture
-		3) {									//max life level
+		150) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 40));
-	this->SetScale(sf::Vector2f(1.f, 1.f));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
+	this->SetScale(sf::Vector2f(1, 1));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_big.ogg");
 }
 
@@ -86,9 +86,9 @@ BlockGrass::BlockGrass(int const& id_object, float const& spawn_x, float const& 
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(64, 64),					//offset
 		"Data/Static/Block_02.png",				//texture
-		3) {									//max life level
+		150) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 40));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
 	this->SetScale(sf::Vector2f(1, 1));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_big.ogg");
 }
@@ -101,10 +101,10 @@ CactusTypeOne::CactusTypeOne(int const& id_object, float const& spawn_x, float c
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Cactus_01.png",			//texture
-		1) {									//max life level
+		25) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 20));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -116,10 +116,10 @@ CactusTypeTwo::CactusTypeTwo(int const& id_object, float const& spawn_x, float c
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Cactus_02.png",			//texture
-		1) {									//max life level
+		25) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -131,10 +131,10 @@ CactusTypeThree::CactusTypeThree(int const& id_object, float const& spawn_x, flo
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Cactus_03.png",			//texture
-		1) {									//max life level
+		25) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -145,11 +145,13 @@ Log::Log(int const& id_object, float const& spawn_x, float const& spawn_y)
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Cactus_03.png",			//texture
-		1) {									//max life level
+		"Data/Static/Log.png",			//texture
+		25) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(-33, 0), 15));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 15));
+	this->AddCollision(new RoundCollision(sf::Vector2f(33, 0), 15));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 }
 
 std::string Log::ClassName() { return "Log"; }
@@ -163,7 +165,7 @@ Star::Star(int const& id_object, float const& spawn_x, float const& spawn_y)
 		1) {									//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->SetScale(sf::Vector2f(0.4f, 0.4f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/star_up.ogg");
 	ActionLife();
 }
@@ -181,10 +183,10 @@ Stump::Stump(int const& id_object, float const& spawn_x, float const& spawn_y)
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Stump.png",				//texture
-		1) {									//max life level
+		25) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 }
 
 std::string Stump::ClassName() { return "Stump"; }
@@ -195,10 +197,10 @@ TreeTypeOne::TreeTypeOne(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_01.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -210,10 +212,10 @@ TreeTypeTwo::TreeTypeTwo(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_02.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -225,10 +227,10 @@ TreeTypeThree::TreeTypeThree(int const& id_object, float const& spawn_x, float c
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_03.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -240,10 +242,10 @@ TreeTypeFour::TreeTypeFour(int const& id_object, float const& spawn_x, float con
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_04.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -255,10 +257,10 @@ TreeTypeFive::TreeTypeFive(int const& id_object, float const& spawn_x, float con
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_05.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -270,10 +272,10 @@ TreeTypeSix::TreeTypeSix(int const& id_object, float const& spawn_x, float const
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_06.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -285,10 +287,10 @@ TreeTypeSeven::TreeTypeSeven(int const& id_object, float const& spawn_x, float c
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_07.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -300,10 +302,10 @@ TreeTypeEight::TreeTypeEight(int const& id_object, float const& spawn_x, float c
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_08.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -315,10 +317,10 @@ TreeTypeNine::TreeTypeNine(int const& id_object, float const& spawn_x, float con
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Tree_09.png",				//texture
-		1) {									//max life level
+		30) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
 }
 
@@ -330,10 +332,10 @@ Well::Well(int const& id_object, float const& spawn_x, float const& spawn_y)
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
 		"Data/Static/Well.png",					//texture
-		2) {									//max life level
+		70) {									//max life level
 
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
-	this->SetScale(sf::Vector2f(0.5, 0.5));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
+	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_small.ogg");
 }
 
