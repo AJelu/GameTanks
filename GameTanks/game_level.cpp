@@ -151,6 +151,14 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	this->AddUiObject(Shot_distance_);
 	this->AddUiObject(Time_to_next_shot_);
 	this->AddUiObject(Shot_life_);
+
+	Exit_ = new Button(sf::Vector2f(a, a + a * m * 8), sf::Vector2f(0, 0));
+	Exit_->SetScale(scale);
+	Exit_->SetCharacterSize(text_size);
+	Exit_->SetTextAlign(0);
+	Exit_->SetText("Exit");
+	this->AddUiObject(Exit_);
+
 }
 
 template <class TypeObject>
@@ -245,9 +253,10 @@ bool GameLevel::UpdateState(float& game_timer) {
 
 bool GameLevel::ExitLevel(sf::Packet& Result_level) {
 	bool result = BaseLevel::ExitLevel(Result_level);
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <returns></returns>
+	if (Exit_->GetMouseUpOnThis(true)) {
+		Result_level << Level_type::MENU_LEVEL;
+		Result_level << "";
+		return true;
+	}
 	return result;
 }

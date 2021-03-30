@@ -2,10 +2,13 @@
 #include "engine.h"
 
 Engine::Engine()
-    : status_server_(StatusServer::NOT_DETERMINED), thread_lan_(&Engine::LanGame, this) {
+    : pause_client_recv_(false), 
+    status_server_(StatusServer::NOT_DETERMINED), 
+    thread_lan_(&Engine::LanGame, this) {
 
     std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
+
 }
 
 void Engine::CreateResolutionWindowMode() {
@@ -56,7 +59,7 @@ void Engine::GameSpeed(float& timer) { timer = timer / GAME_SPEED_CONTROLLER; }
 
 void Engine::ForcedResetGameTimer(float& timer) { if (timer > GAME_TIMER_LIMIT) timer = 0; }
 
-void Engine::SetStatusServer(std::string status_game_server) {
+/*void Engine::SetStatusServer(std::string status_game_server) {
     if (status_game_server == "SERVER") status_server_ = StatusServer::SERVER;
     if (status_game_server == "CLIENT") status_server_ = StatusServer::CLIENT;
     if (status_game_server == "NONE") status_server_ = StatusServer::NOT_DETERMINED;
@@ -64,9 +67,33 @@ void Engine::SetStatusServer(std::string status_game_server) {
 
 int Engine::GetStatusServer() {
     return (int)status_server_;
+}*/
+
+void Engine::StartServer() {
+    status_server_ = StatusServer::SERVER;
 }
 
-void Engine::Font() { Main_font_.loadFromFile("Data/Font/Font.ttf"); }
+void Engine::StopServer() {
+    status_server_ = StatusServer::NOT_DETERMINED;
+}
+
+void Engine::ConnectLanToIp(std::string const& ip_to_connect) {
+    ip_client_connect_ = ip_to_connect;
+    client_id_object_ = 0;
+    status_server_ = StatusServer::CLIENT;
+}
+
+int Engine::GetRecvIdFromServer() {
+    return client_id_object_;
+}
+
+void Engine::PauseClientRecv(bool const& pause_client_recv) {
+    pause_client_recv_ = pause_client_recv;
+}
+
+bool Engine::ServerIsWork() {
+    return status_server_ != StatusServer::NOT_DETERMINED;
+}
 
 Engine::~Engine() { 
     thread_lan_.join();

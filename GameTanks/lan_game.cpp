@@ -4,6 +4,7 @@ void Engine::LanGame() {
 	while (true) {
 		if (status_server_ == StatusServer::SERVER) this->ServerManager();
 		else if (status_server_ == StatusServer::CLIENT) this->ClientManager();
+		//maybe sleep to N ms????
 	}
 }
 
@@ -19,6 +20,9 @@ bool Engine::ServerManager() {
 	server.listen(7777);
 	tcp_selector_.add(server);
 	std::cout << "Server started. Port: 7777" << std::endl;
+
+	ip_client_connect_ = "";
+	client_id_object_ = 0;
 
 	while (status_server_ == StatusServer::SERVER) {
 		if (tcp_selector_.wait()) {
@@ -38,6 +42,9 @@ bool Engine::ServerManager() {
 						send_id_packet << (Point_level_->AddPlayerFromLan());
 						socket->send(send_id_packet);
 						send_id_packet.clear();
+						/*send_id_packet << (Point_level_->GetPacketToSendAllClient(true));
+						socket->send(send_id_packet);
+						send_id_packet.clear();*/
 					}
 					list_clients_.push_back(socket);
 					tcp_selector_.add(*socket);
@@ -93,37 +100,25 @@ void Engine::CheckingDisconnectedClients() {
 }
 
 void Engine::ClientManager() {
+	if (tcp_socket_.connect(ip_client_connect_, 7777) == sf::Socket::Done) {
+		client_id_object_ = 0;
 
-	do {
-		std::cout << "Connect to ip address: ";
-		std::cin >> ip_enter_;
 
-		if (!(status_server_ == StatusServer::CLIENT)) break;
-		else if (tcp_socket_.connect(ip_enter_, 7777) == sf::Socket::Done) {
-			tcp_socket_.setBlocking(false);
+		sf::Packet send_connect_packet;
+		tcp_socket_.send(send_connect_packet);
+		send_connect_packet.clear();
 
-			sf::Packet send_connect_packet;
-			tcp_socket_.send(send_connect_packet);
-			send_connect_packet.clear();
+		//Reseiving packet with ID
+		sf::Packet resieve_id_packet;
+		tcp_socket_.receive(resieve_id_packet);
+		resieve_id_packet >> client_id_object_;
+		resieve_id_packet.clear();
 
-			//Reseiving packet with ID
-			sf::Packet resieve_id_packet;
-			tcp_socket_.receive(resieve_id_packet);
-			//resieve_id_packet >> unpack;
-			resieve_id_packet.clear();
-
-			// Receive packets: 
-			RecvMessageFromServer();
-		}
-
-		else if (tcp_socket_.connect(ip_enter_, 7777) != sf::Socket::Done) {
-			std::cout << "Cannot connect to the server... Try again? Enter (y): yes; (n): no; ";
-			std::string connect;
-			std::cin >> connect;
-			if (connect == "n") break;
-			system("cls");
-		}
-	} while (true);
+		tcp_socket_.setBlocking(false);
+		// Receive packets: 
+		RecvMessageFromServer();
+	}
+	else status_server_ = StatusServer::NOT_DETERMINED;
 }
 
 //Get Intafomration to go client: BaseLevel->GetObjectToSendClient
@@ -147,12 +142,14 @@ void Engine::ClientSendMessageToServer(sf::Packet& mailings_Packet) {
 bool Engine::RecvMessageFromServer() {
 	
 	while (status_server_ == StatusServer::CLIENT) {
-		sf::Packet get_packet;
-		if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
-			Point_level_->RecvPacketFromServer(get_packet);
-			std::cout << std::endl << "Recieve packet from server ip: "
-				<< tcp_socket_.getRemoteAddress() << std::endl;
-			get_packet.clear();
+		if (!pause_client_recv_) {
+			sf::Packet get_packet;
+			if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
+				Point_level_->RecvPacketFromServer(get_packet);
+				std::cout << std::endl << "Recieve packet from server ip: "
+					<< tcp_socket_.getRemoteAddress() << std::endl;
+				get_packet.clear();
+			}
 		}
 	}
 	tcp_socket_.disconnect();

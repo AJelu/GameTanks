@@ -23,7 +23,11 @@ private:
 	BaseLevel* Point_level_;
 	sf::Font Main_font_;
 
+	//for lan:
 	std::thread thread_lan_;
+	std::string ip_client_connect_;
+	int client_id_object_;
+	bool pause_client_recv_;
 
 	enum class StatusServer { NOT_DETERMINED, SERVER, CLIENT };
 	StatusServer status_server_;
@@ -56,8 +60,6 @@ private:
 	bool RecvMessageFromServer();
 	/*-----------------------------*/
 
-	void Font();
-
 public:
 	Engine();
 
@@ -67,9 +69,16 @@ public:
 	int Start();
 	void Stop();
 
-	void SetStatusServer(std::string status_game_server);
+	//void SetStatusServer(std::string status_game_server); ///?????
 
-	int GetStatusServer();
+	//int GetStatusServer(); ///??????
+
+	void StartServer();
+	void StopServer();
+	void ConnectLanToIp(std::string const& ip_to_connect); //set status CLIENT and connect to ip
+	int GetRecvIdFromServer(); // return 0 if not recv or engine is server
+	void PauseClientRecv(bool const& pause_client_recv);
+	bool ServerIsWork();
 	
 	void ChangeLevel(BaseLevel* level);
 

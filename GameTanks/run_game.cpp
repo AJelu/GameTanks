@@ -14,27 +14,61 @@ void RunGame() {
     srand((unsigned int)time(NULL));
 
     Engine engine;
+    sf::Packet Level_result;
 
-    GameLevel Game_level;
-    engine.ChangeLevel(&Game_level);
+    BaseLevel* level;
+    level = new MenuLevel();
+    engine.ChangeLevel(level);
 
     std::string connect_type;
 
     int state = 0;
     while (true) {
-        while (!engine.GetStatusServer()) {
-            std::cout << "Select type to connect: (s): server; (c): client; "
-                << "(q) - quit game; ";
-            std::cin >> connect_type;
-            system("cls");
+        if (level->ExitLevel(Level_result)) {
+            int type_load_level = BaseLevel::Level_type::EXIT;
+            std::string ip_connect = "";
+            BaseLevel* l = nullptr;
 
-            if (connect_type == "s") { engine.SetStatusServer("SERVER"); break; }
-            else if (connect_type == "c") { engine.SetStatusServer("CLIENT"); break; }
-            else if (connect_type == "q") exit(0);
-            else std::cout << "The wrong type is selected!" << std::endl;
+            Level_result >> type_load_level;
+            if (type_load_level == BaseLevel::Level_type::EXIT) {
+                break;
+            }
+            else if (type_load_level == BaseLevel::Level_type::GAME_LEVEL) {
+                Level_result >> ip_connect;
+                if (ip_connect == "") {
+                    l = new GameLevel();
+                    engine.ChangeLevel(l);
+                    engine.StartServer();
+                    delete level;
+                    level = l;
+                }
+                else {
+                    engine.PauseClientRecv(true);
+                    engine.ConnectLanToIp(ip_connect); 
+                    while (engine.GetRecvIdFromServer() == 0 && engine.ServerIsWork()) {
+                        //white id client object
+                        std::cout << "";
+                    }
+                    if (engine.GetRecvIdFromServer() != 0) {
+                        l = new GameLevel(engine.GetRecvIdFromServer());
+                        engine.ChangeLevel(l);
+                        delete level;
+                        level = l;
+                    }
+                    engine.PauseClientRecv(false);
+                }
+            }
+            else if (type_load_level == BaseLevel::Level_type::MENU_LEVEL) {
+                l = new MenuLevel();
+                engine.StopServer();
+                engine.ChangeLevel(l);
+                delete level;
+                level = l;
+            }
         }
+        Level_result.clear(); 
 
-        state = engine.Start();  
+        state = engine.Start(); 
         if (state == 0) {
             //logic game instance
         }
@@ -49,4 +83,5 @@ void RunGame() {
         }
     }
     std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
+    //here need destroy thread!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
