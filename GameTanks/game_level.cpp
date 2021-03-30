@@ -1,56 +1,59 @@
 #include "Levels.h"
 
-GameLevel::GameLevel() : BaseLevel() {
+GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	/* Initialization tile map and border: */
 	this->SetBackgroundTexture("Data/Maps/Map.png");
 	this->SetBorderTexture("Data/Maps/Map_border.png", 50);
 	this->SetBackgroundMusic("Data/Audio/music/music_in_game.ogg", 10);
-
-	/* Respawn player: */
-	this->Player_ = new TankBrown(1, 200, 200);
-	this->AddPlayerObject(Player_);
-	this->SetWatchObject(Player_);
-
-
-	/* Respawn test bonus: */
-	this->SetBonusObject(new Star(1, 500, 500));
-
-
-	/* Respawn enemy: */
-	RedTank* red_tank_enemy = nullptr;
-	this->SpawnEnemyObject(red_tank_enemy, 10, 1, 300, 400);
-
-	TankBrown* brown_tank_enemy = nullptr;
-	this->SpawnEnemyObject(brown_tank_enemy, 10, 1, 300, 400);
-
-	TankWhite* white_tank_enemy = nullptr;
-	this->SpawnEnemyObject(white_tank_enemy, 10, 1, 300, 400);
-
-	TankBlack* black_tank_enemy = nullptr;
-	this->SpawnEnemyObject(black_tank_enemy, 10, 1, 300, 400);
-
-	TankYellow* yellow_tank_enemy = nullptr;
-	this->SpawnEnemyObject(yellow_tank_enemy, 10, 1, 300, 400);
-
-	TankGreen* green_tank_enemy = nullptr;
-	this->SpawnEnemyObject(green_tank_enemy, 10, 1, 300, 400);
+	
+	Player_ = nullptr;
+	if (id_watch_object == 0) {
+		/* Respawn player: */
+		Player_ = new TankBrown(1, 200, 200);
+		this->AddPlayerObject(Player_);
+		this->SetWatchObject(Player_);
+		player_id_ = Player_->GetIdObject();
 
 
-	/* Respawn static objects: */
-	BarellBrown* static_barell_brown = nullptr;
-	this->SpawnStaticObject(static_barell_brown, 60, 1, 200, 200);
+		/* Respawn test bonus: */
+		this->SetBonusObject(new Star(1, 500, 500));
 
-	BarellBroken* static_barell_broken = nullptr;
-	this->SpawnStaticObject(static_barell_broken, 60, 1, 200, 200);
 
-	BarellGreen* static_barell_green = nullptr;
-	this->SpawnStaticObject(static_barell_green, 60, 1, 200, 200);
+		/* Respawn enemy: */
+		RedTank* red_tank_enemy = nullptr;
+		this->SpawnEnemyObject(red_tank_enemy, 10, 1, 300, 400);
 
-	BlockGround* static_block_ground = nullptr;
-	this->SpawnStaticObject(static_block_ground, 50, 1, 200, 200);
+		TankBrown* brown_tank_enemy = nullptr;
+		this->SpawnEnemyObject(brown_tank_enemy, 10, 1, 300, 400);
 
-	BlockGrass* static_block_grass = nullptr;
-	this->SpawnStaticObject(static_block_grass, 50, 1, 200, 200);
+		TankWhite* white_tank_enemy = nullptr;
+		this->SpawnEnemyObject(white_tank_enemy, 10, 1, 300, 400);
+
+		TankBlack* black_tank_enemy = nullptr;
+		this->SpawnEnemyObject(black_tank_enemy, 10, 1, 300, 400);
+
+		TankYellow* yellow_tank_enemy = nullptr;
+		this->SpawnEnemyObject(yellow_tank_enemy, 10, 1, 300, 400);
+
+		TankGreen* green_tank_enemy = nullptr;
+		this->SpawnEnemyObject(green_tank_enemy, 10, 1, 300, 400);
+
+
+		/* Respawn static objects: */
+		BarellBrown* static_barell_brown = nullptr;
+		this->SpawnStaticObject(static_barell_brown, 60, 1, 200, 200);
+
+		BarellBroken* static_barell_broken = nullptr;
+		this->SpawnStaticObject(static_barell_broken, 60, 1, 200, 200);
+
+		BarellGreen* static_barell_green = nullptr;
+		this->SpawnStaticObject(static_barell_green, 60, 1, 200, 200);
+
+		BlockGround* static_block_ground = nullptr;
+		this->SpawnStaticObject(static_block_ground, 50, 1, 200, 200);
+
+		BlockGrass* static_block_grass = nullptr;
+		this->SpawnStaticObject(static_block_grass, 50, 1, 200, 200);
 
 	CactusTypeOne* static_cactus_type_one = nullptr;
 	this->SpawnStaticObject(static_cactus_type_one, 20, 1, 200, 200);
@@ -61,11 +64,11 @@ GameLevel::GameLevel() : BaseLevel() {
 	CactusTypeThree* static_cactus_type_three = nullptr;
 	this->SpawnStaticObject(static_cactus_type_three, 30, 1, 200, 200);
 
-	Log* static_log = nullptr;
-	this->SpawnStaticObject(static_log, 50, 1, 200, 200);
+		Log* static_log = nullptr;
+		this->SpawnStaticObject(static_log, 50, 1, 200, 200);
 
-	Stump* static_stump = nullptr;
-	this->SpawnStaticObject(static_stump, 40, 1, 200, 200);
+		Stump* static_stump = nullptr;
+		this->SpawnStaticObject(static_stump, 40, 1, 200, 200);
 
 	TreeTypeOne* static_tree_type_one = nullptr;
 	this->SpawnStaticObject(static_tree_type_one, 80, 1, 200, 200);
@@ -94,9 +97,11 @@ GameLevel::GameLevel() : BaseLevel() {
 	TreeTypeNine* static_tree_type_nine = nullptr;
 	this->SpawnStaticObject(static_tree_type_nine, 30, 1, 200, 200);
 
-	Well* static_well = nullptr;
-	this->SpawnStaticObject(static_well, 30, 1, 200, 200);
-	/*------------------------------*/
+		Well* static_well = nullptr;
+		this->SpawnStaticObject(static_well, 40, 1, 200, 200);
+		/*------------------------------*/
+	}
+	else player_id_ = id_watch_object;
 
 	float a = 20, m = 3;
 	Point_current_		= new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
@@ -167,6 +172,17 @@ void GameLevel::SpawnEnemyObject(TypeObject* object, int const& quantity,
 
 bool GameLevel::UpdateState(float& game_timer) {
 	bool result = BaseLevel::UpdateState(game_timer);
+
+	//if client and not recev object for game and watch
+	if (Player_ == nullptr) {
+		GameObject* temp_ptr = this->GetObjectById(player_id_);
+		if (temp_ptr == nullptr || temp_ptr->GetGameType() != "Player_objects")
+			return result;
+		Player_ = (TankObject*)temp_ptr;
+		this->SetWatchObject(Player_);
+	}
+
+	//other manipulation on game level:
 	std::stringstream stream;
 	stream << "Points: " << Player_->GetCurrentPoint();
 	Point_current_->SetText(stream.str());

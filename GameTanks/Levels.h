@@ -10,6 +10,9 @@
 
 class BaseLevel {
 private:
+
+	unsigned int count_id_objects_ = 1;
+
 	//all level objects:
 	std::vector <UiObject*> Ui_objects_;
 	UiObject* Focused_object;
@@ -26,7 +29,7 @@ private:
 	//die game objects (exist in other vectors).
 	std::list <GameObject*> Dies_objects_;
 
-	std::vector <BaseObject*> Need_sync_with_client_objects_;
+	std::list <BaseObject*> Need_sync_with_client_objects_;
 
 	//level size
 	int size_level_height_, size_level_width_, size_level_border_ = 0;
@@ -51,7 +54,6 @@ private:
 
 	float max_safe_distance = 0;
 
-	void CalculateCollisionOnLevel();
 	void CameraControl();
 
 	bool SafePointSpawn(GameObject* Game_object);
@@ -61,21 +63,27 @@ public:
 	sf::View& Draw(sf::RenderWindow& window);
 	
 	bool AddUiObject(UiObject* Ui_object);
-	bool AddStaticObject(GameObject* Static_objects);
-	bool AddEnemyObject(TankObject* Enemy_objects);
-	bool AddPlayerObject(TankObject* Player_objects);
+	bool AddStaticObject(GameObject* Static_objects, 
+		bool const& ignore_random_spawn = false);
+	bool AddEnemyObject(TankObject* Enemy_objects,
+		bool const& ignore_random_spawn = false);
+	bool AddPlayerObject(TankObject* Player_objects,
+		bool const& ignore_random_spawn = false);
 	bool AddShotObject(MovebleObject* Shot_objects);
 	bool AddDieObject(GameObject* Dies_objects);
 	bool SetWatchObject(VisibleObject* Watch_object);
 	bool SetBonusObject(GameObject* Bonus_object);
 
+	TankObject* GetPlayer(int const& player_number);
+	GameObject* GetObjectById(int const& id_object);
+
 	void SetBackgroundTexture(std::string texture_address);
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
 	void SetBackgroundMusic(std::string music_address, float const& volume);
 
-	sf::Packet GetPacketToSendAllClient();
-	
+	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
 	void RecvPacketFromServer(sf::Packet& Packet);
+	int AddPlayerFromLan(); //return his watchings object
 
 	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);
 	virtual bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 
@@ -83,6 +91,7 @@ public:
 	void InputEnemy();
 
 	virtual bool UpdateState(float& game_timer);
+	void CalculateCollisionOnLevel();
 
 	virtual int NextLevel();
 	virtual bool ExitGame();
@@ -93,6 +102,7 @@ public:
 class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
+	int player_id_ = 0;
 	UiObject* Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
 		* Shot_distance_, * Time_to_next_shot_, * Shot_life_;
 
@@ -103,7 +113,7 @@ private:
 		int const& id_object, float const& spawn_x, float const& spawn_y);
 
 public:
-	GameLevel();
+	GameLevel(int const& id_watch_object = 0);
 	
 	bool UpdateState(float& game_timer) override;
 

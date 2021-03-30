@@ -12,12 +12,18 @@ void BaseObject::SetIdObject(int const& id_object) { id_object_ = id_object; }
 std::string BaseObject::ClassName() { return "BaseObject"; }
 
 bool BaseObject::CreatePacket(sf::Packet& Packet) {
-    Packet << id_object_;
+    Packet << id_object_ << this->ClassName();
     return false;
 }
 
 bool BaseObject::SetDataFromPacket(sf::Packet& Packet) {
     return false;
+}
+
+bool BaseObject::GetNeedSynchByLan() { return need_synch_by_lan_; }
+
+void BaseObject::SetNeedSynchByLan(bool const& need_synch_by_lan) {
+    need_synch_by_lan_ = need_synch_by_lan;
 }
 
 BaseObject::~BaseObject() {}

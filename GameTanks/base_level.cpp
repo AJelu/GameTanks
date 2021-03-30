@@ -23,13 +23,16 @@ bool BaseLevel::AddUiObject(UiObject* Ui_object) {
 	if (Ui_object != nullptr) {
 		Ui_objects_.push_back(Ui_object);
 		Ui_object->SetCamera(&Player_camera_);
+		Ui_object->SetIdObject(0);
 		return true;
 	}
 	return false;
 }
 
-bool BaseLevel::AddStaticObject(GameObject* Static_objects) {
-	if (Static_objects != nullptr && this->RespawnObject(Static_objects)) {
+bool BaseLevel::AddStaticObject(GameObject* Static_objects,
+		bool const& ignore_random_spawn) {
+	if (Static_objects != nullptr 
+			&& (ignore_random_spawn || this->RespawnObject(Static_objects))) {
 		Static_objects->SafeState();
 		Static_objects->SetGameType("Static_objects");
 		Static_objects_.push_back(Static_objects);
@@ -37,34 +40,44 @@ bool BaseLevel::AddStaticObject(GameObject* Static_objects) {
 		if (Static_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Static_objects->GetSafeDistance();
 		Static_objects->SetCamera(&Player_camera_);
+		Static_objects->SetIdObject(count_id_objects_);
+		count_id_objects_++;
 		return true;
 	}
 	return false;
 }
 
-bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects) {
-	if (Enemy_objects != nullptr && this->RespawnObject(Enemy_objects)) {
+bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects,
+		bool const& ignore_random_spawn) {
+	if (Enemy_objects != nullptr
+			&& (ignore_random_spawn || this->RespawnObject(Enemy_objects))) {
 		Enemy_objects->SafeState();
-		Enemy_objects->SetGameType("Enemy_objects");
+		Enemy_objects->SetGameType("Enemy_objects"); 
 		Enemy_objects_.push_back(Enemy_objects);
 		All_objects_.push_back(Enemy_objects);
 		if (Enemy_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Enemy_objects->GetSafeDistance();
 		Enemy_objects->SetCamera(&Player_camera_);
+		Enemy_objects->SetIdObject(count_id_objects_);
+		count_id_objects_++;
 		enemy_shot_time_.push_back(0);
 		return true;
 	}
 	return false;
 }
 
-bool BaseLevel::AddPlayerObject(TankObject* Player_objects) {
-	if (Player_objects != nullptr && this->SafePointSpawn(Player_objects)) {
+bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
+		bool const& ignore_random_spawn) {
+	if (Player_objects != nullptr
+			&& (ignore_random_spawn || this->RespawnObject(Player_objects))) {
 		Players_objects_.push_back(Player_objects);
 		All_objects_.push_back(Player_objects);
-		Player_objects->SetGameType("Player_objects");
+		Player_objects->SetGameType("Player_objects"); 
 		if (Player_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Player_objects->GetSafeDistance();
 		Player_objects->SetCamera(&Player_camera_);
+		Player_objects->SetIdObject(count_id_objects_);
+		count_id_objects_++;
 		return true;
 	}
 	return false;
@@ -74,10 +87,12 @@ bool BaseLevel::AddShotObject(MovebleObject* Shot_objects) {
 	if (Shot_objects != nullptr) {
 		Shot_objects_.push_back(Shot_objects);
 		All_objects_.push_back(Shot_objects);
-		Shot_objects->SetGameType("Shot_objects");
+		Shot_objects->SetGameType("Shot_objects"); 
 		if (Shot_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Shot_objects->GetSafeDistance();
 		Shot_objects->SetCamera(&Player_camera_);
+		Shot_objects->SetIdObject(count_id_objects_);
+		count_id_objects_++;
 		return true;
 	}
 	return false;
@@ -107,9 +122,24 @@ bool BaseLevel::SetWatchObject(VisibleObject* Watch_object) {
 bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
 	if (Bonus_object != nullptr) {
 		Bonus_object_ = Bonus_object;
+		Bonus_object_->SetIdObject(count_id_objects_);
+		count_id_objects_++;
 		return true;
 	}
 	return false;
+}
+
+TankObject* BaseLevel::GetPlayer(int const& player_number) {
+	if (player_number >= 0 && player_number < Players_objects_.size())
+		return Players_objects_[player_number];
+	return nullptr;
+}
+
+GameObject* BaseLevel::GetObjectById(int const& id_object) {
+	for (auto item : All_objects_)
+		if (item->GetIdObject() == id_object)
+			return item;
+	return nullptr;
 }
 
 void BaseLevel::SetBackgroundTexture(std::string texture_address) {
@@ -134,12 +164,89 @@ void BaseLevel::SetBackgroundMusic(std::string music_address, float const& volum
 	music_background_.setLoop(true);
 }
 
-sf::Packet BaseLevel::GetPacketToSendAllClient() {
-	return sf::Packet(); /////////////////////////////////////////////////////////////////////////
+sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
+	sf::Packet Paket;
+	if (all_data) { //full synchrinization
+		for (auto item : All_objects_) item->CreatePacket(Paket);
+	}
+	else { //just changes
+		while (!Need_sync_with_client_objects_.empty()) {
+			Need_sync_with_client_objects_.front()->CreatePacket(Paket);
+			Need_sync_with_client_objects_.front()->SetNeedSynchByLan(false);
+			Need_sync_with_client_objects_.pop_front();
+		}
+	}
+	if (Bonus_object_ != nullptr) Bonus_object_->CreatePacket(Paket);
+	return Paket;
 }
 
 void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
-	////////////////////////////////////////////////////////////////////////////////////////
+	int id;
+	std::string class_name = "";
+	bool finded_id;
+	while (Packet.endOfPacket()) {
+		Packet >> id >> class_name;
+		finded_id = false;
+		for (auto item : All_objects_) {
+			if (item->GetIdObject() == id) {
+				finded_id = true;
+				item->SetDataFromPacket(Packet);
+				break;
+			}
+		}
+		if (!finded_id) {
+			GameObject* object = nullptr;
+			if (class_name == "Bullet") object = new Bullet(0);
+			else if (class_name == "RedTank") object = new RedTank(0, 0, 0);
+			else if (class_name == "TankBrown") object = new TankBrown(0, 0, 0);
+			else if (class_name == "TankWhite") object = new TankWhite(0, 0, 0);
+			else if (class_name == "TankBlack") object = new TankBlack(0, 0, 0);
+			else if (class_name == "TankYellow") object = new TankYellow(0, 0, 0);
+			else if (class_name == "TankGreen") object = new TankGreen(0, 0, 0);
+			else if (class_name == "BarellBrown") object = new BarellBrown(0, 0, 0);
+			else if (class_name == "BarellBroken") object = new BarellBroken(0, 0, 0);
+			else if (class_name == "BarellGreen") object = new BarellGreen(0, 0, 0);
+			else if (class_name == "BlockGround") object = new BlockGround(0, 0, 0);
+			else if (class_name == "BlockGrass") object = new BlockGrass(0, 0, 0);
+			else if (class_name == "CactusTypeOne") object = new CactusTypeOne(0, 0, 0);
+			else if (class_name == "CactusTypeTwo") object = new CactusTypeTwo(0, 0, 0);
+			else if (class_name == "CactusTypeThree") object = new CactusTypeThree(0,0,0);
+			else if (class_name == "Log") object = new Log(0, 0, 0);
+			else if (class_name == "Star") object = new Star(0, 0, 0);
+			else if (class_name == "Stump") object = new Stump(0, 0, 0);
+			else if (class_name == "TreeTypeOne") object = new TreeTypeOne(0, 0, 0);
+			else if (class_name == "TreeTypeTwo") object = new TreeTypeTwo(0, 0, 0);
+			else if (class_name == "TreeTypeThree") object = new TreeTypeThree(0, 0, 0);
+			else if (class_name == "TreeTypeFour") object = new TreeTypeFour(0, 0, 0);
+			else if (class_name == "TreeTypeFive") object = new TreeTypeFive(0, 0, 0);
+			else if (class_name == "TreeTypeSix") object = new TreeTypeSix(0, 0, 0);
+			else if (class_name == "TreeTypeSeven") object = new TreeTypeSeven(0, 0, 0);
+			else if (class_name == "TreeTypeEight") object = new TreeTypeEight(0, 0, 0);
+			else if (class_name == "TreeTypeNine") object = new TreeTypeNine(0, 0, 0);
+			else if (class_name == "Well") object = new Well(0, 0, 0);
+			
+			if (object != nullptr) {
+				object->SetDataFromPacket(Packet);
+				if (object->GetGameType() == "Static_objects")
+					this->AddStaticObject(object, true);
+				else if (object->GetGameType() == "Enemy_objects")
+					this->AddEnemyObject((TankObject*)object, true);
+				else if (object->GetGameType() == "Player_objects")
+					this->AddPlayerObject((TankObject*)object, true);
+				else if (object->GetGameType() == "Shot_objects")
+					this->AddShotObject((MovebleObject*)object);
+
+				object->SetIdObject(id);
+			}
+		}
+	}
+}
+
+int BaseLevel::AddPlayerFromLan() {
+
+	TankObject* object = new RedTank(0, 200, 200);
+	this->AddPlayerObject(object);
+	return object->GetIdObject();
 }
 
 bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key) {
@@ -201,8 +308,14 @@ void BaseLevel::InputEnemy() {
 bool BaseLevel::UpdateState(float& game_timer) {
 	int i;
 	// update animation for Static_objects_
-	for (i = 0; i < (int)Static_objects_.size(); i++) 
+	for (i = 0; i < (int)Static_objects_.size(); i++) {
 		Static_objects_[i]->RecalculateState(game_timer);
+		if (Static_objects_[i]->GetNeedSynchByLan() 
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(), 
+				Static_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Static_objects_[i]);
+	}
 	// update animation and state for Bonus_object_
 	if (Bonus_object_ != nullptr) 
 		Bonus_object_->RecalculateState(game_timer);
@@ -210,12 +323,29 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	for (i = 0; i < (int)Enemy_objects_.size(); i++) {
 		Enemy_objects_[i]->RecalculateState(game_timer);
 		enemy_shot_time_[i] -= game_timer;
+		if (Enemy_objects_[i]->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				Enemy_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Enemy_objects_[i]);
 	}
 	// update animation and state for Players_objects_
-	for (i = 0; i < (int)Players_objects_.size(); i++) 
+	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		Players_objects_[i]->RecalculateState(game_timer);
-	for (MovebleObject* item : Shot_objects_)
+		if (Players_objects_[i]->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				Players_objects_[i]) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(Players_objects_[i]);
+	}
+	for (MovebleObject* item : Shot_objects_) {
 		item->RecalculateState(game_timer);
+		if (item->GetNeedSynchByLan()
+			&& (std::find(Need_sync_with_client_objects_.begin(),
+				Need_sync_with_client_objects_.end(),
+				item) == Need_sync_with_client_objects_.end()))
+			Need_sync_with_client_objects_.push_back(item);
+	}
 	// update animation for Ui_objects_
 	for (i = 0; i < (int)Ui_objects_.size(); i++)
 		Ui_objects_[i]->RecalculateState(game_timer);
@@ -230,7 +360,18 @@ bool BaseLevel::UpdateState(float& game_timer) {
 			}
 		}
 	}
-	this->CalculateCollisionOnLevel();
+
+	for (MovebleObject* item : Shot_objects_) {
+		if (item->GetLifeLevel() == 0 
+				&& item->AnimationEnd(true) && !item->PlaysSounds()) {
+			Shot_objects_.remove(item);
+			All_objects_.remove(item);
+			Need_sync_with_client_objects_.remove(item);
+			delete item;
+		}
+		else if (item->GetDistanceMove() <= 0)
+			item->SetLifeLevel(0);
+	}
 
 	return true;
 }
@@ -252,20 +393,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				((TankObject*)(*it))->AddBonus(new Bonuses());
 				this->RespawnObject(Bonus_object_);
 			}
-			
-			if ((*it)->GetGameType() == "Shot_objects" &&
-				(*it)->GetLifeLevel() == 0) {
-				if ((*it)->AnimationEnd(true) && !(*it)->PlaysSounds()) {
-					Shot_objects_.remove((MovebleObject*)(*it));
-					All_objects_.erase(it);
-					delete (*it);
-				}
-			}
-			else if ((*it)->GetGameType() == "Shot_objects" &&
-				((MovebleObject*)(*it))->GetDistanceMove() <= 0) {
-				(*it)->SetLifeLevel(0);
-			}
-			else
+
 			if ((*it)->GetGameType() == "Shot_objects" || (*it)->ObjectInRangeLevel(
 				size_level_width_, size_level_height_, size_level_border_)) {
 				auto it2(it); it2++;
