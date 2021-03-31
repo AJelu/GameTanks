@@ -51,11 +51,13 @@ private:
 	std::string send_message;
 
 	bool ServerManager();
-	void ClientManager();
-
-	void CheckingDisconnectedClients();
 	void CleaningClients();
-	void ServerMailingMessageToClients(sf::Packet& mailings_Packet);
+	void ConnectNewClient(sf::TcpListener& server);
+	void PacketReceivingServer();
+	void CheckingDisconnectedClients();
+	void ServerMailingMessageToClients();
+
+	void ClientManager();
 	void ClientSendMessageToServer(sf::Packet& mailings_Packet);
 	bool RecvMessageFromServer();
 	/*-----------------------------*/

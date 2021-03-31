@@ -185,7 +185,7 @@ sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 	return Paket;
 }
 
-void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
+void BaseLevel::RecvPacketFromServer(sf::Packet Packet) {
 	int id;
 	std::string class_name = "";
 	bool finded_id;

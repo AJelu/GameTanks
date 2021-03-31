@@ -84,7 +84,7 @@ public:
 	void SetBackgroundMusic(std::string music_address, float const& volume);
 
 	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
-	void RecvPacketFromServer(sf::Packet& Packet);
+	void RecvPacketFromServer(sf::Packet Packet);
 	int AddPlayerFromLan(); //return id his watchings object
 
 	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);
