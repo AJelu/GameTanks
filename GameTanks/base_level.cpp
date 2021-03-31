@@ -166,30 +166,21 @@ void BaseLevel::SetBackgroundMusic(std::string music_address, float const& volum
 
 sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 	sf::Packet Paket;
-	if (all_data) { //full synchrinization
-		for (auto item : All_objects_) item->CreatePacket(Paket);
-	}
-	else { //just changes
-		while (delete_item_need_sync_with_client_objects_) {
-			//thread sleep "n"
-		}
-		read_need_sync_with_client_objects_ = true;
-		while (!Need_sync_with_client_objects_.empty()) {
-			Need_sync_with_client_objects_.front()->CreatePacket(Paket);
-			Need_sync_with_client_objects_.front()->SetNeedSynchByLan(false);
-			Need_sync_with_client_objects_.pop_front();
-		}
-		read_need_sync_with_client_objects_ = false;
-	}
-	if (Bonus_object_ != nullptr) Bonus_object_->CreatePacket(Paket);
+	Paket = Packet_send_;
+	Packet_send_.clear();
 	return Paket;
 }
 
-void BaseLevel::RecvPacketFromServer(sf::Packet Packet) {
+void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
+	if (Packet.getDataSize() > 0) 
+		Packets_recv_.push_back(Packet);
+}
+
+void BaseLevel::RecvPacketFromServerI(sf::Packet& Packet) {
 	int id;
 	std::string class_name = "";
 	bool finded_id;
-	while (Packet.endOfPacket()) {
+	while (!Packet.endOfPacket()) {
 		Packet >> id >> class_name;
 		finded_id = false;
 		for (auto item : All_objects_) {
@@ -381,6 +372,23 @@ bool BaseLevel::UpdateState(float& game_timer) {
 			item->SetLifeLevel(0);
 	}
 	delete_item_need_sync_with_client_objects_ = false;
+
+
+	sf::Packet Paket;
+	for (auto item : All_objects_)
+	{
+		item->CreatePacket(Paket);
+		item->SetNeedSynchByLan(false);
+	}
+	Packet_send_ = Paket;
+	//Paket.clear();
+
+	while (!Packets_recv_.empty()) {
+		this->RecvPacketFromServerI(Packets_recv_.front());
+		//Packets_recv_.front().clear();
+		//Packets_recv_.pop_front();
+		Packets_recv_.clear();
+	}
 
 	return true;
 }

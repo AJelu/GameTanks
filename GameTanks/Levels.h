@@ -32,6 +32,8 @@ private:
 	std::list <BaseObject*> Need_sync_with_client_objects_;
 	bool read_need_sync_with_client_objects_ = false,
 		delete_item_need_sync_with_client_objects_ = false;
+	sf::Packet Packet_send_;
+	std::list <sf::Packet> Packets_recv_;
 
 	//level size
 	int size_level_height_, size_level_width_, size_level_border_ = 0;
@@ -84,7 +86,8 @@ public:
 	void SetBackgroundMusic(std::string music_address, float const& volume);
 
 	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
-	void RecvPacketFromServer(sf::Packet Packet);
+	void RecvPacketFromServer(sf::Packet& Packet);
+	void RecvPacketFromServerI(sf::Packet& Packet);
 	int AddPlayerFromLan(); //return id his watchings object
 
 	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);

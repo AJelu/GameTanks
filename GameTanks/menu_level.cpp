@@ -26,7 +26,7 @@ MenuLevel::MenuLevel() {
 	Exit_->SetTextAlign(0);
 
 	NewGame_->SetText("NewGame");
-	ConnectToGameInput_->SetText("");
+	ConnectToGameInput_->SetText("127.0.0.1");
 	ConnectToGame_->SetText("ConnectToGame");
 	Exit_->SetText("Exit");
 

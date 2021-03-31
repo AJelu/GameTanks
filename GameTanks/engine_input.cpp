@@ -33,31 +33,32 @@ void Engine::EngineInpute() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             send_message = "Up";
-            ClientSendMessageToServer(send_packet << send_message);
+            send_packet << sf::Keyboard::Up;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             send_message = "Left";
-            ClientSendMessageToServer(send_packet << send_message);
+            send_packet << sf::Keyboard::Left;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             send_message = "Right";
-            ClientSendMessageToServer(send_packet << send_message);
+            send_packet << sf::Keyboard::Right;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
             !sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             send_message = "Down";
-            ClientSendMessageToServer(send_packet << send_message);
+            send_packet << sf::Keyboard::Down;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             send_message = "Space";
-            ClientSendMessageToServer(send_packet << send_message);
-        }  
+            send_packet << sf::Keyboard::Space;
+        }
+        if (send_packet.getDataSize() > 0) ClientSendMessageToServer(send_packet);
         send_packet.clear();
     }
 

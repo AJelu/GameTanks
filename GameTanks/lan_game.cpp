@@ -30,7 +30,7 @@ bool Engine::ServerManager() {
 				PacketReceivingServer();
 				ServerMailingMessageToClients();
 			}
-			CheckingDisconnectedClients();
+			//CheckingDisconnectedClients(); <<<<<<<<<<<<<<<here is ЖИРНИЙ. ДУЖЕ
 		}
 	}
 	return false;
@@ -63,10 +63,6 @@ void Engine::ConnectNewClient(sf::TcpListener& server) {
 			send_id_packet << (Point_level_->AddPlayerFromLan());
 			socket->send(send_id_packet);
 			send_id_packet.clear();
-
-			/*send_id_packet << (Point_level_->GetPacketToSendAllClient(true));
-			socket->send(send_id_packet);
-			send_id_packet.clear();*/
 		}
 		list_clients_.push_back(socket);
 		tcp_selector_.add(*socket);
@@ -80,15 +76,16 @@ void Engine::PacketReceivingServer() {
 		if (tcp_selector_.isReady(*list_clients_[i])) {
 			sf::Packet get_packet;
 			if (list_clients_[i]->receive(get_packet) == sf::Socket::Done) {
-
-				//Point_level_->InputKeyboard(i + 1, (*get_packet?)); <<<<<<<
-
-				std::string connect_message;
-				get_packet >> connect_message; //unpack packet
-				std::cout << "Package received successfully <" << i
-					<< ">: " << connect_message << "\t ip: "
-					<< (*list_clients_[i]).getRemoteAddress() << std::endl;
-
+				
+				while (!get_packet.endOfPacket()) {
+					std::cout << "size" << get_packet.getDataSize() << std::endl;
+					int j = 0;
+					get_packet >> j;
+					Point_level_->InputKeyboard(i + 1, (sf::Keyboard::Key)j);
+					std::cout << "Package received successfully <" << j
+						<< ">: \t ip: "
+						<< (*list_clients_[i]).getRemoteAddress() << std::endl;
+				}
 				get_packet.clear();
 			}
 		}
@@ -118,20 +115,21 @@ void Engine::ClientManager() {
 //Get Intafomration to go client: BaseLevel->GetObjectToSendClient
 
 void Engine::ServerMailingMessageToClients() {
-	sf::Packet mailings_Packet;
-	mailings_Packet << Point_level_->GetPacketToSendAllClient(); /* with this client does not receive packets... */
-	for (int client = 0; client < (int)list_clients_.size(); client++) {
-		std::cout << "Mailing packet to client <" << client << ">" << std::endl;
-		if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done)
-			std::cout << "Mailing packages sent successfully!" << std::endl;
-		else std::cout << "Packages were not sent!" << std::endl;
+	sf::Packet mailings_Packet = Point_level_->GetPacketToSendAllClient(true); /* with this client does not receive packets... */
+	if (mailings_Packet.getDataSize() > 10) {
+		for (int client = 0; client < (int)list_clients_.size(); client++) {
+			std::cout << "Mailing packet to client <" << client << ">" << std::endl;
+			if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done)
+				std::cout << "Mailing packages sent successfully!" << std::endl;
+			else std::cout << "Packages were not sent!" << std::endl;
+		}
 	}
 	mailings_Packet.clear();
 }
 
 void Engine::ClientSendMessageToServer(sf::Packet& mailings_Packet) {
 	if (tcp_socket_.send(mailings_Packet) == sf::Socket::Done)
-		std::cout << "Package sent successfully!" << std::endl;
+		std::cout << "Package sent successfully!" << mailings_Packet.getDataSize() << std::endl;
 	else std::cout << "Package was not sent!" << std::endl;
 }
 
@@ -139,15 +137,15 @@ bool Engine::RecvMessageFromServer() {
 
 	while (status_server_ == StatusServer::CLIENT) {
 		if (!pause_client_recv_) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(250));
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 			sf::Packet send_connect_packet;
 			tcp_socket_.send(send_connect_packet);
 			send_connect_packet.clear();
 
 			sf::Packet get_packet;
-			if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
-				Point_level_->RecvPacketFromServer(get_packet); /* with this client does not receive packets... */
+			if (tcp_socket_.receive(get_packet) == sf::Socket::Done) { //<<<<<<<<<<<<Зависа тута доки основний поток не визове ClientSendMessageToServer()
+				Point_level_->RecvPacketFromServer(get_packet);
 				std::cout << std::endl << "Recieve packet from server ip: "
 					<< tcp_socket_.getRemoteAddress() << std::endl;
 				get_packet.clear();
