@@ -4,7 +4,7 @@ void Engine::LanGame() {
 	while (true) {
 		if (status_server_ == StatusServer::SERVER) this->ServerManager();
 		else if (status_server_ == StatusServer::CLIENT) this->ClientManager();
-		//maybe sleep to N ms????
+		else if (!Main_window_.isOpen()) break;
 	}
 }
 
@@ -116,14 +116,14 @@ void Engine::ClientManager() {
 
 void Engine::ServerMailingMessageToClients() {
 	sf::Packet mailings_Packet = Point_level_->GetPacketToSendAllClient(true); /* with this client does not receive packets... */
-	if (mailings_Packet.getDataSize() > 10) {
+	//if (mailings_Packet.getDataSize() > 10) {
 		for (int client = 0; client < (int)list_clients_.size(); client++) {
 			std::cout << "Mailing packet to client <" << client << ">" << std::endl;
 			if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done)
 				std::cout << "Mailing packages sent successfully!" << std::endl;
 			else std::cout << "Packages were not sent!" << std::endl;
 		}
-	}
+	//}
 	mailings_Packet.clear();
 }
 
@@ -137,7 +137,7 @@ bool Engine::RecvMessageFromServer() {
 
 	while (status_server_ == StatusServer::CLIENT) {
 		if (!pause_client_recv_) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
 			sf::Packet send_connect_packet;
 			tcp_socket_.send(send_connect_packet);
@@ -158,6 +158,6 @@ bool Engine::RecvMessageFromServer() {
 
 void Engine::CleaningClients() {
 	for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin();
-		it != list_clients_.end(); it++)
+		it != list_clients_.end(); it++) 
 		delete* it;
 }

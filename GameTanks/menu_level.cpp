@@ -1,34 +1,37 @@
 #include "levels.h"
 
 MenuLevel::MenuLevel() {
-	float a = 20, m = 3;
+	this->SetBackgroundTexture("Data/background/background.png");
+	this->SetBackgroundMusic("Data/Audio/music/Start_fon.ogg", 75);
+
+	float a = 50, m = 3;
 	NewGame_ =				new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
 	ConnectToGameInput_ =	new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
 	ConnectToGame_ =		new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
 	Exit_ =					new Button(sf::Vector2f(a, a + a * m * 3), sf::Vector2f(0, 0));
 
-	sf::Vector2f scale = sf::Vector2f(0.5f, 0.3f);
+	sf::Vector2f scale = sf::Vector2f(0.8f, 0.6f);
 	NewGame_->SetScale(scale);
 	ConnectToGameInput_->SetScale(scale);
 	ConnectToGame_->SetScale(scale);
 	Exit_->SetScale(scale);
 
-	int text_size = 20;
+	int text_size = 40;
 	NewGame_->SetCharacterSize(text_size);
 	ConnectToGameInput_->SetCharacterSize(text_size);
 	ConnectToGame_->SetCharacterSize(text_size);
 	Exit_->SetCharacterSize(text_size);
 
-	float text_align = -0.01f;
+	float text_align = 0;
 	NewGame_->SetTextAlign(0);
 	ConnectToGameInput_->SetTextAlign(text_align);
 	ConnectToGame_->SetTextAlign(0);
 	Exit_->SetTextAlign(0);
 
-	NewGame_->SetText("NewGame");
+	NewGame_->SetText("NEW GAME");
 	ConnectToGameInput_->SetText("127.0.0.1");
-	ConnectToGame_->SetText("ConnectToGame");
-	Exit_->SetText("Exit");
+	ConnectToGame_->SetText("CONNECT GAME");
+	Exit_->SetText("EXIT");
 
 	ConnectToGameInput_->SetFocusable(true);
 	ConnectToGameInput_->ShowCursorBlink(true);

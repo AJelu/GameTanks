@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 /* The file contains the basic settings of the game */
 
@@ -6,8 +7,9 @@
 static const int GAME_SPEED_CONTROLLER = 1000;
 static const int GAME_TIMER_LIMIT = 1;
 
-static const int SCREEN_RESOLUTION_X = 1024;
-static const int SCREEN_RESOLUTION_Y = 768;
+static const float SCREEN_RESOLUTION_X = float(sf::VideoMode::getDesktopMode().width); //1024
+static const float SCREEN_RESOLUTION_Y = float(sf::VideoMode::getDesktopMode().height); //768
+
 
 //enemy settings:
 static const int ENEMY_SHOT_TIME_MULTIPLY = 5;

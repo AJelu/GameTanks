@@ -73,6 +73,7 @@ void RunGame() {
             //logic game instance
         }
         else if (state == 1) {
+            std::cout << "Console message: Exit game!" << std::endl; //this is for the test!
             engine.Stop();
             break;
         }

@@ -8,15 +8,16 @@ Engine::Engine()
 
     std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
-
 }
 
 void Engine::CreateResolutionWindowMode() {
+
+    //FULL SCREEN GAME
     sf::Vector2f resolution;
     resolution.x = SCREEN_RESOLUTION_X;
     resolution.y = SCREEN_RESOLUTION_Y;
 
-    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Default);
+    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Fullscreen);
     Main_window_.setFramerateLimit(60);
 }
 
