@@ -140,7 +140,7 @@ public:
 
 class MenuLevel : public BaseLevel {
 private:
-	UiObject* NewGame_, * ConnectToGame_, * ConnectToGameInput_, * Exit_;
+	UiObject* NewGame_, * ConnectToGame_, * ConnectToGameInput_, * Exit_ , * Title_;
 
 public:
 	MenuLevel();

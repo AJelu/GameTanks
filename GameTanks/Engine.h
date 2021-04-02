@@ -21,7 +21,6 @@ private:
 	sf::Clock Game_clock_;
 	sf::RenderWindow Main_window_; // this object is responsible for all render
 	BaseLevel* Point_level_;
-	sf::Font Main_font_;
 
 	//for lan:
 	std::thread thread_lan_, thread_lan2_;

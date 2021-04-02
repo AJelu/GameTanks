@@ -9,12 +9,16 @@ MenuLevel::MenuLevel() {
 	ConnectToGameInput_ =	new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
 	ConnectToGame_ =		new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
 	Exit_ =					new Button(sf::Vector2f(a, a + a * m * 3), sf::Vector2f(0, 0));
+	Title_ =				new Title(sf::Vector2f(a * 12, a + a * m * 6), sf::Vector2f(0, 0));
 
-	sf::Vector2f scale = sf::Vector2f(0.8f, 0.6f);
-	NewGame_->SetScale(scale);
-	ConnectToGameInput_->SetScale(scale);
-	ConnectToGame_->SetScale(scale);
-	Exit_->SetScale(scale);
+	sf::Vector2f button_scale = sf::Vector2f(0.8f, 0.6f);
+	NewGame_->SetScale(button_scale);
+	ConnectToGameInput_->SetScale(button_scale);
+	ConnectToGame_->SetScale(button_scale);
+	Exit_->SetScale(button_scale);
+
+	sf::Vector2f title_scale = sf::Vector2f(0.5f, 0.5f);
+	Title_->SetScale(title_scale);
 
 	int text_size = 40;
 	NewGame_->SetCharacterSize(text_size);
@@ -40,6 +44,7 @@ MenuLevel::MenuLevel() {
 	this->AddUiObject(ConnectToGameInput_);
 	this->AddUiObject(ConnectToGame_);
 	this->AddUiObject(Exit_);
+	this->AddUiObject(Title_);
 }
 
 bool MenuLevel::UpdateState(float& game_timer) {
