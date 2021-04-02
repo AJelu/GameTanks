@@ -184,9 +184,9 @@ void GameObject::CollisionOff() { collision_off_ = true; }
 
 void GameObject::CollisionOn() { collision_off_ = false; }
 
-std::string GameObject::GetGameType() { return game_type_; }
+int GameObject::GetGameType() { return game_type_; }
 
-void GameObject::SetGameType(std::string const& game_type) { 
+void GameObject::SetGameType(int const& game_type) { 
 	game_type_ = game_type;
 	this->SetNeedSynchByLan(true);
 }

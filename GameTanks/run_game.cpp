@@ -13,12 +13,12 @@ void RunGame() {
 
     srand((unsigned int)time(NULL));
 
-    Engine engine;
+    Engine* engine = new Engine();;
     sf::Packet Level_result;
 
     BaseLevel* level;
     level = new MenuLevel();
-    engine.ChangeLevel(level);
+    engine->ChangeLevel(level);
 
     std::string connect_type;
 
@@ -37,52 +37,53 @@ void RunGame() {
                 Level_result >> ip_connect;
                 if (ip_connect == "") {
                     l = new GameLevel();
-                    engine.ChangeLevel(l);
-                    engine.StartServer();
+                    engine->ChangeLevel(l);
+                    engine->StartServer();
                     delete level;
                     level = l;
                 }
                 else {
-                    engine.PauseClientRecv(true);
-                    engine.ConnectLanToIp(ip_connect); 
-                    while (engine.GetRecvIdFromServer() == 0 && engine.ServerIsWork()) {
+                    engine->PauseClientRecv(true);
+                    engine->ConnectLanToIp(ip_connect);
+                    while (engine->GetRecvIdFromServer() == 0 && engine->ServerIsWork()) {
                         //white id client object
                         std::cout << "";
                     }
-                    if (engine.GetRecvIdFromServer() != 0) {
-                        l = new GameLevel(engine.GetRecvIdFromServer());
-                        engine.ChangeLevel(l);
+                    if (engine->GetRecvIdFromServer() != 0) {
+                        l = new GameLevel(engine->GetRecvIdFromServer());
+                        engine->ChangeLevel(l);
                         delete level;
                         level = l;
                     }
-                    engine.PauseClientRecv(false);
+                    engine->PauseClientRecv(false);
                 }
             }
             else if (type_load_level == BaseLevel::Level_type::MENU_LEVEL) {
                 l = new MenuLevel();
-                engine.StopServer();
-                engine.ChangeLevel(l);
+                engine->StopServer();
+                engine->ChangeLevel(l);
                 delete level;
                 level = l;
             }
         }
         Level_result.clear(); 
 
-        state = engine.Start(); 
+        state = engine->Start();
         if (state == 0) {
             //logic game instance
         }
         else if (state == 1) {
             std::cout << "Console message: Exit game!" << std::endl; //this is for the test!
-            engine.Stop();
+            engine->Stop();
             break;
         }
         else if (state == 2) {
-            engine.Stop();
+            engine->Stop();
             std::cout << "Console message: Game Restart!" << std::endl; //this is for the test!
             RunGame();
         }
     }
     std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
-    //here need destroy thread!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    delete engine;
+    delete level;
 }

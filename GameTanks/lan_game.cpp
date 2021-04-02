@@ -4,8 +4,12 @@ void Engine::LanGame() {
 	while (true) {
 		if (status_server_ == StatusServer::SERVER) this->ServerManager();
 		else if (status_server_ == StatusServer::CLIENT) this->ClientManager();
-		else if (!Main_window_.isOpen()) break;
 	}
+}
+
+void Engine::LanGame2() {
+	while (status_server_ == StatusServer::SERVER)
+		ServerMailingMessageToClients();
 }
 
 bool Engine::ServerManager() {
@@ -23,15 +27,17 @@ bool Engine::ServerManager() {
 	tcp_selector_.add(server);
 	std::cout << "Server started. Port: 7777" << std::endl;
 
+	//thread_lan2_ = std::thread(&Engine::LanGame2, this);
+
 	while (status_server_ == StatusServer::SERVER) {
 		if (tcp_selector_.wait()) {
 			if (tcp_selector_.isReady(server)) ConnectNewClient(server);
 			else {
 				PacketReceivingServer();
-				ServerMailingMessageToClients();
 			}
-			//CheckingDisconnectedClients(); <<<<<<<<<<<<<<<here is ÆÈÐÍÈÉ. ÄÓÆÅ
+			CheckingDisconnectedClients(); //<<<<<<<<<<<<<<<here is ÆÈÐÍÈÉ. ÄÓÆÅ
 		}
+		ServerMailingMessageToClients();
 	}
 	return false;
 }
@@ -116,14 +122,14 @@ void Engine::ClientManager() {
 
 void Engine::ServerMailingMessageToClients() {
 	sf::Packet mailings_Packet = Point_level_->GetPacketToSendAllClient(true); /* with this client does not receive packets... */
-	//if (mailings_Packet.getDataSize() > 10) {
+	if (mailings_Packet.getDataSize() > 10) {
 		for (int client = 0; client < (int)list_clients_.size(); client++) {
 			std::cout << "Mailing packet to client <" << client << ">" << std::endl;
 			if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done)
 				std::cout << "Mailing packages sent successfully!" << std::endl;
 			else std::cout << "Packages were not sent!" << std::endl;
 		}
-	//}
+	}
 	mailings_Packet.clear();
 }
 
@@ -137,14 +143,14 @@ bool Engine::RecvMessageFromServer() {
 
 	while (status_server_ == StatusServer::CLIENT) {
 		if (!pause_client_recv_) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-			sf::Packet send_connect_packet;
+			/*sf::Packet send_connect_packet;
 			tcp_socket_.send(send_connect_packet);
-			send_connect_packet.clear();
+			send_connect_packet.clear();*/
 
 			sf::Packet get_packet;
-			if (tcp_socket_.receive(get_packet) == sf::Socket::Done) { //<<<<<<<<<<<<Çàâèñà òóòà äîêè îñíîâíèé ïîòîê íå âèçîâå ClientSendMessageToServer()
+			if (tcp_socket_.receive(get_packet) == sf::Socket::Done) {
 				Point_level_->RecvPacketFromServer(get_packet);
 				std::cout << std::endl << "Recieve packet from server ip: "
 					<< tcp_socket_.getRemoteAddress() << std::endl;

@@ -52,7 +52,7 @@ DoubleBullet::DoubleBullet(int const& id_object, GameObject* Parrent) : MovebleO
 	this->ActionLife();
 }
 
-std::string DoubleBullet::ClassName() { return "Bullet"; }
+std::string DoubleBullet::ClassName() { return "DoubleBullet"; }
 
 void DoubleBullet::ActionDie() {
 	this->ClearAnimarionList(true);

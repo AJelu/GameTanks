@@ -184,7 +184,7 @@ bool GameLevel::UpdateState(float& game_timer) {
 	//if client and not recev object for game and watch
 	if (Player_ == nullptr) {
 		GameObject* temp_ptr = this->GetObjectById(player_id_);
-		if (temp_ptr == nullptr || temp_ptr->GetGameType() != "Player_objects")
+		if (temp_ptr == nullptr || temp_ptr->GetGameType() != PLAYER)
 			return result;
 		Player_ = (TankObject*)temp_ptr;
 		this->SetWatchObject(Player_);

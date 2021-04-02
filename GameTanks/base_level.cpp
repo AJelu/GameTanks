@@ -12,7 +12,7 @@ sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	if (Bonus_object_ != nullptr)						Bonus_object_->Draw(window);
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->Draw(window);
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->Draw(window);
-	for (MovebleObject* item : Shot_objects_)			item->Draw(window);
+	for (auto const& item : Shot_objects_)				item->Draw(window);
 	window.draw(Sprite_border_);
 	for (i = 0; i < (int)Ui_objects_.size(); i++)		Ui_objects_[i]->Draw(window);
 	CameraControl();
@@ -34,7 +34,7 @@ bool BaseLevel::AddStaticObject(GameObject* Static_objects,
 	if (Static_objects != nullptr 
 			&& (ignore_random_spawn || this->RespawnObject(Static_objects))) {
 		Static_objects->SafeState();
-		Static_objects->SetGameType("Static_objects");
+		Static_objects->SetGameType(STATIC);
 		Static_objects_.push_back(Static_objects);
 		All_objects_.push_back(Static_objects);
 		if (Static_objects->GetSafeDistance() > max_safe_distance)
@@ -52,7 +52,7 @@ bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects,
 	if (Enemy_objects != nullptr
 			&& (ignore_random_spawn || this->RespawnObject(Enemy_objects))) {
 		Enemy_objects->SafeState();
-		Enemy_objects->SetGameType("Enemy_objects"); 
+		Enemy_objects->SetGameType(ENEMY);
 		Enemy_objects_.push_back(Enemy_objects);
 		All_objects_.push_back(Enemy_objects);
 		if (Enemy_objects->GetSafeDistance() > max_safe_distance)
@@ -72,7 +72,7 @@ bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
 			&& (ignore_random_spawn || this->RespawnObject(Player_objects))) {
 		Players_objects_.push_back(Player_objects);
 		All_objects_.push_back(Player_objects);
-		Player_objects->SetGameType("Player_objects"); 
+		Player_objects->SetGameType(PLAYER); 
 		if (Player_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Player_objects->GetSafeDistance();
 		Player_objects->SetCamera(&Player_camera_);
@@ -87,7 +87,7 @@ bool BaseLevel::AddShotObject(MovebleObject* Shot_objects) {
 	if (Shot_objects != nullptr) {
 		Shot_objects_.push_back(Shot_objects);
 		All_objects_.push_back(Shot_objects);
-		Shot_objects->SetGameType("Shot_objects"); 
+		Shot_objects->SetGameType(SHOT);
 		if (Shot_objects->GetSafeDistance() > max_safe_distance)
 			max_safe_distance = Shot_objects->GetSafeDistance();
 		Shot_objects->SetCamera(&Player_camera_);
@@ -122,6 +122,7 @@ bool BaseLevel::SetWatchObject(VisibleObject* Watch_object) {
 bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
 	if (Bonus_object != nullptr) {
 		Bonus_object_ = Bonus_object;
+		Bonus_object_->SetGameType(BONUS);
 		Bonus_object_->SetIdObject(count_id_objects_);
 		count_id_objects_++;
 		return true;
@@ -166,8 +167,10 @@ void BaseLevel::SetBackgroundMusic(std::string music_address, float const& volum
 
 sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
 	sf::Packet Paket;
-	Paket = Packet_send_;
-	Packet_send_.clear();
+	if (Packet_send_.getDataSize() > 0) {
+		Paket = Packet_send_;
+		Packet_send_.clear();
+	}
 	return Paket;
 }
 
@@ -180,7 +183,9 @@ void BaseLevel::RecvPacketFromServerI(sf::Packet& Packet) {
 	int id;
 	std::string class_name = "";
 	bool finded_id;
-	while (!Packet.endOfPacket()) {
+	int for_chect_error_packet = 0;
+	while (!Packet.endOfPacket() && for_chect_error_packet < 100000) {
+		for_chect_error_packet++;
 		Packet >> id >> class_name;
 		finded_id = false;
 		for (auto item : All_objects_) {
@@ -193,6 +198,7 @@ void BaseLevel::RecvPacketFromServerI(sf::Packet& Packet) {
 		if (!finded_id) {
 			GameObject* object = nullptr;
 			if (class_name == "Bullet") object = new Bullet(0);
+			else if (class_name == "DoubleBullet") object = new DoubleBullet(0);
 			else if (class_name == "RedTank") object = new RedTank(0, 0, 0);
 			else if (class_name == "TankBrown") object = new TankBrown(0, 0, 0);
 			else if (class_name == "TankWhite") object = new TankWhite(0, 0, 0);
@@ -223,14 +229,16 @@ void BaseLevel::RecvPacketFromServerI(sf::Packet& Packet) {
 			
 			if (object != nullptr) {
 				object->SetDataFromPacket(Packet);
-				if (object->GetGameType() == "Static_objects")
+				if (object->GetGameType() == STATIC)
 					this->AddStaticObject(object, true);
-				else if (object->GetGameType() == "Enemy_objects")
+				else if (object->GetGameType() == ENEMY)
 					this->AddEnemyObject((TankObject*)object, true);
-				else if (object->GetGameType() == "Player_objects")
+				else if (object->GetGameType() == PLAYER)
 					this->AddPlayerObject((TankObject*)object, true);
-				else if (object->GetGameType() == "Shot_objects")
+				else if (object->GetGameType() == SHOT)
 					this->AddShotObject((MovebleObject*)object);
+				else if (object->GetGameType() == BONUS)
+					this->SetBonusObject(object);
 
 				object->SetIdObject(id);
 			}
@@ -381,7 +389,7 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		item->SetNeedSynchByLan(false);
 	}
 	Packet_send_ = Paket;
-	//Paket.clear();
+	Paket.clear();
 
 	while (!Packets_recv_.empty()) {
 		this->RecvPacketFromServerI(Packets_recv_.front());
@@ -405,13 +413,13 @@ void BaseLevel::CalculateCollisionOnLevel() {
 		recalc_all = false;
 		All_objects_.sort(compare);
 		for (auto it = All_objects_.begin(); it != All_objects_.end(); ++it) {
-			if ((*it)->GetGameType() == "Player_objects" && 
+			if ((*it)->GetGameType() == PLAYER &&
 				!(*it)->Collision(Bonus_object_)) {
 				((TankObject*)(*it))->AddBonus(new Bonuses());
 				this->RespawnObject(Bonus_object_);
 			}
 
-			if ((*it)->GetGameType() == "Shot_objects" || (*it)->ObjectInRangeLevel(
+			if ((*it)->GetGameType() == SHOT || (*it)->ObjectInRangeLevel(
 				size_level_width_, size_level_height_, size_level_border_)) {
 				auto it2(it); it2++;
 				for (; it2 != All_objects_.end(); ++it2) {
@@ -419,8 +427,8 @@ void BaseLevel::CalculateCollisionOnLevel() {
 							((*it2)->GetCoordinateCentre().x - max_safe_distance))) {
 						if ((*it)->SafeDistanceToCollision((*it2)) <= 0) {
 							if (!(*it)->Collision((*it2))) {
-								if		((*it)->GetGameType() == "Shot_objects" &&
-										(*it2)->GetGameType() == "Shot_objects") {
+								if		((*it)->GetGameType() == SHOT &&
+										(*it2)->GetGameType() == SHOT) {
 									if ((*it)->GetLifeLevel() != 0
 											&& (*it2)->GetLifeLevel() != 0) {
 										(*it)->SetLifeLevel(0);
@@ -429,24 +437,24 @@ void BaseLevel::CalculateCollisionOnLevel() {
 										((MovebleObject*)(*it2))->SetDistanceMove(0);
 									}
 								}
-								else if ((*it)->GetGameType() != "Shot_objects" &&
-										(*it2)->GetGameType() != "Shot_objects") {
+								else if ((*it)->GetGameType() != SHOT &&
+										(*it2)->GetGameType() != SHOT) {
 									(*it)->RestorePreviousState();
-									if ((*it)->GetGameType() != "Static_objects") {
+									if ((*it)->GetGameType() != STATIC) {
 										((MovebleObject*)(*it))->SetDistanceMove(0);
 									}
 									(*it2)->RestorePreviousState();
-									if ((*it2)->GetGameType() != "Static_objects") {
+									if ((*it2)->GetGameType() != STATIC) {
 										((MovebleObject*)(*it2))->SetDistanceMove(0);
 									}
 									(*it)->StartAudioAction("collision");
 									(*it2)->StartAudioAction("collision");
 									recalc_all = true;
 								}
-								else if ((*it)->GetGameType() == "Shot_objects" ||
-										(*it2)->GetGameType() == "Shot_objects") {
+								else if ((*it)->GetGameType() == SHOT ||
+										(*it2)->GetGameType() == SHOT) {
 									GameObject* shot, * object;
-									if ((*it)->GetGameType() == "Shot_objects") {
+									if ((*it)->GetGameType() == SHOT) {
 										shot = (*it);
 										object = (*it2);
 									}
@@ -455,7 +463,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 										object = (*it);
 									}
 									if (object->GetLifeLevel() != 0) {
-										if (object->GetGameType() == "Static_objects")
+										if (object->GetGameType() == STATIC)
 											object->StartAudioAction("collision");
 										//add current point:
 										if (shot->GetPerrent() != nullptr) {
@@ -487,7 +495,7 @@ void BaseLevel::CalculateCollisionOnLevel() {
 				}
 			}
 			else {
-				if ((*it)->GetGameType() != "Static_objects") {
+				if ((*it)->GetGameType() != STATIC) {
 					(*it)->RestorePreviousState();
 					((MovebleObject*)(*it))->SetDistanceMove(0);
 					(*it)->StartAudioAction("collision");

@@ -58,7 +58,7 @@ void Engine::EngineInpute() {
             send_message = "Space";
             send_packet << sf::Keyboard::Space;
         }
-        if (send_packet.getDataSize() > 0) ClientSendMessageToServer(send_packet);
+        ClientSendMessageToServer(send_packet);
         send_packet.clear();
     }
 

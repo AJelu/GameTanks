@@ -24,7 +24,7 @@ private:
 	sf::Font Main_font_;
 
 	//for lan:
-	std::thread thread_lan_;
+	std::thread thread_lan_, thread_lan2_;
 	std::string ip_client_connect_;
 	int client_id_object_;
 	bool pause_client_recv_;
@@ -66,6 +66,7 @@ public:
 	Engine();
 
 	void LanGame();
+	void LanGame2();
 	void EngineDraw(); //public->private
 
 	int Start();
