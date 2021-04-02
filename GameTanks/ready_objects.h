@@ -120,6 +120,14 @@ public:
 	void ActionClickUp() override;
 };
 
+class Title : public UiObject {
+public:
+	Title(sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate);
+
+	void ActionEnter() override;
+	void ActionLeave() override;
+};
 
 //game objects:
 class CommonGameObject abstract : public GameObject {

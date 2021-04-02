@@ -7,17 +7,30 @@ BaseLevel::BaseLevel() {
 
 sf::View& BaseLevel::Draw(sf::RenderWindow& window) {
 	window.draw(Sprite_background_);
+	for (auto const& object : Static_objects_)	object->Draw(window);
+	if (Bonus_object_ != nullptr)				Bonus_object_->Draw(window);
+	for (auto const& object : Enemy_objects_)	object->Draw(window);
+	for (auto const& object : Players_objects_)	object->Draw(window);
+	for (auto const& object : Shot_objects_)	object->Draw(window);
+	window.draw(Sprite_border_);
+	for (auto const& object : Ui_objects_)		object->Draw(window);
+	CameraControl();
+	return Player_camera_;
+}
+
+/*
+	window.draw(Sprite_background_);
 	int i;
 	for (i = 0; i < (int)Static_objects_.size(); i++)	Static_objects_[i]->Draw(window);
 	if (Bonus_object_ != nullptr)						Bonus_object_->Draw(window);
 	for (i = 0; i < (int)Enemy_objects_.size(); i++)	Enemy_objects_[i]->Draw(window);
 	for (i = 0; i < (int)Players_objects_.size(); i++)	Players_objects_[i]->Draw(window);
-	for (MovebleObject* item : Shot_objects_)			item->Draw(window);
+	for (auto const& item : Shot_objects_)				item->Draw(window);
 	window.draw(Sprite_border_);
 	for (i = 0; i < (int)Ui_objects_.size(); i++)		Ui_objects_[i]->Draw(window);
 	CameraControl();
 	return Player_camera_;
-}
+*/
 
 bool BaseLevel::AddUiObject(UiObject* Ui_object) {
 	if (Ui_object != nullptr) {
