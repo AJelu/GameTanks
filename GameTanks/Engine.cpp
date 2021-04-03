@@ -17,7 +17,7 @@ void Engine::CreateResolutionWindowMode() {
     resolution.x = SCREEN_RESOLUTION_X;
     resolution.y = SCREEN_RESOLUTION_Y;
 
-    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Fullscreen);
+    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Default);
     Main_window_.setFramerateLimit(60);
 }
 
@@ -60,16 +60,6 @@ void Engine::GameSpeed(float& timer) { timer = timer / GAME_SPEED_CONTROLLER; }
 
 void Engine::ForcedResetGameTimer(float& timer) { if (timer > GAME_TIMER_LIMIT) timer = 0; }
 
-/*void Engine::SetStatusServer(std::string status_game_server) {
-    if (status_game_server == "SERVER") status_server_ = StatusServer::SERVER;
-    if (status_game_server == "CLIENT") status_server_ = StatusServer::CLIENT;
-    if (status_game_server == "NONE") status_server_ = StatusServer::NOT_DETERMINED;
-}
-
-int Engine::GetStatusServer() {
-    return (int)status_server_;
-}*/
-
 void Engine::StartServer() {
     status_server_ = StatusServer::SERVER;
 }
@@ -96,8 +86,8 @@ bool Engine::ServerIsWork() {
     return status_server_ != StatusServer::NOT_DETERMINED;
 }
 
-Engine::~Engine() { 
-    thread_lan_.join();
+Engine::~Engine() {
+    thread_lan_.detach();
     for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin(); 
         it != list_clients_.end(); it++)
         delete* it;

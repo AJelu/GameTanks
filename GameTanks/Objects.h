@@ -273,7 +273,7 @@ private:
 	float max_collision_distance_;
 	bool collision_off_;
 	
-	std::string game_type_ = "";
+	int game_type_ = 0;
 
 	float time_to_respawn_;
 
@@ -319,8 +319,8 @@ public:
 	void CollisionOff();//ignore all collisions
 	void CollisionOn();
 
-	std::string GetGameType();
-	void SetGameType(std::string const& game_type);
+	int GetGameType();
+	void SetGameType(int const& game_type);
 
 	//for animation
 	virtual void ActionDie(); ///need override in daughter

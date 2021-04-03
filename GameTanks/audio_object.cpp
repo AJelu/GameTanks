@@ -166,12 +166,14 @@ bool AudioObject::SetDataFromPacket(sf::Packet& Packet) {
 	Packet >> temp_size;
 	for (int i = 0; i < temp_size; i++) {
 		Packet >> temp_i;
-		this->StartAudioAction(Audio_action_name_[temp_i]);
+		if (temp_i >= 0 && temp_i < Audio_action_name_.size())
+			this->StartAudioAction(Audio_action_name_[temp_i]);
 	}
 	Packet >> temp_size;
 	for (int i = 0; i < temp_size; i++) {
 		Packet >> temp_i;
-		this->StopAudioAction(Audio_action_name_[temp_i]);
+		if (temp_i >= 0 && temp_i < Audio_action_name_.size())
+			this->StopAudioAction(Audio_action_name_[temp_i]);
 	}
 	return false;
 }

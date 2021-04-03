@@ -106,6 +106,14 @@ public:
 		MENU_LEVEL = 1,
 		EXIT = 0
 	};
+
+	enum Object_type {
+		STATIC = 1,
+		ENEMY = 2,
+		PLAYER = 3,
+		SHOT = 4,
+		BONUS = 5
+	};
 };
 
 
