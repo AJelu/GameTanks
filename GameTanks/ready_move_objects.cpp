@@ -91,6 +91,7 @@ TypedTank::TypedTank(int const& id_object,
 		true, 50);
 	this->AddAudioAction("TypedTank_dead", "Data/Audio/explosion/tank_dead.ogg");
 	this->AddAudioAction("collision", "Data/Audio/collision/collision_tank.ogg", false, 40);
+	this->SetBasePoint(30);
 }
 
 void TypedTank::ActionDie() {
@@ -153,7 +154,6 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 20), 48));
-	this->SetBasePoint(200); //delete
 }
 
 std::string RedTank::ClassName() { return "RedTank"; }
@@ -297,7 +297,7 @@ TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& sp
 		700,									//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 48));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 46));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 18), 46));
 }
 
 std::string TankGreen::ClassName() { return "TankGreen"; }

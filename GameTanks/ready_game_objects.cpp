@@ -12,6 +12,7 @@ CommonGameObject::CommonGameObject(int const& id_object,
 void CommonGameObject::ActionDie() {
 	this->StartAudioAction("destructible");
 	this->StartPlayAnimation(2, 1, 12, 20);
+	this->CollisionOff();
 }
 
 void CommonGameObject::ActionLife() {
@@ -33,6 +34,7 @@ BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const
 	
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
+	this->SetBasePoint(1);
 }
 
 std::string BarellBrown::ClassName() { return "BarellBrown"; }
@@ -47,6 +49,7 @@ BarellBroken::BarellBroken(int const& id_object, float const& spawn_x, float con
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
+	this->SetBasePoint(1);
 }
 
 std::string BarellBroken::ClassName() { return "BarellBroken"; }
@@ -61,6 +64,7 @@ BarellGreen::BarellGreen(int const& id_object, float const& spawn_x, float const
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
+	this->SetBasePoint(1);
 }
 
 std::string BarellGreen::ClassName() { return "BarellGreen"; }
@@ -75,6 +79,7 @@ BlockGround::BlockGround(int const& id_object, float const& spawn_x, float const
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
 	this->SetScale(sf::Vector2f(1, 1));
+	this->SetBasePoint(3);
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_big.ogg");
 }
 
@@ -90,6 +95,7 @@ BlockGrass::BlockGrass(int const& id_object, float const& spawn_x, float const& 
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
 	this->SetScale(sf::Vector2f(1, 1));
+	this->SetBasePoint(3);
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_big.ogg");
 }
 
@@ -106,6 +112,7 @@ CactusTypeOne::CactusTypeOne(int const& id_object, float const& spawn_x, float c
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 20));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string CactusTypeOne::ClassName() { return "CactusTypeOne"; }
@@ -121,6 +128,7 @@ CactusTypeTwo::CactusTypeTwo(int const& id_object, float const& spawn_x, float c
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string CactusTypeTwo::ClassName() { return "CactusTypeTwo"; }
@@ -136,6 +144,7 @@ CactusTypeThree::CactusTypeThree(int const& id_object, float const& spawn_x, flo
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string CactusTypeThree::ClassName() { return "CactusTypeThree"; }
@@ -152,6 +161,7 @@ Log::Log(int const& id_object, float const& spawn_x, float const& spawn_y)
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 15));
 	this->AddCollision(new RoundCollision(sf::Vector2f(33, 0), 15));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
+	this->SetBasePoint(1);
 }
 
 std::string Log::ClassName() { return "Log"; }
@@ -167,6 +177,7 @@ Star::Star(int const& id_object, float const& spawn_x, float const& spawn_y)
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->SetScale(sf::Vector2f(0.4f, 0.4f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/star_up.ogg");
+	this->SetBasePoint(30);
 	ActionLife();
 }
 
@@ -187,6 +198,7 @@ Stump::Stump(int const& id_object, float const& spawn_x, float const& spawn_y)
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
+	this->SetBasePoint(1);
 }
 
 std::string Stump::ClassName() { return "Stump"; }
@@ -202,6 +214,7 @@ TreeTypeOne::TreeTypeOne(int const& id_object, float const& spawn_x, float const
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeOne::ClassName() { return "TreeTypeOne"; }
@@ -217,6 +230,7 @@ TreeTypeTwo::TreeTypeTwo(int const& id_object, float const& spawn_x, float const
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeTwo::ClassName() { return "TreeTypeTwo"; }
@@ -232,6 +246,7 @@ TreeTypeThree::TreeTypeThree(int const& id_object, float const& spawn_x, float c
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeThree::ClassName() { return "TreeTypeThree"; }
@@ -247,6 +262,7 @@ TreeTypeFour::TreeTypeFour(int const& id_object, float const& spawn_x, float con
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeFour::ClassName() { return "TreeTypeFour"; }
@@ -262,6 +278,7 @@ TreeTypeFive::TreeTypeFive(int const& id_object, float const& spawn_x, float con
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeFive::ClassName() { return "TreeTypeFive"; }
@@ -277,6 +294,7 @@ TreeTypeSix::TreeTypeSix(int const& id_object, float const& spawn_x, float const
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeSix::ClassName() { return "TreeTypeSix"; }
@@ -292,6 +310,7 @@ TreeTypeSeven::TreeTypeSeven(int const& id_object, float const& spawn_x, float c
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeSeven::ClassName() { return "TreeTypeSeven"; }
@@ -307,6 +326,7 @@ TreeTypeEight::TreeTypeEight(int const& id_object, float const& spawn_x, float c
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeEight::ClassName() { return "TreeTypeEight"; }
@@ -322,6 +342,7 @@ TreeTypeNine::TreeTypeNine(int const& id_object, float const& spawn_x, float con
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/damage_tree.ogg");
+	this->SetBasePoint(1);
 }
 
 std::string TreeTypeNine::ClassName() { return "TreeTypeNine"; }
@@ -337,6 +358,7 @@ Well::Well(int const& id_object, float const& spawn_x, float const& spawn_y)
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
 	this->AddAudioAction("destructible", "Data/Audio/destructible/destructible_small.ogg");
+	this->SetBasePoint(2);
 }
 
 std::string Well::ClassName() { return "Well"; }
