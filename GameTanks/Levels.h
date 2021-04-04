@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <sstream>
+#include <chrono>
 #include "ready_objects.h"
 #include "settings.h"
 
@@ -20,6 +21,7 @@ private:
 	std::vector <TankObject*> Enemy_objects_;
 	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
+	std::list <int> Players_who_need_delete_;
 	std::list <MovebleObject*> Shot_objects_;
 	GameObject* Bonus_object_;
 
@@ -29,10 +31,7 @@ private:
 	//die game objects (exist in other vectors).
 	std::list <GameObject*> Dies_objects_;
 
-	std::list <BaseObject*> Need_sync_with_client_objects_;
-	bool read_need_sync_with_client_objects_ = false,
-		delete_item_need_sync_with_client_objects_ = false;
-	sf::Packet Packet_send_;
+	sf::Packet Packet_send_all_data_, Packet_send_changes_;
 	std::list <sf::Packet> Packets_recv_;
 
 	//level size
@@ -40,7 +39,7 @@ private:
 
 	float min_distance_respawn_to_Static_objects_ = 0.001f; //% size level
 	float min_distance_respawn_to_Enemy_objects_ = 0.005f; //% size level
-	float min_distance_respawn_to_Players_objects_ = 0.001f; //% size level
+	float min_distance_respawn_to_Players_objects_ = 0.01f; //% size level
 	float min_distance_respawn_to_Shot_objects_ = 0.0000010f; //% size level
 
 	VisibleObject* Watch_object_;
@@ -48,10 +47,12 @@ private:
 	sf::View Player_camera_;
 
 	//background and border:
-	sf::Texture Texture_background_;
+	VisibleObject Background_, Border_;
+
+	/*sf::Texture Texture_background_;
 	sf::Sprite Sprite_background_;
 	sf::Texture Texture_border_;
-	sf::Sprite Sprite_border_;
+	sf::Sprite Sprite_border_;*/
 
 	//background music:
 	sf::Music music_background_;
@@ -62,6 +63,7 @@ private:
 
 	bool SafePointSpawn(GameObject* Game_object);
 	bool RespawnObject(GameObject* Game_object); ///recreate??? very hard//////////////////
+	void UnpackingPacket(sf::Packet& Packet);
 public:
 	BaseLevel();
 	sf::View& Draw(sf::RenderWindow& window);
@@ -78,6 +80,8 @@ public:
 	bool SetWatchObject(VisibleObject* Watch_object);
 	bool SetBonusObject(GameObject* Bonus_object);
 
+	void DeleteClientPlayer(int const& number);
+
 	TankObject* GetPlayer(int const& player_number);
 	GameObject* GetObjectById(int const& id_object);
 
@@ -87,10 +91,10 @@ public:
 
 	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
 	void RecvPacketFromServer(sf::Packet& Packet);
-	void RecvPacketFromServerI(sf::Packet& Packet);
 	int AddPlayerFromLan(); //return id his watchings object
 
-	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key);
+	virtual bool InputKeyboard(int const& player_nuber, sf::Keyboard::Key Key, 
+		sf::Event::EventType event_type);
 	virtual bool InputMouse(sf::Event::EventType event_type, sf::Vector2i mouse_position); 
 
 	void InputEnemy();

@@ -21,9 +21,9 @@ private:
 	sf::Clock Game_clock_;
 	sf::RenderWindow Main_window_; // this object is responsible for all render
 	BaseLevel* Point_level_;
-
+	sf::Packet send_packet;
 	//for lan:
-	std::thread thread_lan_, thread_lan2_;
+	std::thread thread_lan_;
 	std::string ip_client_connect_;
 	int client_id_object_;
 	bool pause_client_recv_;
@@ -56,6 +56,8 @@ private:
 	void CheckingDisconnectedClients();
 	void ServerMailingMessageToClients();
 
+	int counter_send;
+
 	void ClientManager();
 	void ClientSendMessageToServer(sf::Packet& mailings_Packet);
 	bool RecvMessageFromServer();
@@ -65,7 +67,6 @@ public:
 	Engine();
 
 	void LanGame();
-	void LanGame2();
 	void EngineDraw(); //public->private
 
 	int Start();

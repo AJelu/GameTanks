@@ -149,16 +149,18 @@ void MovebleObject::RecalculateState(float const& game_time) {
 std::string MovebleObject::ClassName() { return "MovebleObject"; }
 
 bool MovebleObject::CreatePacket(sf::Packet& Packet) {
-	GameObject::CreatePacket(Packet);
+	bool result = GameObject::CreatePacket(Packet);
 	Packet << speed_ << distance_ << freeze_time_;
 	Packet << rotation_speed_ << rotation_degree_;
-	return false;
+	return result;
 }
 
 bool MovebleObject::SetDataFromPacket(sf::Packet& Packet) {
-	GameObject::SetDataFromPacket(Packet);
-	Packet >> speed_ >> distance_ >> freeze_time_;
-	Packet >> rotation_speed_ >> rotation_degree_;
+	if (GameObject::SetDataFromPacket(Packet)) {
+		Packet >> speed_ >> distance_ >> freeze_time_;
+		Packet >> rotation_speed_ >> rotation_degree_;
+		return true;
+	}
 	return false;
 }
 

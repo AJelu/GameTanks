@@ -1,5 +1,6 @@
 #include <iostream>
 #include "run_game.h"
+#include "objects.h"
 
 int main() {
     std::cout << "Console message: Game Run!" << std::endl; //this is for the test!
@@ -45,9 +46,11 @@ void RunGame() {
                 else {
                     engine->PauseClientRecv(true);
                     engine->ConnectLanToIp(ip_connect);
+                    int err_int = 0;
                     while (engine->GetRecvIdFromServer() == 0 && engine->ServerIsWork()) {
-                        //white id client object
-                        std::cout << "";
+                        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                        err_int++;
+                        if (err_int > 1000) break;
                     }
                     if (engine->GetRecvIdFromServer() != 0) {
                         l = new GameLevel(engine->GetRecvIdFromServer());
@@ -56,11 +59,13 @@ void RunGame() {
                         level = l;
                     }
                     engine->PauseClientRecv(false);
+                    if (err_int > 1000) engine->StopServer();
                 }
             }
             else if (type_load_level == BaseLevel::Level_type::MENU_LEVEL) {
-                l = new MenuLevel();
                 engine->StopServer();
+                std::this_thread::sleep_for(std::chrono::milliseconds(20));
+                l = new MenuLevel();
                 engine->ChangeLevel(l);
                 delete level;
                 level = l;
@@ -86,4 +91,7 @@ void RunGame() {
     std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
     delete engine;
     delete level;
+
+    VisibleObject::DestroyCreatedStaticVectors();
+    AudioObject::DestroyCreatedStaticVectors();
 }

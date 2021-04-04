@@ -77,6 +77,8 @@ private:
 	bool ShowTile(); //show current frame texture
 	bool SetTile(int const& tile_level, int const& tile_number); //set show choosed frame texture
 public:
+	static void DestroyCreatedStaticVectors();
+
 	VisibleObject();
 	VisibleObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
@@ -163,6 +165,7 @@ private:
 	bool StopPlayingAudioAction(std::string const& audio_action);
 
 public:
+	static void DestroyCreatedStaticVectors();
 	AudioObject();
 	AudioObject(int const& id_object,
 		sf::Vector2f const& coordinate_centre,
@@ -417,10 +420,10 @@ public:
 	MovebleObject* CreateShot(bool const& forcibly_shot = false);
 	void RecalculateState(float const& game_time) override; //+recalculate time_to_next_shot
 
-	void MoveUp();
-	void MoveDown();
-	void MoveRight();
-	void MoveLeft();
+	void MoveUp(float const& value = 10);
+	void MoveDown(float const& value = 10);
+	void MoveRight(float const& value = 10);
+	void MoveLeft(float const& value = 10);
 
 	sf::Vector2f GetPointCreateShot();
 	float GetSpeedShot();

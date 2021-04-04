@@ -40,6 +40,9 @@ int Engine::Start() {
         this->EngineUpdate(game_time);
         this->EngineDraw();
 
+        if (status_server_ == StatusServer::SERVER)
+            this->ServerMailingMessageToClients();
+
         return 0;
     }
     return 1;
