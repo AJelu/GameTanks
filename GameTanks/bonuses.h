@@ -6,13 +6,13 @@ class Bonuses {
 private:
 	float bonus_duration_, //bunus time
 		//% + current stats:
-		speed_move_, rotatino_speed_,
+		speed_move_, rotation_speed_,
 		speed_shot_, shot_distance_, time_freeze_shot_,
 		shot_life_, life_level_, max_life_level_;
 
 	//original parametrs^
 	float o_bonus_duration_, //bunus time
-		o_speed_move_, o_rotatino_speed_,
+		o_speed_move_, o_rotation_speed_,
 		o_speed_shot_, o_shot_distance_, o_time_freeze_shot_;
 	int o_shot_life_, o_life_level_, o_max_life_level_;
 

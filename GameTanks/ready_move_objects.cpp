@@ -152,7 +152,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		700,									//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 20), 50));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 20), 48));
 	this->SetBasePoint(200); //delete
 }
 
@@ -182,7 +182,7 @@ TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& sp
 		700,									//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 50));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 48));
 }
 
 std::string TankBrown::ClassName() { return "TankBrown"; }
@@ -211,7 +211,7 @@ TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& sp
 		700,									//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, -10), 50));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, -10), 48));
 }
 
 std::string TankWhite::ClassName() { return "TankWhite"; }
@@ -297,7 +297,7 @@ TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& sp
 		700,									//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 48));
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 48));
+	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 46));
 }
 
 std::string TankGreen::ClassName() { return "TankGreen"; }

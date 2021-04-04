@@ -113,7 +113,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Time_to_next_shot_	= new Button(sf::Vector2f(a, a + a * m * 6), sf::Vector2f(0, 0));
 	Shot_life_			= new Button(sf::Vector2f(a, a + a * m * 7), sf::Vector2f(0, 0));
 
-	sf::Vector2f scale = sf::Vector2f(0.5f, 0.3f);
+	sf::Vector2f scale = sf::Vector2f(0.6f, 0.26f);
 	Point_current_->SetScale(scale);
 	Life_->SetScale(scale);
 	Speed_->SetScale(scale);
@@ -123,7 +123,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Time_to_next_shot_->SetScale(scale);
 	Shot_life_->SetScale(scale);
 
-	int text_size = 20;
+	int text_size = 30;
 	Point_current_->SetCharacterSize(text_size);
 	Life_->SetCharacterSize(text_size);
 	Speed_->SetCharacterSize(text_size);
@@ -133,7 +133,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Time_to_next_shot_->SetCharacterSize(text_size);
 	Shot_life_->SetCharacterSize(text_size);
 
-	float text_align = -0.01f;
+	float text_align = 0;
 	Point_current_->SetTextAlign(text_align);
 	Life_->SetTextAlign(text_align);
 	Speed_->SetTextAlign(text_align);
@@ -158,7 +158,6 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Exit_->SetTextAlign(0);
 	Exit_->SetText("Exit");
 	this->AddUiObject(Exit_);
-
 }
 
 template <class TypeObject>
