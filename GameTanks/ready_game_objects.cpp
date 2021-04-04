@@ -11,7 +11,7 @@ CommonGameObject::CommonGameObject(int const& id_object,
 
 void CommonGameObject::ActionDie() {
 	this->StartAudioAction("destructible");
-	this->StartPlayAnimation(2, 1, 12, 20);
+	this->StartPlayAnimation(2, 1, 12, 30);
 	this->CollisionOff();
 }
 
@@ -154,7 +154,7 @@ Log::Log(int const& id_object, float const& spawn_x, float const& spawn_y)
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
 		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Log.png",			//texture
+		"Data/Static/Log.png",					//texture
 		25) {									//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(-33, 0), 15));
