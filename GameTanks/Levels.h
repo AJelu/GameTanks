@@ -22,7 +22,7 @@ private:
 	std::vector <float> enemy_shot_time_; // for shooting enemy
 	std::vector <TankObject*> Players_objects_;
 	std::list <int> Players_who_need_delete_;
-	std::list <MovebleObject*> Shot_objects_;
+	std::vector <MovebleObject*> Shot_objects_;
 	GameObject* Bonus_object_;
 
 
@@ -31,7 +31,8 @@ private:
 	//die game objects (exist in other vectors).
 	std::list <GameObject*> Dies_objects_;
 
-	sf::Packet Packet_send_all_data_, Packet_send_changes_;
+	std::vector <sf::Packet> Packet_send_all_data_, 
+							 Packet_send_changes_;
 	std::list <sf::Packet> Packets_recv_;
 
 	//level size
@@ -49,11 +50,6 @@ private:
 	//background and border:
 	VisibleObject Background_, Border_;
 
-	/*sf::Texture Texture_background_;
-	sf::Sprite Sprite_background_;
-	sf::Texture Texture_border_;
-	sf::Sprite Sprite_border_;*/
-
 	//background music:
 	sf::Music music_background_;
 
@@ -62,8 +58,9 @@ private:
 	void CameraControl();
 
 	bool SafePointSpawn(GameObject* Game_object);
-	bool RespawnObject(GameObject* Game_object); ///recreate??? very hard//////////////////
+	bool RespawnObject(GameObject* Game_object);
 	void UnpackingPacket(sf::Packet& Packet);
+	void AddAnchorUiToObject(GameObject* Game_object, std::string text);
 public:
 	BaseLevel();
 	sf::View& Draw(sf::RenderWindow& window);
@@ -74,7 +71,7 @@ public:
 	bool AddEnemyObject(TankObject* Enemy_objects,
 		bool const& ignore_random_spawn = false);
 	bool AddPlayerObject(TankObject* Player_objects,
-		bool const& ignore_random_spawn = false);
+		bool const& ignore_random_spawn = false, bool need_add_ui = false);
 	bool AddShotObject(MovebleObject* Shot_objects);
 	bool AddDieObject(GameObject* Dies_objects);
 	bool SetWatchObject(VisibleObject* Watch_object);
@@ -89,7 +86,8 @@ public:
 	void SetBorderTexture(std::string texture_address, int const& size_level_border);
 	void SetBackgroundMusic(std::string music_address, float const& volume);
 
-	sf::Packet GetPacketToSendAllClient(bool const& all_data = false);	
+	sf::Packet GetPacketToSendAllClient(int const& player_number, 
+		bool const& all_data);
 	void RecvPacketFromServer(sf::Packet& Packet);
 	int AddPlayerFromLan(); //return id his watchings object
 
@@ -152,4 +150,9 @@ public:
 	bool UpdateState(float& game_timer) override;
 
 	bool ExitLevel(sf::Packet& Result_level) override;
+};
+
+class LoadLevel : public BaseLevel {
+public:
+	LoadLevel(std::string const& text);
 };

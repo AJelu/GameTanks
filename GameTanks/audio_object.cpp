@@ -117,6 +117,17 @@ bool AudioObject::PlaysSounds() {
 	return Sounds_file_.size() > 0;
 }
 
+void AudioObject::StopAllSounds() {
+	for (int i = 0; i < (int)Sounds_file_.size(); i++) {
+		//stop and delete audio
+		Sounds_file_[i]->setLoop(false);
+		Sounds_file_[i]->stop();
+		delete Sounds_file_[i];
+	}
+	Audio_action_playing_name_.clear();
+	Sounds_file_.clear();
+}
+
 void AudioObject::SetCamera(sf::View* Camera) { Camera_ = Camera; }
 
 sf::View* AudioObject::GetCamera() { return Camera_; }

@@ -1,7 +1,7 @@
 #include "engine.h"
 
 void Engine::LanGame() {
-	while (true) {
+	while (lan_thread_work_) {
 		if (status_server_ == StatusServer::SERVER) this->ServerManager();
 		else if (status_server_ == StatusServer::CLIENT) this->ClientManager();
 	}
@@ -12,10 +12,8 @@ bool Engine::ServerManager() {
 	//Cleaning
 	ip_client_connect_ = "";
 	client_id_object_ = 0;
-	counter_send = 0;
 
 	//Start Server Work
-	sf::TcpListener server;
 	server.listen(7777);
 	tcp_selector_.add(server);
 	std::cout << "Server started. Port: 7777" << std::endl;
@@ -27,10 +25,6 @@ bool Engine::ServerManager() {
 			CheckingDisconnectedClients();
 		}
 	}
-	server.close();
-	this->CleaningClients();
-	tcp_selector_.clear();
-	list_clients_.clear();
 	return true;
 }
 
@@ -62,13 +56,13 @@ void Engine::ConnectNewClient(sf::TcpListener& server) {
 			sf::Packet recv_id_packet;
 			sf::Packet send_time_packet;
 			send_id_packet << (Point_level_->AddPlayerFromLan());
-			//get start time
+			//<<<<<<<<<<<<<<<<<get start time
 			socket->send(send_id_packet);
 			//recv packet
 			socket->receive(recv_id_packet);
-			//get end time
-			//calculate ping (end - start)
-			//get game_time + ping and sent to client
+			//<<<<<<<<<<<<<<<<<get end time
+			//<<<<<<<<<<<<<<<<<calculate ping (end - start)
+			//<<<<<<<<<<<<<<<<<get game_time + ping and sent to client
 			socket->send(send_id_packet);
 			send_id_packet.clear();
 			recv_id_packet.clear();
@@ -104,10 +98,8 @@ void Engine::PacketReceivingServer() {
 }
 
 void Engine::ClientManager() {
-	//sf::Packet send_connect_packet;
 	sf::Packet resieve_id_packet;
 	sf::Packet resieve_time_packet;
-	//tcp_socket_();
 	if (tcp_socket_.connect(ip_client_connect_, 7777) == sf::Socket::Done) {
 		client_id_object_ = 0;
 
@@ -120,7 +112,7 @@ void Engine::ClientManager() {
 		
 		//Reseiving packet with level_time
 		tcp_socket_.receive(resieve_time_packet);
-		////////////////////resieve_time_packet >> client_id_object_;
+		//<<<<<<<<<<<<<<<<< resieve_time_packet >> client_id_object_;
 
 		// Receive packets: 
 		RecvMessageFromServer();
@@ -133,18 +125,18 @@ void Engine::ClientManager() {
 //Get Intafomration to go client: BaseLevel->GetObjectToSendClient
 
 void Engine::ServerMailingMessageToClients() {
-	sf::Packet mailings_Packet = 
-		Point_level_->GetPacketToSendAllClient(true);
-	if (mailings_Packet.getDataSize() > 0) {
-		for (int client = 0; client < (int)list_clients_.size(); client++) {
+	sf::Packet mailings_Packet;
+	for (int client = 0; client < (int)list_clients_.size(); client++) {
+		mailings_Packet = Point_level_->GetPacketToSendAllClient(client + 1, true);
+		if (mailings_Packet.getDataSize() > 0) {
 			/*std::cout << "Mailing packet to client <" << client << ">" << std::endl;*/
-			if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done){
+			if (list_clients_[client]->send(mailings_Packet) == sf::Socket::Done) {
 				/*std::cout << "Mailing packages sent successfully!" << std::endl;*/
 			}
 			/*else std::cout << "Packages were not sent!" << std::endl;*/
 		}
+		mailings_Packet.clear();
 	}
-	mailings_Packet.clear();
 }
 
 void Engine::ClientSendMessageToServer(sf::Packet& mailings_Packet) {
@@ -155,19 +147,11 @@ void Engine::ClientSendMessageToServer(sf::Packet& mailings_Packet) {
 
 bool Engine::RecvMessageFromServer() {
 	sf::Packet packet;
-	counter_send = 0;
 	while (status_server_ == StatusServer::CLIENT) {
 		if (!pause_client_recv_) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-
-			/*if (counter_send >= 10) {
-				counter_send = 0;
-				tcp_socket_.send(packet);
-				packet.clear();
-			}
-			else counter_send++;*/
-
+			packet.clear();
 			if (tcp_socket_.receive(packet) == sf::Socket::Done) {
 				Point_level_->RecvPacketFromServer(packet);
 				/*std::cout << std::endl << "Recieve packet from server ip: "
@@ -176,12 +160,12 @@ bool Engine::RecvMessageFromServer() {
 			}
 		}
 	}
-	//tcp_socket_.disconnect();
 	return true;
 }
 
 void Engine::CleaningClients() {
-	for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin();
-		it != list_clients_.end(); it++) 
-		delete* it;
+	for (int i = 0; i < (int)list_clients_.size(); i++) {
+		list_clients_[i]->disconnect();
+		delete list_clients_[i];
+	}
 }

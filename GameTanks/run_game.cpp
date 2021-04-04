@@ -36,6 +36,16 @@ void RunGame() {
             }
             else if (type_load_level == BaseLevel::Level_type::GAME_LEVEL) {
                 Level_result >> ip_connect;
+                //show load frame
+                BaseLevel* Load_level; 
+                if (ip_connect == "")   Load_level = new LoadLevel("Loading...");
+                else                    Load_level = new LoadLevel("Connecting...");
+                engine->ChangeLevel(Load_level);
+                engine->Start();
+                engine->ChangeLevel(level);
+                delete Load_level;
+                Load_level = nullptr;
+                /*----------------*/
                 if (ip_connect == "") {
                     l = new GameLevel();
                     engine->ChangeLevel(l);
@@ -50,16 +60,15 @@ void RunGame() {
                     while (engine->GetRecvIdFromServer() == 0 && engine->ServerIsWork()) {
                         std::this_thread::sleep_for(std::chrono::milliseconds(10));
                         err_int++;
-                        if (err_int > 1000) break;
+                        if (err_int > 10000) break;
                     }
                     if (engine->GetRecvIdFromServer() != 0) {
                         l = new GameLevel(engine->GetRecvIdFromServer());
                         engine->ChangeLevel(l);
                         delete level;
                         level = l;
-                    }
+                    } else engine->StopServer();
                     engine->PauseClientRecv(false);
-                    if (err_int > 1000) engine->StopServer();
                 }
             }
             else if (type_load_level == BaseLevel::Level_type::MENU_LEVEL) {
@@ -73,8 +82,8 @@ void RunGame() {
         }
         Level_result.clear(); 
 
-        state = engine->Start();
-        if (state == 0) {
+        /*state = */engine->Start();
+        /*if (state == 0) {
             //logic game instance
         }
         else if (state == 1) {
@@ -86,8 +95,13 @@ void RunGame() {
             engine->Stop();
             std::cout << "Console message: Game Restart!" << std::endl; //this is for the test!
             RunGame();
-        }
+        }*/
     }
+    BaseLevel* Load_level = new LoadLevel("Exit...");
+    engine->ChangeLevel(Load_level);
+    engine->Start();
+    delete Load_level;
+    Load_level = nullptr;
     std::cout << "Console message: Game Quit!" << std::endl; //this is for the test!
     delete engine;
     delete level;

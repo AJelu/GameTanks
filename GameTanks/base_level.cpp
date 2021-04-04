@@ -68,7 +68,7 @@ bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects,
 }
 
 bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
-		bool const& ignore_random_spawn) {
+		bool const& ignore_random_spawn, bool need_add_ui) {
 	if (Player_objects != nullptr
 			&& (ignore_random_spawn || this->RespawnObject(Player_objects))) {
 		Players_objects_.push_back(Player_objects);
@@ -79,6 +79,13 @@ bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
 		Player_objects->SetCamera(&Player_camera_);
 		Player_objects->SetIdObject(count_id_objects_);
 		count_id_objects_++;
+		Packet_send_all_data_.push_back(sf::Packet());
+		Packet_send_changes_.push_back(sf::Packet());
+		std::stringstream stream;
+		stream << "Player " << Players_objects_.size();
+		if (need_add_ui)
+			this->AddAnchorUiToObject(Player_objects, stream.str());
+		stream.str("");
 		return true;
 	}
 	return false;
@@ -150,17 +157,11 @@ GameObject* BaseLevel::GetObjectById(int const& id_object) {
 
 void BaseLevel::SetBackgroundTexture(std::string texture_address) {
 	Background_.SetTexture(texture_address, 1, 1);
-	/*Texture_background_.loadFromFile(texture_address);
-	Sprite_background_.setTexture(Texture_background_);
-	Sprite_background_.setPosition(0, 0);*/
 }
 
 void BaseLevel::SetBorderTexture(std::string texture_address, int const& size_level_border) {
 
 	Border_.SetTexture(texture_address, 1, 1);
-	/*Texture_border_.loadFromFile(texture_address);
-	Sprite_border_.setTexture(Texture_border_);
-	Sprite_border_.setPosition(0, 0);*/
 	size_level_width_ = Border_.GetWidthSprite(true);
 	size_level_height_ = Border_.GetHeightSprite(true);
 	size_level_border_ = size_level_border;
@@ -178,16 +179,17 @@ void BaseLevel::SetBackgroundMusic(std::string music_address, float const& volum
 	music_background_.setLoop(true);
 }
 
-sf::Packet BaseLevel::GetPacketToSendAllClient(bool const& all_data) {
+sf::Packet BaseLevel::GetPacketToSendAllClient(int const& player_number,
+		bool const& all_data) {
 	sf::Packet Paket;
 	if (all_data) {
-		if (Packet_send_all_data_.getDataSize() > 0) {
-			Paket = Packet_send_all_data_;
+		if (Packet_send_all_data_[player_number].getDataSize() > 0) {
+			Paket = Packet_send_all_data_[player_number];
 		}
 	}
 	else {
-		if (Packet_send_changes_.getDataSize() > 0) {
-			Paket = Packet_send_changes_;
+		if (Packet_send_changes_[player_number].getDataSize() > 0) {
+			Paket = Packet_send_changes_[player_number];
 		}
 	}
 	return Paket;
@@ -199,9 +201,13 @@ void BaseLevel::RecvPacketFromServer(sf::Packet& Packet) {
 }
 
 void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
-	int id;
+	int id, player_id;
 	std::string class_name;
 	bool finded_id;
+	for (auto item : All_objects_) {
+		item->SetCoordinate(sf::Vector2f(-500.f, -500.f));
+	}
+	Packet >> player_id;
 	while (!Packet.endOfPacket() && Packet.getDataSize() > 10) {
 		Packet >> id;
 		Packet >> class_name;
@@ -265,7 +271,7 @@ void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
 				else if (object->GetGameType() == ENEMY)
 					this->AddEnemyObject((TankObject*)object, true);
 				else if (object->GetGameType() == PLAYER)
-					this->AddPlayerObject((TankObject*)object, true);
+					this->AddPlayerObject((TankObject*)object, true, player_id != id);
 				else if (object->GetGameType() == SHOT)
 					this->AddShotObject((MovebleObject*)object);
 				else if (object->GetGameType() == BONUS)
@@ -276,30 +282,51 @@ void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
 			else break;
 		}
 	}
+	for (auto item : All_objects_) {
+		if (item->GetCoordinateCentre().x <= -100.f 
+				|| item->GetCoordinateCentre().y <= -100.f) {
+			item->StopAllSounds();
+		}
+	}
+}
+
+void BaseLevel::AddAnchorUiToObject(GameObject* Game_object, std::string text) {
+	UiObject* Ui_object = new Button(sf::Vector2f(0, -40), sf::Vector2f(0, 0));
+	Ui_object->SetAnchorObject(Game_object);
+	Ui_object->SetOffsetSprite(sf::Vector2f(Ui_object->GetWidthSprite() / 2.f,
+		Ui_object->GetHeightSprite() / 2.f));
+	Ui_object->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Ui_object->SetText(text);
+	this->AddUiObject(Ui_object);
 }
 
 int BaseLevel::AddPlayerFromLan() {
 
-	TankObject* object = new RedTank(0, 200, 200);
+	TankObject* Object = new RedTank(0, 200, 200);
 	switch (rand()%6)
 	{
-	case 0:	object = new RedTank(0, 0, 0);
+	case 0:	Object = new RedTank(0, 0, 0);
 		break;
-	case 1:	object = new TankBrown(0, 0, 0);
+	case 1:	Object = new TankBrown(0, 0, 0);
 		break;
-	case 2:	object = new TankWhite(0, 0, 0);
+	case 2:	Object = new TankWhite(0, 0, 0);
 		break;
-	case 3:	object = new TankBlack(0, 0, 0);
+	case 3:	Object = new TankBlack(0, 0, 0);
 		break;
-	case 4:	object = new TankYellow(0, 0, 0);
+	case 4:	Object = new TankYellow(0, 0, 0);
 		break;
-	case 5:	object = new TankGreen(0, 0, 0);
+	case 5:	Object = new TankGreen(0, 0, 0);
 		break;
-	default:object = new TankGreen(0, 0, 0);
+	default:Object = new TankGreen(0, 0, 0);
 		break;
 	}
-	this->AddPlayerObject(object);
-	return object->GetIdObject();
+	this->AddPlayerObject(Object);
+
+	std::stringstream stream;
+	stream << "Player " << Players_objects_.size();
+	this->AddAnchorUiToObject(Object, stream.str());
+	stream.str("");
+	return Object->GetIdObject();
 }
 
 bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key, 
@@ -402,17 +429,19 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	for (i = 0; i < (int)Players_objects_.size(); i++) {
 		Players_objects_[i]->RecalculateState(game_timer);
 	}
-	for (auto it = Shot_objects_.begin(); it != Shot_objects_.end(); ++it) {
-		(*it)->RecalculateState(game_timer);
+	for (i = 0; i < (int)Shot_objects_.size(); i++) {
+	//for (auto it = Shot_objects_.begin(); it != Shot_objects_.end(); ++it) {
+		Shot_objects_[i]->RecalculateState(game_timer);
 
-		if ((*it)->GetLifeLevel() == 0
-			&& (*it)->AnimationEnd(true) && !(*it)->PlaysSounds()) {
-			All_objects_.remove((*it));
-			delete (*it);
-			Shot_objects_.erase(it);
+		if (Shot_objects_[i]->GetLifeLevel() == 0
+			&& Shot_objects_[i]->AnimationEnd(true) && !Shot_objects_[i]->PlaysSounds()) {
+			All_objects_.remove(Shot_objects_[i]);
+			delete Shot_objects_[i];
+			Shot_objects_.erase(Shot_objects_.begin() + i);
+			i--;
 		}
-		else if ((*it)->GetDistanceMove() <= 0)
-			(*it)->SetLifeLevel(0);
+		else if (Shot_objects_[i]->GetDistanceMove() <= 0)
+			Shot_objects_[i]->SetLifeLevel(0);
 	}
 	// update animation for Ui_objects_
 	for (i = 0; i < (int)Ui_objects_.size(); i++)
@@ -429,25 +458,41 @@ bool BaseLevel::UpdateState(float& game_timer) {
 		}
 	}
 
-	sf::Packet PaketAll, PaketChange;
+	
+
+	for (i = 0; i < (int)Packet_send_all_data_.size(); i++) {
+		Packet_send_all_data_[i].clear();
+		Packet_send_all_data_[i] << Players_objects_[i]->GetIdObject();
+		Packet_send_changes_[i].clear();
+		Packet_send_changes_[i] << Players_objects_[i]->GetIdObject();
+		if (Bonus_object_ != nullptr) {
+			Bonus_object_->CreatePacket(Packet_send_all_data_[i]);
+			if (Bonus_object_->GetNeedSynchByLan())
+				Bonus_object_->CreatePacket(Packet_send_changes_[i]);
+			Bonus_object_->SetNeedSynchByLan(false);
+		}
+	}
 	for (auto item : All_objects_) {
-		item->CreatePacket(PaketAll);
-		if (item->GetNeedSynchByLan())
-			item->CreatePacket(PaketChange);
-		item->SetNeedSynchByLan(false);
+		for (i = 0; i < (int)Players_objects_.size(); i++) {
+			if (item->GetCoordinateCentre().x + item->GetWidthSprite() > 
+					Players_objects_[i]->GetCoordinateCentre().x 
+						- SCREEN_RESOLUTION_X &&
+				item->GetCoordinateCentre().x - item->GetWidthSprite() < 
+					Players_objects_[i]->GetCoordinateCentre().x 
+						+ SCREEN_RESOLUTION_X &&
+				item->GetCoordinateCentre().y + item->GetHeightSprite() > 
+					Players_objects_[i]->GetCoordinateCentre().y 
+						- SCREEN_RESOLUTION_Y &&
+				item->GetCoordinateCentre().y - item->GetHeightSprite() < 
+					Players_objects_[i]->GetCoordinateCentre().y 
+						+ SCREEN_RESOLUTION_Y) {
+				item->CreatePacket(Packet_send_all_data_[i]);
+				if (item->GetNeedSynchByLan())
+					item->CreatePacket(Packet_send_changes_[i]);
+				item->SetNeedSynchByLan(false);
+			}
+		}
 	}
-	if (Bonus_object_ != nullptr) {
-		Bonus_object_->CreatePacket(PaketAll);
-		if (Bonus_object_->GetNeedSynchByLan())
-			Bonus_object_->CreatePacket(PaketChange);
-		Bonus_object_->SetNeedSynchByLan(false);
-	}
-	Packet_send_all_data_.clear();
-	Packet_send_all_data_ = PaketAll;
-	PaketAll.clear();
-	Packet_send_changes_.clear();
-	Packet_send_changes_ = PaketChange;
-	PaketChange.clear();
 
 	while (!Packets_recv_.empty()) {
 		this->UnpackingPacket(Packets_recv_.front());
@@ -455,23 +500,28 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	}
 
 	while (!Players_who_need_delete_.empty()) {
-		int i = Players_who_need_delete_.front();
+		i = Players_who_need_delete_.front();
 		Players_who_need_delete_.pop_front();
-
-		Packet_send_all_data_ << -1;
-		Packet_send_all_data_ << "DeletePlayerById";
-		Packet_send_all_data_ << Players_objects_[i]->GetIdObject();
+		
+		for (int j = 0; j < (int)Packet_send_all_data_.size(); j++) {
+			Packet_send_all_data_[j] << -1;
+			Packet_send_all_data_[j] << "DeletePlayerById";
+			Packet_send_all_data_[j] << Players_objects_[i]->GetIdObject();
+		}
 
 		All_objects_.remove(Players_objects_[i]);
 		Dies_objects_.remove(Players_objects_[i]);
-		for (auto it = Ui_objects_.begin(); it != Ui_objects_.end(); ++it){
-			if ((*it)->GetAnchorObject() == Players_objects_[i]) {
-				delete (*it);
-				Ui_objects_.erase(it);
+		for (int j = 0; j < (int)Ui_objects_.size(); j++) {
+			if (Ui_objects_[j]->GetAnchorObject() == Players_objects_[i]) {
+				delete Ui_objects_[j];
+				Ui_objects_.erase(Ui_objects_.begin() + j);
+				j--;
 			}
 		}
 		delete (Players_objects_[i]);
 		Players_objects_.erase(Players_objects_.begin() + i);
+		Packet_send_all_data_.erase(Packet_send_all_data_.begin() + i);
+		Packet_send_changes_.erase(Packet_send_changes_.begin() + i);
 	}
 
 	return true;
@@ -693,5 +743,6 @@ BaseLevel::~BaseLevel() {
 	for (i = 0; i < (int)Players_objects_.size(); i++)	
 		if (Players_objects_.at(i)) delete Players_objects_[i];
 
-	for (MovebleObject* Shot_item : Shot_objects_) delete Shot_item;
+	for (i = 0; i < (int)Shot_objects_.size(); i++)
+		if (Shot_objects_.at(i)) delete Shot_objects_[i];
 }

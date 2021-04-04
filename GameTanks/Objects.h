@@ -178,6 +178,7 @@ public:
 	bool StopAudioAction(std::string const& audio_action);
 
 	bool PlaysSounds();
+	void StopAllSounds();
 
 	//play started audio actions
 	void RecalculateState(float const& game_time) override; /////////////////////////////
