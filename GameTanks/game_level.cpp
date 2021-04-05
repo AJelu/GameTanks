@@ -103,7 +103,71 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	}
 	else player_id_ = id_watch_object;
 
-	float a = 20, m = 3;
+	float a = 10, m = 4;
+	Text_Border_		= new TextLine(sf::Vector2f(6, 78), 0, 10, 3);
+	
+	Point_current_		= new Text(sf::Vector2f(a, a + a * m * 1));
+	Life_				= new Text(sf::Vector2f(a, a + a * m * 2));
+	Shot_life_			= new Text(sf::Vector2f(a, a + a * m * 3));
+	Shot_distance_		= new Text(sf::Vector2f(a, a + a * m * 4));
+	Speed_shot_			= new Text(sf::Vector2f(a, a + a * m * 5));
+	Time_to_next_shot_	= new Text(sf::Vector2f(a, a + a * m * 6));
+	Rotation_speed_		= new Text(sf::Vector2f(a, a + a * m * 7));
+	Speed_				= new Text(sf::Vector2f(a, a + a * m * 8));
+	
+	Text_Border_->SetScale(sf::Vector2f(0.5f, 0.74f));
+
+	sf::Vector2f scale = sf::Vector2f(1, 1);
+	Point_current_->SetScale(scale);
+	Life_->SetScale(scale);
+	Speed_->SetScale(scale);
+	Rotation_speed_->SetScale(scale);
+	Speed_shot_->SetScale(scale);
+	Shot_distance_->SetScale(scale);
+	Time_to_next_shot_->SetScale(scale);
+	Shot_life_->SetScale(scale);
+
+	int text_size = 21;
+	Point_current_->SetCharacterSize(text_size);
+	Life_->SetCharacterSize(text_size);
+	Speed_->SetCharacterSize(text_size);
+	Rotation_speed_->SetCharacterSize(text_size);
+	Speed_shot_->SetCharacterSize(text_size);
+	Shot_distance_->SetCharacterSize(text_size);
+	Time_to_next_shot_->SetCharacterSize(text_size);
+	Shot_life_->SetCharacterSize(text_size);
+
+	float text_align = 0;
+	Point_current_->SetTextAlign(text_align);
+	Life_->SetTextAlign(text_align);
+	Speed_->SetTextAlign(text_align);
+	Rotation_speed_->SetTextAlign(text_align);
+	Speed_shot_->SetTextAlign(text_align);
+	Shot_distance_->SetTextAlign(text_align);
+	Time_to_next_shot_->SetTextAlign(text_align);
+	Shot_life_->SetTextAlign(text_align);
+
+	//this->AddUiObject(Text_Border_);
+	this->AddUiObject(Point_current_);
+	this->AddUiObject(Life_);
+	this->AddUiObject(Speed_);
+	this->AddUiObject(Rotation_speed_);
+	this->AddUiObject(Speed_shot_);
+	this->AddUiObject(Shot_distance_);
+	this->AddUiObject(Time_to_next_shot_);
+	this->AddUiObject(Shot_life_);
+	
+
+	Exit_ = new Button(sf::Vector2f(5, 2), sf::Vector2f(0, 0));
+	Exit_->SetScale(sf::Vector2f(0.25f, 0.2f));
+	Exit_->SetCharacterSize(30);
+	Exit_->SetTextAlign(0);
+	Exit_->SetText("EXIT");
+	this->AddUiObject(Exit_);
+}
+
+/*
+	float a = 10, m = 4;
 	Point_current_		= new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
 	Life_				= new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
 	Speed_				= new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
@@ -158,7 +222,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Exit_->SetTextAlign(0);
 	Exit_->SetText("Exit");
 	this->AddUiObject(Exit_);
-}
+*/
 
 template <class TypeObject>
 void GameLevel::SpawnStaticObject(TypeObject* object, int const& quantity,
@@ -191,62 +255,62 @@ bool GameLevel::UpdateState(float& game_timer) {
 
 	//other manipulation on game level:
 	std::stringstream stream;
-	stream << "Points: " << Player_->GetCurrentPoint();
+	stream << "SCORE POINT: " << Player_->GetCurrentPoint();
 	Point_current_->SetText(stream.str());
 	stream.str("");
 
-	stream << "Life: " << Player_->GetLifeLevel() << "\\" << Player_->GetMaxLifeLevel();
+	stream << "HIT POINT: " << Player_->GetLifeLevel() << "\\" << Player_->GetMaxLifeLevel();
 	Life_->SetText(stream.str());
 	stream.str("");
 
 	if (Player_->GetBonus() != nullptr) {
-		stream << "Speed: " << Player_->GetBonus()->GetOriginalSpeedMove();
-		stream << "(" << Player_->GetBonus()->GetSpeedMove() << ")";
+		stream << "DAMAGE: " << Player_->GetBonus()->GetOriginalShotLife();
+		stream << " > " << int(Player_->GetBonus()->GetShotLife());
 	}
-	else stream << "Speed: " << Player_->GetSpeedMove();
-	Speed_->SetText(stream.str());
+	else stream << "DAMAGE: " << Player_->GetLifeShot();
+	Shot_life_->SetText(stream.str());
 	stream.str("");
 
 	if (Player_->GetBonus() != nullptr) {
-		stream << "Rotation speed: " << Player_->GetBonus()->GetOriginalRotationSpeed();
-		stream << "(" << Player_->GetBonus()->GetRotationSpeed() << ")";
+		stream << "ATTACK RANGE: " << Player_->GetBonus()->GetOriginalShotDistance();
+		stream << " > " << int(Player_->GetBonus()->GetShotDistance());
 	}
-	else stream << "Rotation speed: " << Player_->GetRotationSpeed();
-	Rotation_speed_->SetText(stream.str());
-	stream.str("");
-
-	if (Player_->GetBonus() != nullptr) {
-		stream << "Speed shot: " << Player_->GetBonus()->GetOriginalSpeedShot();
-		stream << "(" << Player_->GetBonus()->GetSpeedShot() << ")";
-	}
-	else stream << "Speed shot: " << Player_->GetSpeedShot();
-	Speed_shot_->SetText(stream.str());
-	stream.str("");
-
-	if (Player_->GetBonus() != nullptr) {
-		stream << "Shot distance: " << Player_->GetBonus()->GetOriginalShotDistance();
-		stream << "(" << Player_->GetBonus()->GetShotDistance() << ")";
-	}
-	else stream << "Shot distance: " << Player_->GetShotDistance();
+	else stream << "ATTACK RANGE: " << Player_->GetShotDistance();
 	Shot_distance_->SetText(stream.str());
 	stream.str("");
 
 	if (Player_->GetBonus() != nullptr) {
-		stream << "Time shot: " << Player_->GetBonus()->GetOriginalTimeFreezeShot();
-		stream << "(" << Player_->GetBonus()->GetTimeFreezeShot() << ")";
+		stream << "ATTACK SPEED: " << Player_->GetBonus()->GetOriginalSpeedShot();
+		stream << " > " << int(Player_->GetBonus()->GetSpeedShot());
 	}
-	else stream << "Time shot: " << Player_->GetTimeFreezeShot();
+	else stream << "ATTACK SPEED: " << Player_->GetSpeedShot();
+	Speed_shot_->SetText(stream.str());
+	stream.str("");
+
+	if (Player_->GetBonus() != nullptr) {
+		stream << "RECHARGE: " << Player_->GetBonus()->GetOriginalTimeFreezeShot();
+		stream << " > " << int(Player_->GetBonus()->GetTimeFreezeShot());
+	}
+	else stream << "RECHARGE: " << Player_->GetTimeFreezeShot();
 	Time_to_next_shot_->SetText(stream.str());
 	stream.str("");
 
 	if (Player_->GetBonus() != nullptr) {
-		stream << "Shot life: " << Player_->GetBonus()->GetOriginalShotLife();
-		stream << "(" << Player_->GetBonus()->GetShotLife() << ")";
+		stream << "MOBILITY: " << Player_->GetBonus()->GetOriginalRotationSpeed();
+		stream << " > " << int(Player_->GetBonus()->GetRotationSpeed());
 	}
-	else stream << "Shot life: " << Player_->GetLifeShot();
-	Shot_life_->SetText(stream.str());
+	else stream << "MOBILITY: " << Player_->GetRotationSpeed();
+	Rotation_speed_->SetText(stream.str());
 	stream.str("");
 
+	if (Player_->GetBonus() != nullptr) {
+		stream << "SPEED: " << Player_->GetBonus()->GetOriginalSpeedMove();
+		stream << " > " << int(Player_->GetBonus()->GetSpeedMove());
+	}
+	else stream << "SPEED: " << Player_->GetSpeedMove();
+	Speed_->SetText(stream.str());
+	stream.str("");
+	
 	return result;
 }
 

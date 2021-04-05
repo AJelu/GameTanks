@@ -148,7 +148,7 @@ RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_
 		70,										//rotation speed
 		sf::Vector2f(-1,150),					//create point shot
 		60,										//shot life
-		300,									//speed shot
+		320,									//speed shot
 		500,									//shot distance
 		700,									//time freeze shot (to next shot)
 		Parrent) {
@@ -206,7 +206,7 @@ TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& sp
 		120,									//rotation speed
 		sf::Vector2f(0, 77),					//create point shot
 		75,										//shot life
-		300,									//speed shot
+		320,									//speed shot
 		400,									//shot distance
 		700,									//time freeze shot (to next shot)
 		Parrent) {
@@ -235,7 +235,7 @@ TankBlack::TankBlack(int const& id_object, float const& spawn_x, float const& sp
 		140,									//rotation speed
 		sf::Vector2f(0, 68),					//create point shot
 		35,										//shot life
-		350,									//speed shot
+		360,									//speed shot
 		400,									//shot distance
 		700,									//time freeze shot (to next shot)
 		Parrent) {
@@ -263,7 +263,7 @@ TankYellow::TankYellow(int const& id_object, float const& spawn_x, float const& 
 		100,									//rotation speed
 		sf::Vector2f(0, 121),					//create point shot
 		50,										//shot life
-		350,									//speed shot
+		360,									//speed shot
 		450,									//shot distance
 		700,									//time freeze shot (to next shot)
 		Parrent) {
@@ -292,7 +292,7 @@ TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& sp
 		60,										//rotation speed
 		sf::Vector2f(0, 80),					//create point shot
 		90,										//shot life
-		280,									//speed shot
+		285,									//speed shot
 		350,									//shot distance
 		700,									//time freeze shot (to next shot)
 		Parrent) {

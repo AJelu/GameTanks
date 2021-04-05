@@ -28,6 +28,13 @@ void Button::ActionClickUp() {
 	this->StartPlayAnimation(1, 3, 1, 20);
 }
 
+Loading::Loading(sf::Vector2f const& coordinate_centre,
+	sf::Vector2f const& offset_sprite_coordinate) : UiObject(
+		coordinate_centre, offset_sprite_coordinate,
+		"Data/Ui/loading.png", //texture
+		1, 1) { //frame count
+}
+
 Title::Title(sf::Vector2f const& coordinate_centre,
 	sf::Vector2f const& offset_sprite_coordinate) : UiObject(
 		coordinate_centre, offset_sprite_coordinate,
@@ -51,8 +58,8 @@ void Title::ActionLeave() {
 /*-------example:-----------*/
 Text::Text(sf::Vector2f const& coordinate_centre) : UiObject(
 	coordinate_centre, sf::Vector2f(0, 0),
-	"Data/Ui/title.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	2, 1) {
+	"Data/Ui/text_background.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	1, 1) {
 }
 
 void Text::ActionEnter()
@@ -73,10 +80,9 @@ void Text::ActionClickUp()
 
 TextLine::TextLine(sf::Vector2f const& coordinate_centre, 
 		int const& line_count, int const& one_line_text_size, int const& line_step_px)
-	: UiObject(
-		coordinate_centre, sf::Vector2f(0, 0),
-		"Data/Ui/title.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		2, 1) {
+	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
+		"Data/Ui/text_background.png",
+		1, 1) {
 	this->SetFocusable(false);
 	for (int i = 0; i < line_count; i++) {
 		Lines_.push_back(Text(sf::Vector2f(10, line_step_px * i)));

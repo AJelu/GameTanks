@@ -123,7 +123,7 @@ class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
 	int player_id_ = 0;
-	UiObject* Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
+	UiObject* Text_Border_, * Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
 		* Shot_distance_, * Time_to_next_shot_, * Shot_life_, * Exit_;
 
 	template <class TypeObject> void SpawnStaticObject(TypeObject* object, int const& quantity,

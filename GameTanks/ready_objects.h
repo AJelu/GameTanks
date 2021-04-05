@@ -120,6 +120,12 @@ public:
 	void ActionClickUp() override;
 };
 
+class Loading : public UiObject {
+public:
+	Loading(sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate);
+};
+
 /*-------example:-----------*/
 class Text : public UiObject {
 public:

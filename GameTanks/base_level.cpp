@@ -317,7 +317,7 @@ int BaseLevel::AddPlayerFromLan() {
 		break;
 	case 5:	Object = new TankGreen(0, 0, 0);
 		break;
-	default:Object = new TankGreen(0, 0, 0);
+	default: Object = new TankGreen(0, 0, 0);
 		break;
 	}
 	this->AddPlayerObject(Object);
