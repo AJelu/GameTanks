@@ -78,44 +78,74 @@ void Text::ActionClickUp()
 {
 }
 
-TextLine::TextLine(sf::Vector2f const& coordinate_centre, 
-		int const& line_count, int const& one_line_text_size, int const& line_step_px)
+TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
+		int const& line_count,
+		int const& one_line_text_size,
+		int const& one_line_ui_size_px, int const& line_step_px)
 	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
-		"Data/Ui/text_background.png",
+		"Data/Ui/text_background_.png",
 		1, 1) {
+	width_ = width;
+	one_line_text_size_ = one_line_text_size;
+	one_line_ui_size_px_ = one_line_ui_size_px;
+	line_step_px_ = line_step_px;
+	this->ChangeCounLine(line_count);
 	this->SetFocusable(false);
-	for (int i = 0; i < line_count; i++) {
-		Lines_.push_back(Text(sf::Vector2f(10, line_step_px * i)));
-		Lines_.back().SetText("");
-		Lines_.back().SetCharacterSize(one_line_text_size);
-		Lines_.back().SetAnchorObject(this);
+}
+
+void TextLine::TextAlign(int const& align) {
+	for (int i = 0; i < (int)Lines_.size(); i++) {
+		Lines_[i]->SetTextAlign(align);
 	}
 }
 
-void TextLine::ActionEnter()
-{
-}
-
-void TextLine::ActionLeave()
-{
-}
-
-void TextLine::ActionClickDown()
-{
-}
-
-void TextLine::ActionClickUp()
-{
+void TextLine::ChangeCounLine(int const& line_count) {
+	if (line_count > 0) {
+		if (line_count > (int)Lines_.size()) {
+			for (int i = (int)Lines_.size(); i < line_count; i++) {
+				Lines_.push_back(new Text(sf::Vector2f(0, line_step_px_ * i)));
+				Lines_.back()->SetText("");
+				Lines_.back()->SetTexture("Data/Ui/text_background_.png", 1, 1);
+				Lines_.back()->SetCharacterSize(one_line_text_size_);
+				Lines_.back()->SetAnchorObject(this);
+				Lines_.back()->SetScale(sf::Vector2f(
+					width_ / (float)Lines_.back()->GetWidthSprite(),
+					one_line_ui_size_px_ / (float)Lines_.back()->GetHeightSprite()));
+			}
+			this->SetScale(sf::Vector2f(
+				width_ / (float)this->GetWidthSprite(),
+				(line_count * line_step_px_ -
+					(line_step_px_ - one_line_ui_size_px_)) 
+				/ (float)this->GetHeightSprite()));
+		}
+		else if (line_count < (int)Lines_.size()) {
+			for (int i = (int)Lines_.size(); i > line_count; i--) {
+				delete Lines_.back();
+				Lines_.pop_back();
+			}
+			this->SetScale(sf::Vector2f(
+				width_ / (float)this->GetWidthSprite(),
+				(line_count* line_step_px_ -
+					(line_step_px_ - one_line_ui_size_px_))
+				/ (float)this->GetHeightSprite()));
+		}
+	}
 }
 
 void TextLine::SetTextLine(std::string str, int const& line_number) {
-	Lines_[line_number].SetText(str);
+	if (line_number >= 0 && line_number < (int)Lines_.size())
+		Lines_[line_number]->SetText(str);
 }
 
 void TextLine::Draw(sf::RenderWindow& window) {
 	UiObject::Draw(window);
 	for (int i = 0; i < (int)Lines_.size(); i++)
-		Lines_[i].Draw(window);
+		Lines_[i]->Draw(window);
+}
+
+TextLine::~TextLine() {
+	for (int i = 0; i < (int)Lines_.size(); i++)
+		delete Lines_[i];
 }
 
 /*--------------------------*/

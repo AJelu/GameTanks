@@ -11,6 +11,7 @@ UiObject::UiObject() : AudioObject() {
 	character_size_ = 30;
 	cursor_size_ = 3; 
 	show_cursor_ = focusable_ = false;
+	this->SetText("");
 }
 
 UiObject::UiObject(
@@ -28,6 +29,7 @@ UiObject::UiObject(
 	character_size_ = 30;
 	cursor_size_ = 3;
 	show_cursor_ = focusable_ = false;
+	this->SetText("");
 }
 
 bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,

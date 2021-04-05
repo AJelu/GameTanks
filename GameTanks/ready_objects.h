@@ -139,19 +139,26 @@ public:
 
 class TextLine : public UiObject {
 private:
-	std::vector<UiObject> Lines_;
+	std::vector<UiObject*> Lines_;
+
+	int one_line_text_size_,
+		line_step_px_,
+		one_line_ui_size_px_,
+		width_;
 public:
-	TextLine(sf::Vector2f const& coordinate_centre, 
-		int const& line_count, int const& one_line_text_size, int const& line_step_px);
+	TextLine(sf::Vector2f const& coordinate_centre, int const& width,
+		int const& line_count, 
+		int const& one_line_text_size, 
+		int const& one_line_ui_size_px, int const& line_step_px);
 
-	void ActionEnter() override;
-	void ActionLeave() override;
-	void ActionClickDown() override;
-	void ActionClickUp() override;
+	void TextAlign(int const& align);
 
+	void ChangeCounLine(int const& line_count);
 	void SetTextLine(std::string str, int const& line_number);
-
 	void Draw(sf::RenderWindow& window) override;
+
+
+	~TextLine() override;
 };
 
 /*--------------------------*/
