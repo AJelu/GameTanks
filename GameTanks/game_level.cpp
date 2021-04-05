@@ -165,8 +165,10 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Exit_->SetText("EXIT");
 	this->AddUiObject(Exit_);
 
-
-	TextLine* ui = new TextLine(sf::Vector2f(500, 500), 150, 5, 40, 45, 50);
+	/*----------test---------*/
+	TextLine* ui = new TextLine(sf::Vector2f(0, 0), 150, 5, 40, 45, 50);
+	ui->SetStartCoorditateMiddle();
+	ui->SetStartCoorditateCentre();
 	ui->TextAlign(0);
 	ui->SetTextLine("1", 0);
 	ui->SetTextLine("2", 1);
@@ -174,6 +176,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	ui->SetTextLine("4", 3);
 	ui->SetTextLine("5", 4);
 	this->AddUiObject(ui);
+	/*-----------------*/
 }
 
 /*

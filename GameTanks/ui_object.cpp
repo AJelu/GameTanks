@@ -2,7 +2,7 @@
 
 UiObject::UiObject() : AudioObject() {
 	coordinate_centre_.x = 0;
-	coordinate_centre_.x = 0;
+	coordinate_centre_.y = 0;
 
 	Font_.loadFromFile("Data/Font/Font.ttf");
 	Text_in_ui_.setFont(Font_);
@@ -12,6 +12,8 @@ UiObject::UiObject() : AudioObject() {
 	cursor_size_ = 3; 
 	show_cursor_ = focusable_ = false;
 	this->SetText("");
+	this->SetStartCoorditateLeft();
+	this->SetStartCoorditateTop();
 }
 
 UiObject::UiObject(
@@ -30,6 +32,8 @@ UiObject::UiObject(
 	cursor_size_ = 3;
 	show_cursor_ = focusable_ = false;
 	this->SetText("");
+	this->SetStartCoorditateLeft();
+	this->SetStartCoorditateTop();
 }
 
 bool UiObject::MouseInputToObject(sf::Event::EventType const& event_type,
@@ -183,6 +187,18 @@ void UiObject::SetFocusable(bool const& focusable) { focusable_ = focusable; }
 
 void UiObject::SetTextAlign(float const& align) { text_centre_ = align; }
 
+void UiObject::SetStartCoorditateLeft() { centring_x = LEFT; }
+
+void UiObject::SetStartCoorditateRight() { centring_x = RIGHT; }
+
+void UiObject::SetStartCoorditateCentre() { centring_x = CENTER; }
+
+void UiObject::SetStartCoorditateTop() { centring_y = TOP; }
+
+void UiObject::SetStartCoorditateMiddle() { centring_y = MIDDLE; }
+
+void UiObject::SetStartCoorditateBottom() { centring_y = BOTTOM; }
+
 std::string UiObject::GetText(){ return text_; }
 
 bool UiObject::GetCursorBlink() { return show_cursor_; }
@@ -231,10 +247,36 @@ void UiObject::Draw(sf::RenderWindow& window) {
 		this->SetCoordinate(Anchor_object_->GetCoordinateCentre() + coordinate_centre_);
 	}
 	else if (this->GetCamera() != nullptr) {
-		this->SetCoordinate(this->GetCamera()->getCenter() 
-			- sf::Vector2f(this->GetCamera()->getSize().x/2, 
-				this->GetCamera()->getSize().y / 2)
-			+ coordinate_centre_);
+		float coordinate_x = 0, coordinate_y = 0;
+		if (centring_x == LEFT) {
+			coordinate_x = this->GetCamera()->getCenter().x
+				- this->GetCamera()->getSize().x / 2.f
+				+ coordinate_centre_.x;
+		}
+		else if (centring_x == CENTER) {
+			coordinate_x = this->GetCamera()->getCenter().x
+				+ coordinate_centre_.x;
+		}
+		else if (centring_x == RIGHT) {
+			coordinate_x = this->GetCamera()->getCenter().x
+				+ this->GetCamera()->getSize().x / 2.f
+				- coordinate_centre_.x;
+		}
+		if (centring_y == TOP) {
+			coordinate_y = this->GetCamera()->getCenter().y
+				- this->GetCamera()->getSize().y / 2.f
+				+ coordinate_centre_.y;
+		}
+		else if (centring_y == MIDDLE) {
+			coordinate_y = this->GetCamera()->getCenter().y
+				+ coordinate_centre_.y;
+		}
+		else if (centring_y == BOTTOM) {
+			coordinate_y = this->GetCamera()->getCenter().y
+				+ this->GetCamera()->getSize().y / 2.f
+				- coordinate_centre_.y;
+		}
+		this->SetCoordinate(sf::Vector2f(coordinate_x, coordinate_y));
 	}
 	else {
 		this->SetCoordinate(coordinate_centre_);
