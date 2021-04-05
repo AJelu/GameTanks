@@ -4,38 +4,28 @@
 void Bonuses::GenerateSpeed() { // Speed +20-50% / Rotation -20-50%
 	speed_move_ = (rand() % 3 + 2) * 0.1f;
 	rotation_speed_ = -speed_move_;
-	std::cout << "GenerateSpeed: " << "speed_move_ = " << speed_move_ 
-		<< " rotation_speed_ = " << rotation_speed_ << std::endl;
 }
 
 void Bonuses::GenerateRotation() { // Rotation +20-50% / Speed -20-50%
 	rotation_speed_ = (rand() % 3 + 2) * 0.1f;
 	speed_move_ = -rotation_speed_;
-	std::cout << "GenerateRotation: " << "rotation_speed_ = " << rotation_speed_
-		<< " speed_move_ = " << speed_move_ << std::endl;
 }
 
 void Bonuses::GenerateShotPower() { // Damage +50-100% / Range -25-50% / Recharge -10%
 	shot_life_ = (rand() % 10 + 5) * 0.1f;
 	shot_distance_ = shot_life_ / 2;
 	time_freeze_shot_ = 0.1f;
-	std::cout << "GenerateShotPower: " << "shot_life_ = " << shot_life_
-		<< " shot_distance_ = " << shot_distance_ << "time_freeze_shot_ -10%" << std::endl;
 }
 
 void Bonuses::GenerateShotSpeed() { // Range +20-50% / Recharge +10% / Damage -20-50%
 	shot_distance_ = (rand() % 3 + 2) * 0.1f;
 	time_freeze_shot_ = -0.1f;
 	shot_life_ = -shot_distance_;
-	std::cout << "GenerateShotPower: " << "shot_life_ = " << shot_life_
-		<< " shot_distance_ = " << shot_distance_ << "time_freeze_shot_ +10%" << std::endl;
 }
 
 void Bonuses::GenerateLife() { // HP Regen +200% / Bonus HP +2
 	life_level_ = 2;
 	max_life_level_ = 0.02f;
-	std::cout << "GenerateLife: " << "life_level_ = " << life_level_
-		<< " max_life_level_ = " << max_life_level_ << std::endl;
 }
 
 Bonuses::Bonuses() {
@@ -76,8 +66,6 @@ Bonuses::Bonuses(float bonus_duration) {
 	life_level_			= 0.00;
 	max_life_level_		= 0.00;
 
-	//generate parameters
-	this->GenerateShotSpeed();
 	switch (rand() % 4)
 	{
 	case 0: this->GenerateSpeed();
