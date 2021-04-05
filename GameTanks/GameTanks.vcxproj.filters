@@ -96,8 +96,8 @@
     <ClCompile Include="ready_game_objects.cpp">
       <Filter>Source Files\READY_OBJECTS</Filter>
     </ClCompile>
-    <ClCompile Include="ready_objects.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="load_level.cpp">
+      <Filter>Source Files\LEVELS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

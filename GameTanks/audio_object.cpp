@@ -74,6 +74,13 @@ bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 	return result;
 }
 
+void AudioObject::DestroyCreatedStaticVectors() {
+	for (int i = 0; i < (int)Sounds_buffer_.size(); i++)
+		delete Sounds_buffer_[i];
+	Audio_file_name_.clear();
+	Sounds_buffer_.clear();
+}
+
 AudioObject::AudioObject() : VisibleObject() {
 	Camera_ = nullptr;
 }
@@ -108,6 +115,17 @@ bool AudioObject::StopAudioAction(std::string const& audio_action){
 
 bool AudioObject::PlaysSounds() {
 	return Sounds_file_.size() > 0;
+}
+
+void AudioObject::StopAllSounds() {
+	for (int i = 0; i < (int)Sounds_file_.size(); i++) {
+		//stop and delete audio
+		Sounds_file_[i]->setLoop(false);
+		Sounds_file_[i]->stop();
+		delete Sounds_file_[i];
+	}
+	Audio_action_playing_name_.clear();
+	Sounds_file_.clear();
 }
 
 void AudioObject::SetCamera(sf::View* Camera) { Camera_ = Camera; }
@@ -148,7 +166,7 @@ void AudioObject::RecalculateState(float const& game_time) {
 std::string AudioObject::ClassName() { return "AudioObject"; }
 
 bool AudioObject::CreatePacket(sf::Packet& Packet) {
-	VisibleObject::CreatePacket(Packet);
+	bool result = VisibleObject::CreatePacket(Packet);
 	Packet << (int)Need_send_start_to_lan_.size();
 	for (auto item : Need_send_start_to_lan_) {
 		Packet << item;
@@ -157,23 +175,35 @@ bool AudioObject::CreatePacket(sf::Packet& Packet) {
 	for (auto item : Need_send_stop_to_lan_) {
 		Packet << item;
 	}
-	return false;
+	return result;
 }
 
 bool AudioObject::SetDataFromPacket(sf::Packet& Packet) {
-	VisibleObject::SetDataFromPacket(Packet);
-	int temp_size, temp_i;
-	Packet >> temp_size;
-	for (int i = 0; i < temp_size; i++) {
-		Packet >> temp_i;
-		if (temp_i >= 0 && temp_i < Audio_action_name_.size())
-			this->StartAudioAction(Audio_action_name_[temp_i]);
-	}
-	Packet >> temp_size;
-	for (int i = 0; i < temp_size; i++) {
-		Packet >> temp_i;
-		if (temp_i >= 0 && temp_i < Audio_action_name_.size())
-			this->StopAudioAction(Audio_action_name_[temp_i]);
+	if (VisibleObject::SetDataFromPacket(Packet)) {
+		int temp_size, temp_i;
+		Packet >> temp_size;
+		if (temp_size > 100) {
+			temp_size = 100;
+			return false;
+		}
+		for (int i = 0; i < temp_size; i++) {
+			Packet >> temp_i;
+			if (temp_i >= 0 && temp_i < (int)Audio_action_name_.size())
+				this->StartAudioAction(Audio_action_name_[temp_i]);
+			else return false;
+		}
+		Packet >> temp_size;
+		if (temp_size > 100) {
+			temp_size = 100;
+			return false;
+		}
+		for (int i = 0; i < temp_size; i++) {
+			Packet >> temp_i;
+			if (temp_i >= 0 && temp_i < (int)Audio_action_name_.size())
+				this->StopAudioAction(Audio_action_name_[temp_i]);
+			else return false;
+		}
+		return true;
 	}
 	return false;
 }

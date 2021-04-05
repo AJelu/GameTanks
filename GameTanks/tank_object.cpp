@@ -114,13 +114,13 @@ void TankObject::RecalculateState(float const& game_time) {
 	}
 }
 
-void TankObject::MoveUp() { SetDistanceMove(10); }
+void TankObject::MoveUp(float const& value) { SetDistanceMove(value); }
 
-void TankObject::MoveDown() { SetDistanceMove(-10); }
+void TankObject::MoveDown(float const& value) { SetDistanceMove(-value); }
 
-void TankObject::MoveRight() { SetRotationDegree(10); }
+void TankObject::MoveRight(float const& value) { SetRotationDegree(value); }
 
-void TankObject::MoveLeft() { SetRotationDegree(-10); }
+void TankObject::MoveLeft(float const& value) { SetRotationDegree(-value); }
 
 
 sf::Vector2f TankObject::GetPointCreateShot() { return point_create_shot_; }
@@ -157,21 +157,23 @@ void TankObject::SetTimeFreezeShot(float const& time_freeze_shot) {
 std::string TankObject::ClassName() { return "TankObject"; }
 
 bool TankObject::CreatePacket(sf::Packet& Packet) {
-	MovebleObject::CreatePacket(Packet);
+	bool result = MovebleObject::CreatePacket(Packet);
 	Packet << speed_shot_ << shot_distance_ << time_to_next_shot_ << time_freeze_shot_;
 	Packet << shot_life_;
 	//
 	//Bonus_
 	//
-	return false;
+	return result;
 }
 
 bool TankObject::SetDataFromPacket(sf::Packet& Packet) {
-	MovebleObject::SetDataFromPacket(Packet);
-	Packet >> speed_shot_ >> shot_distance_ >> time_to_next_shot_ >> time_freeze_shot_;
-	Packet >> shot_life_;
-	//
-	//Bonus_
-	//
+	if (MovebleObject::SetDataFromPacket(Packet)) {
+		Packet >> speed_shot_ >> shot_distance_ >> time_to_next_shot_ >> time_freeze_shot_;
+		Packet >> shot_life_;
+		//
+		//Bonus_
+		//
+		return true;
+	}
 	return false;
 }

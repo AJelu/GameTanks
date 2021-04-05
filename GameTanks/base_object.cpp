@@ -13,11 +13,11 @@ std::string BaseObject::ClassName() { return "BaseObject"; }
 
 bool BaseObject::CreatePacket(sf::Packet& Packet) {
     Packet << id_object_ << this->ClassName();
-    return false;
+    return true;
 }
 
 bool BaseObject::SetDataFromPacket(sf::Packet& Packet) {
-    return false;
+    return true;
 }
 
 bool BaseObject::GetNeedSynchByLan() { return need_synch_by_lan_; }

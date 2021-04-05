@@ -3,11 +3,12 @@
 
 Engine::Engine()
     : pause_client_recv_(false), 
-    status_server_(StatusServer::NOT_DETERMINED), 
-    thread_lan_(&Engine::LanGame, this) {
+    status_server_(StatusServer::NOT_DETERMINED)/*, 
+    thread_lan_(&Engine::LanGame, this)*/ {
 
-    std::this_thread::get_id(); // Get id thread of LanGame
+    //std::this_thread::get_id(); // Get id thread of LanGame
     this->CreateResolutionWindowMode();
+    thread_lan_ = nullptr;
 }
 
 void Engine::CreateResolutionWindowMode() {
@@ -40,6 +41,9 @@ int Engine::Start() {
         this->EngineUpdate(game_time);
         this->EngineDraw();
 
+        if (status_server_ == StatusServer::SERVER)
+            this->ServerMailingMessageToClients();
+
         return 0;
     }
     return 1;
@@ -61,17 +65,34 @@ void Engine::GameSpeed(float& timer) { timer = timer / GAME_SPEED_CONTROLLER; }
 void Engine::ForcedResetGameTimer(float& timer) { if (timer > GAME_TIMER_LIMIT) timer = 0; }
 
 void Engine::StartServer() {
+    this->StopServer();
+    lan_thread_work_ = true;
     status_server_ = StatusServer::SERVER;
+    thread_lan_ = new std::thread(&Engine::LanGame, this);
 }
 
 void Engine::StopServer() {
     status_server_ = StatusServer::NOT_DETERMINED;
+    lan_thread_work_ = false;
+    tcp_selector_.clear();
+    server.close();
+    if (thread_lan_ != nullptr) {
+        thread_lan_->join();
+        delete thread_lan_;
+        thread_lan_ = nullptr;
+    }
+    this->CleaningClients();
+    list_clients_.clear();
+    tcp_socket_.disconnect();
 }
 
 void Engine::ConnectLanToIp(std::string const& ip_to_connect) {
     ip_client_connect_ = ip_to_connect;
     client_id_object_ = 0;
+    this->StopServer();
+    lan_thread_work_ = true;
     status_server_ = StatusServer::CLIENT;
+    thread_lan_ = new std::thread(&Engine::LanGame, this);
 }
 
 int Engine::GetRecvIdFromServer() {
@@ -87,8 +108,5 @@ bool Engine::ServerIsWork() {
 }
 
 Engine::~Engine() {
-    thread_lan_.detach();
-    for (std::vector<sf::TcpSocket*>::iterator it = list_clients_.begin(); 
-        it != list_clients_.end(); it++)
-        delete* it;
+    this->StopServer();
 }

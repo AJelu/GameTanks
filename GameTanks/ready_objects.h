@@ -120,6 +120,36 @@ public:
 	void ActionClickUp() override;
 };
 
+/*-------example:-----------*/
+class Text : public UiObject {
+public:
+	Text(sf::Vector2f const& coordinate_centre);
+
+	void ActionEnter() override;
+	void ActionLeave() override;
+	void ActionClickDown() override;
+	void ActionClickUp() override;
+};
+
+class TextLine : public UiObject {
+private:
+	std::vector<UiObject> Lines_;
+public:
+	TextLine(sf::Vector2f const& coordinate_centre, 
+		int const& line_count, int const& one_line_text_size, int const& line_step_px);
+
+	void ActionEnter() override;
+	void ActionLeave() override;
+	void ActionClickDown() override;
+	void ActionClickUp() override;
+
+	void SetTextLine(std::string str, int const& line_number);
+
+	void Draw(sf::RenderWindow& window) override;
+};
+
+/*--------------------------*/
+
 class Title : public UiObject {
 public:
 	Title(sf::Vector2f const& coordinate_centre,

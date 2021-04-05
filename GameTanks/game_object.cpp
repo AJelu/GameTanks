@@ -194,16 +194,25 @@ void GameObject::SetGameType(int const& game_type) {
 std::string GameObject::ClassName() { return "GameObject"; }
 
 bool GameObject::CreatePacket(sf::Packet& Packet) {
-	AudioObject::CreatePacket(Packet);
+	bool result = AudioObject::CreatePacket(Packet);
 	Packet << life_level_ << max_life_level_ << base_point_ << current_point_;
 	Packet << game_type_;
-	return false;
+	return result;
 }
 
 bool GameObject::SetDataFromPacket(sf::Packet& Packet) {
-	AudioObject::SetDataFromPacket(Packet);
-	Packet >> life_level_ >> max_life_level_ >> base_point_ >> current_point_;
-	Packet >> game_type_;
+	if (AudioObject::SetDataFromPacket(Packet)) {
+		Packet >> life_level_ >> max_life_level_ >> base_point_ >> current_point_;
+		if (life_level_ > max_life_level_) {
+			life_level_ = max_life_level_;
+			return false;
+		}
+		if (life_level_ < 0 || max_life_level_ < 0) {
+			return false;
+		}
+		Packet >> game_type_;
+		return true;
+	}
 	return false;
 }
 

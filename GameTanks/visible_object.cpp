@@ -9,7 +9,7 @@ VisibleObject::VisibleObject() : BaseObject() {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
-	this->SetTexture("", 1, 1);
+	this->SetTexture("Data/background/background.png", 1, 1);
 	this->SafeState();
 }
 
@@ -76,15 +76,22 @@ bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 	return true;
 }
 
+void VisibleObject::DestroyCreatedStaticVectors() {
+	for (int i = 0; i < (int)Texture_objects_.size(); i++)
+		delete Texture_objects_[i];
+	Texture_name_.clear();
+	Texture_objects_.clear();
+}
+
 float VisibleObject::CalculateGradus() {
 	return gradus_;
 }
 
 void VisibleObject::ClearAnimarionList(bool const& all) {
-	q_tile_level_ = std::vector<int>();
-	q_animation_frame_start_ = std::vector<int>();
-	q_animation_frame_end_ = std::vector<int>();
-	q_animation_speed_for_frame_ = std::vector<float>();
+	q_tile_level_.clear();
+	q_animation_frame_start_.clear();
+	q_animation_frame_end_.clear();
+	q_animation_speed_for_frame_.clear();
 	if (all) {
 		tile_frame_current_ = animation_frame_end_;
 		current_frame_animation_time_ = animation_speed_for_frame_ + 1;
@@ -243,8 +250,8 @@ float VisibleObject::GetDistanceToPoint(const sf::Vector2f& point) {
 std::string VisibleObject::ClassName() { return "VisibleObject"; }
 
 bool VisibleObject::CreatePacket(sf::Packet& Packet) {
-	BaseObject::CreatePacket(Packet);
-	Packet << offset_sprite_coordinate_.x << offset_sprite_coordinate_.y;
+	bool result = BaseObject::CreatePacket(Packet);
+	//Packet << offset_sprite_coordinate_.x << offset_sprite_coordinate_.y;
 	Packet << this->GetCoordinateCentre().x << this->GetCoordinateCentre().y;
 
 	Packet << tile_level_ << tile_frame_current_;
@@ -257,29 +264,89 @@ bool VisibleObject::CreatePacket(sf::Packet& Packet) {
 	//
 	Packet << vector_rotate_x_ << vector_rotate_y_;
 
-	return false;
+	return result;
 }
 
 bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
-	BaseObject::SetDataFromPacket(Packet);
-	Packet >> offset_sprite_coordinate_.x >> offset_sprite_coordinate_.y;
-	this->SetOffsetSprite(offset_sprite_coordinate_);
-	float t_vector_rotate_x_, t_vector_rotate_y_;
-	Packet >> t_vector_rotate_x_ >> t_vector_rotate_y_;
-	this->SetCoordinate(sf::Vector2f(t_vector_rotate_x_, t_vector_rotate_y_));
+	if (BaseObject::SetDataFromPacket(Packet)) {
+		//Packet >> offset_sprite_coordinate_.x >> offset_sprite_coordinate_.y;
+		//this->SetOffsetSprite(offset_sprite_coordinate_);
+		float t_coordinate_x_, t_coordinate_y_;
+		Packet >> t_coordinate_x_ >> t_coordinate_y_;
+		this->SetCoordinate(sf::Vector2f(t_coordinate_x_, t_coordinate_y_));
 
-	Packet >> tile_level_ >> tile_frame_current_;
-	Packet >> animation_frame_start_ >> animation_frame_end_;
-	Packet >> looped_;
-	Packet >> animation_speed_for_frame_;
-	Packet >> current_frame_animation_time_;
-	this->ShowTile();
-	//
-	//queue?
-	//
-	t_vector_rotate_x_, t_vector_rotate_y_;
-	Packet >> t_vector_rotate_x_ >> t_vector_rotate_y_;
-	this->SetRotationVector(t_vector_rotate_x_, t_vector_rotate_y_);
+		Packet >> tile_level_;
+		if (tile_level_ < 1) {
+			tile_level_ = 1;
+			return false;
+		}
+		if (tile_level_ > frame_count_y_) {
+			tile_level_ = frame_count_y_;
+			return false;
+		}
+
+		Packet >> tile_frame_current_;
+		if (tile_frame_current_ < 1) {
+			tile_frame_current_ = 1;
+			return false;
+		}
+		if (tile_frame_current_ > frame_count_x_) {
+			tile_frame_current_ = frame_count_x_;
+			return false;
+		}
+
+
+		Packet >> animation_frame_start_;
+		if (animation_frame_start_ < 1) {
+			animation_frame_start_ = 1;
+			tile_frame_current_ = animation_frame_start_;
+			return false;
+		}
+		if (animation_frame_start_ > frame_count_x_) {
+			animation_frame_start_ = frame_count_x_;
+			tile_frame_current_ = animation_frame_start_;
+			return false;
+		}
+
+		Packet >> animation_frame_end_;
+		if (animation_frame_end_ < 1) {
+			animation_frame_end_ = 1;
+			return false;
+		}
+		if (animation_frame_end_ > frame_count_x_) {
+			animation_frame_end_ = frame_count_x_;
+			return false;
+		}
+		if (animation_frame_start_ <= animation_frame_end_) {
+			if (tile_frame_current_ > animation_frame_end_
+				|| tile_frame_current_ < animation_frame_start_) {
+				tile_frame_current_ = animation_frame_end_;
+			}
+		}
+		else {
+			if (tile_frame_current_ < animation_frame_end_
+				|| tile_frame_current_ > animation_frame_start_) {
+				tile_frame_current_ = animation_frame_end_;
+			}
+		}
+
+		Packet >> looped_;
+		Packet >> animation_speed_for_frame_;
+		if (animation_speed_for_frame_ < 0) {
+			animation_speed_for_frame_ = 0.f;
+			return false;
+		}
+		Packet >> current_frame_animation_time_;
+		this->ClearAnimarionList();
+		this->ShowTile();
+		//
+		//queue?
+		//
+		t_coordinate_x_, t_coordinate_y_;
+		Packet >> t_coordinate_x_ >> t_coordinate_y_;
+		this->SetRotationVector(t_coordinate_x_, t_coordinate_y_);
+		return true;
+	}
 	return false;
 }
 

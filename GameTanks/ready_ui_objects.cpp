@@ -48,3 +48,68 @@ void Title::ActionLeave() {
 	this->StartAudioAction("action2");
 }
 
+/*-------example:-----------*/
+Text::Text(sf::Vector2f const& coordinate_centre) : UiObject(
+	coordinate_centre, sf::Vector2f(0, 0),
+	"Data/Ui/title.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	2, 1) {
+}
+
+void Text::ActionEnter()
+{
+}
+
+void Text::ActionLeave()
+{
+}
+
+void Text::ActionClickDown()
+{
+}
+
+void Text::ActionClickUp()
+{
+}
+
+TextLine::TextLine(sf::Vector2f const& coordinate_centre, 
+		int const& line_count, int const& one_line_text_size, int const& line_step_px)
+	: UiObject(
+		coordinate_centre, sf::Vector2f(0, 0),
+		"Data/Ui/title.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		2, 1) {
+	this->SetFocusable(false);
+	for (int i = 0; i < line_count; i++) {
+		Lines_.push_back(Text(sf::Vector2f(10, line_step_px * i)));
+		Lines_.back().SetText("");
+		Lines_.back().SetCharacterSize(one_line_text_size);
+		Lines_.back().SetAnchorObject(this);
+	}
+}
+
+void TextLine::ActionEnter()
+{
+}
+
+void TextLine::ActionLeave()
+{
+}
+
+void TextLine::ActionClickDown()
+{
+}
+
+void TextLine::ActionClickUp()
+{
+}
+
+void TextLine::SetTextLine(std::string str, int const& line_number) {
+	Lines_[line_number].SetText(str);
+}
+
+void TextLine::Draw(sf::RenderWindow& window) {
+	UiObject::Draw(window);
+	for (int i = 0; i < (int)Lines_.size(); i++)
+		Lines_[i].Draw(window);
+}
+
+/*--------------------------*/
