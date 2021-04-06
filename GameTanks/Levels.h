@@ -125,12 +125,17 @@ private:
 	int player_id_ = 0;
 	UiObject* Text_Border_, * Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
 		* Shot_distance_, * Time_to_next_shot_, * Shot_life_, * Exit_;
-
+	
 	template <class TypeObject> void SpawnStaticObject(TypeObject* object, int const& quantity,
 		int const& id_object, float const& spawn_x, float const& spawn_y);
 
 	template <class TypeObject> void SpawnEnemyObject(TypeObject* object, int const& quantity,
 		int const& id_object, float const& spawn_x, float const& spawn_y);
+
+	template <class TypePlayerObject, class TypeStatValue>
+	void StatsOutput(std::string stat_name, TypeStatValue const& stat_base_value,
+		UiObject* stat_object = nullptr, TypePlayerObject* player_object = nullptr,
+		float const& initial_base_value = 0, float const& stat_bonus_value = 0);
 
 public:
 	GameLevel(int const& id_watch_object = 0);
