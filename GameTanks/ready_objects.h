@@ -137,6 +137,11 @@ public:
 	void ActionClickUp() override;
 };
 
+class PlayersTextBackground : public UiObject {
+public:
+	PlayersTextBackground(sf::Vector2f const& coordinate_centre);
+};
+
 class TextLine : public UiObject {
 private:
 	std::vector<UiObject*> Lines_;

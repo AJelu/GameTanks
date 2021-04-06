@@ -78,10 +78,16 @@ void Text::ActionClickUp()
 {
 }
 
+PlayersTextBackground::PlayersTextBackground(sf::Vector2f const& coordinate_centre) 
+	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
+	"Data/Ui/player_text_background.png",
+	1, 1) {
+}
+
 TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
-		int const& line_count,
-		int const& one_line_text_size,
-		int const& one_line_ui_size_px, int const& line_step_px)
+	int const& line_count,
+	int const& one_line_text_size,
+	int const& one_line_ui_size_px, int const& line_step_px)
 	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
 		"Data/Ui/text_background_.png",
 		1, 1) {

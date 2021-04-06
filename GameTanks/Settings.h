@@ -7,8 +7,8 @@
 static const int GAME_SPEED_CONTROLLER = 1000;
 static const int GAME_TIMER_LIMIT = 1;
 
-static const float SCREEN_RESOLUTION_X = float(sf::VideoMode::getDesktopMode().width); //1024;
-static const float SCREEN_RESOLUTION_Y = float(sf::VideoMode::getDesktopMode().height); //768;
+static const float SCREEN_RESOLUTION_X = float(sf::VideoMode::getDesktopMode().width); //1024; //
+static const float SCREEN_RESOLUTION_Y = float(sf::VideoMode::getDesktopMode().height); //768; //
 
 
 //enemy settings:
