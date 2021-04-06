@@ -132,6 +132,7 @@ bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
 		Bonus_object_ = Bonus_object;
 		Bonus_object_->SetGameType(BONUS);
 		Bonus_object_->SetIdObject(count_id_objects_);
+		this->RespawnObject(Bonus_object_);
 		count_id_objects_++;
 		return true;
 	}
@@ -302,23 +303,22 @@ void BaseLevel::AddAnchorUiToObject(GameObject* Game_object, std::string text) {
 
 int BaseLevel::AddPlayerFromLan() {
 
-	TankObject* Object = new RedTank(0, 200, 200);
-	switch (rand()%6)
-	{
-	case 0:	Object = new RedTank(0, 0, 0);
-		break;
-	case 1:	Object = new TankBrown(0, 0, 0);
-		break;
-	case 2:	Object = new TankWhite(0, 0, 0);
-		break;
-	case 3:	Object = new TankBlack(0, 0, 0);
-		break;
-	case 4:	Object = new TankYellow(0, 0, 0);
-		break;
-	case 5:	Object = new TankGreen(0, 0, 0);
-		break;
-	default: Object = new TankGreen(0, 0, 0);
-		break;
+	TankObject* Object = nullptr;
+	switch (rand() % 6) {
+		case 0:	Object = new RedTank(0, 0, 0);
+			break;
+		case 1:	Object = new TankBrown(0, 0, 0);
+			break;
+		case 2:	Object = new TankWhite(0, 0, 0);
+			break;
+		case 3:	Object = new TankBlack(0, 0, 0);
+			break;
+		case 4:	Object = new TankYellow(0, 0, 0);
+			break;
+		case 5:	Object = new TankGreen(0, 0, 0);
+			break;
+		default: Object = new TankYellow(1, 0, 0);
+			break;
 	}
 	this->AddPlayerObject(Object);
 

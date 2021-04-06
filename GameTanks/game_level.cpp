@@ -8,15 +8,29 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	
 	Player_ = nullptr;
 	if (id_watch_object == 0) {
-		/* Respawn player: */
-		Player_ = new TankBrown(1, 200, 200);
+		switch (rand() % 6) {
+			case 0:	Player_ = new RedTank(1, 0, 0);
+				break;
+			case 1:	Player_ = new TankBrown(1, 0, 0);
+				break;
+			case 2:	Player_ = new TankWhite(1, 0, 0);
+				break;
+			case 3:	Player_ = new TankBlack(1, 0, 0);
+				break;
+			case 4:	Player_ = new TankYellow(1, 0, 0);
+				break;
+			case 5:	Player_ = new TankGreen(1, 0, 0);
+				break;
+			default: Player_ = new TankYellow(1, 0, 0);
+				break;
+		}
 		this->AddPlayerObject(Player_);
 		this->SetWatchObject(Player_);
 		player_id_ = Player_->GetIdObject();
 
 
 		/* Respawn test bonus: */
-		this->SetBonusObject(new Star(1, 500, 500));
+		this->SetBonusObject(new Star(1, 0, 0));
 
 
 		/* Respawn enemy: */
