@@ -18,7 +18,7 @@ void Engine::CreateResolutionWindowMode() {
     resolution.x = SCREEN_RESOLUTION_X;
     resolution.y = SCREEN_RESOLUTION_Y;
 
-    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Default);
+    Main_window_.create(sf::VideoMode(int(resolution.x), int(resolution.y)), "TANKS", sf::Style::Fullscreen);
     Main_window_.setFramerateLimit(60);
 }
 

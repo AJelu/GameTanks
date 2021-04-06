@@ -46,7 +46,7 @@ MenuLevel::MenuLevel() {
 	Title_->SetStartCoorditateCentre();
 	Title_->SetStartCoorditateBottom();
 	Title_->SetOffsetSprite(sf::Vector2f(Title_->GetWidthSprite(true) / 2.0f,
-		Title_->GetHeightSprite(true)));
+		(float)Title_->GetHeightSprite(true)));
 	this->AddUiObject(Title_);
 }
 
