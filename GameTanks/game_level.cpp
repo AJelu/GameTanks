@@ -148,7 +148,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Progress_life_->SetCharacterSize(18);
 	this->AddUiObject(Progress_life_);
 
-	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 100));
+	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 73));
 	Progress_Shot_->SetScale(sf::Vector2f(250.f, 40.f));
 	Progress_Shot_->SetStartCoorditateLeft();
 	Progress_Shot_->SetStartCoorditateBottom();
