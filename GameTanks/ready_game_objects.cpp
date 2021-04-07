@@ -176,8 +176,7 @@ Star::Star(int const& id_object, float const& spawn_x, float const& spawn_y)
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->SetScale(sf::Vector2f(0.4f, 0.4f));
-	this->AddAudioAction("destructible", "Data/Audio/destructible/star_up.ogg");
-	this->SetBasePoint(30);
+	this->AddAudioAction("bonus", "Data/Audio/bonus/star_up.ogg");
 	ActionLife();
 }
 

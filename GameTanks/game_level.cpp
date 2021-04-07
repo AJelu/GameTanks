@@ -141,15 +141,15 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	this->AddUiObject(Point_board);
 
 	Progress_life_ = new ProgressLine(sf::Vector2f(20, 50));
-	Progress_life_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_life_->SetScale(sf::Vector2f(0.18f, 0.18f));
 	Progress_life_->SetStartCoorditateLeft();
 	Progress_life_->SetStartCoorditateBottom();
 	/*Progress_life_->SetTextAlign(0.f);
 	Progress_life_->SetCharacterSize(20);*/
 	this->AddUiObject(Progress_life_);
 
-	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 100));
-	Progress_Shot_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 73));
+	Progress_Shot_->SetScale(sf::Vector2f(0.13f, 0.13f));
 	Progress_Shot_->SetStartCoorditateLeft();
 	Progress_Shot_->SetStartCoorditateBottom();
 	/*Progress_Shot_->SetTextAlign(0.f);
