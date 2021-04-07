@@ -9,7 +9,7 @@ VisibleObject::VisibleObject() : BaseObject() {
 	this->SetRotationVector(0, 1);
 	this->SetCoordinate(sf::Vector2f(0.0f, 0.0f));
 	this->SetOffsetSprite(sf::Vector2f(0.0f, 0.0f));
-	this->SetTexture("Data/background/background.png", 1, 1);
+	this->SetTexture("Data/none.png", 1, 1);
 	this->SafeState();
 }
 
@@ -415,11 +415,16 @@ const sf::Vector2f VisibleObject::GetScale() {
 bool VisibleObject::SetTexture(std::string const& texture,
 							int const& frame_count_x, int const& frame_count_y) {
 	Texture_object_ = (this->GetTexture(texture));
-	Sprite_object_.setTexture(*Texture_object_);
 	frame_count_x_ = frame_count_x;
 	if (frame_count_x_ < 1) frame_count_x_ = 1;
 	frame_count_y_ = frame_count_y;
 	if (frame_count_y_ < 1) frame_count_y_ = 1;
+	if (Texture_object_ == nullptr) {
+		Texture_object_ = (this->GetTexture("Data/none.png"));
+		frame_count_x_ = 1;
+		frame_count_y_ = 1;
+	}
+	Sprite_object_.setTexture(*Texture_object_);
 	this->SetOffsetSprite(offset_sprite_coordinate_);
 	this->StartPlayAnimation(1, 1, 1, 0);
 	return true;

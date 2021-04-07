@@ -213,6 +213,18 @@ private:
 	float time_blink_cursor_ = 0;
 	bool show_cursor_;
 
+	enum Object_centring {
+		LEFT = 1,
+		RIGHT = 2,
+		CENTER = 3,
+		TOP = 4,
+		MIDDLE = 5,
+		BOTTOM = 6
+	};
+
+	Object_centring centring_x;
+	Object_centring centring_y;
+
 	float text_centre_ = 0; // <0 - left; >0 - right; 0 - centre;
 public:
 	UiObject();
@@ -238,6 +250,13 @@ public:
 	void SetCursorSize(float const& cursor_size);
 	void SetFocusable(bool const& focusable);
 	void SetTextAlign(float const& align);
+
+	void SetStartCoorditateLeft();
+	void SetStartCoorditateRight();
+	void SetStartCoorditateCentre();
+	void SetStartCoorditateTop();
+	void SetStartCoorditateMiddle();
+	void SetStartCoorditateBottom();
 
 	//gets
 	std::string GetText();

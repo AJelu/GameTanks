@@ -118,7 +118,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	else player_id_ = id_watch_object;
 
 	float a = 10, m = 4;
-	Text_Border_		= new TextLine(sf::Vector2f(6, 78), 0, 10, 3);
+	//Text_Border_		= new TextLine(sf::Vector2f(6, 78), 0, 10, 3);
 	
 	Point_current_		= new Text(sf::Vector2f(a, a + a * m * 1));
 	Life_				= new Text(sf::Vector2f(a, a + a * m * 2));
@@ -129,7 +129,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Rotation_speed_		= new Text(sf::Vector2f(a, a + a * m * 7));
 	Speed_				= new Text(sf::Vector2f(a, a + a * m * 8));
 	
-	Text_Border_->SetScale(sf::Vector2f(0.5f, 0.74f));
+	//Text_Border_->SetScale(sf::Vector2f(0.5f, 0.74f));
 
 	sf::Vector2f scale = sf::Vector2f(1, 1);
 	Point_current_->SetScale(scale);
@@ -178,6 +178,19 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Exit_->SetTextAlign(0);
 	Exit_->SetText("EXIT");
 	this->AddUiObject(Exit_);
+
+	/*----------test---------*/
+	TextLine* ui = new TextLine(sf::Vector2f(0, 0), 150, 5, 40, 45, 50);
+	ui->SetStartCoorditateMiddle();
+	ui->SetStartCoorditateCentre();
+	ui->TextAlign(0);
+	ui->SetTextLine("1", 0);
+	ui->SetTextLine("2", 1);
+	ui->SetTextLine("3", 2);
+	ui->SetTextLine("4", 3);
+	ui->SetTextLine("5", 4);
+	this->AddUiObject(ui);
+	/*-----------------*/
 }
 
 template <class TypeObject>

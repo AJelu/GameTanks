@@ -42,6 +42,8 @@ void RunGame() {
                 else                    Load_level = new LoadLevel("Connecting...");
                 engine->ChangeLevel(Load_level);
                 engine->Start();
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                engine->Start();
                 engine->ChangeLevel(level);
                 delete Load_level;
                 Load_level = nullptr;
@@ -73,7 +75,6 @@ void RunGame() {
             }
             else if (type_load_level == BaseLevel::Level_type::MENU_LEVEL) {
                 engine->StopServer();
-                std::this_thread::sleep_for(std::chrono::milliseconds(20));
                 l = new MenuLevel();
                 engine->ChangeLevel(l);
                 delete level;
