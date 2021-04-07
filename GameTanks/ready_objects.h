@@ -126,7 +126,6 @@ public:
 		sf::Vector2f const& offset_sprite_coordinate);
 };
 
-/*-------example:-----------*/
 class Text : public UiObject {
 public:
 	Text(sf::Vector2f const& coordinate_centre);
@@ -156,17 +155,25 @@ public:
 		int const& one_line_text_size, 
 		int const& one_line_ui_size_px, int const& line_step_px);
 
-	void TextAlign(int const& align);
+	void TextAlign(float const& align);
 
 	void ChangeCounLine(int const& line_count);
 	void SetTextLine(std::string str, int const& line_number);
 	void Draw(sf::RenderWindow& window) override;
 
-
 	~TextLine() override;
 };
 
-/*--------------------------*/
+class ProgressLine : public UiObject {
+private:
+	UiObject *Fon_, *Progress_, *Border_;
+	sf::Vector2f Scale_;
+public:
+	ProgressLine(sf::Vector2f const& coordinate_centre);
+	void SetProgress(float const& progress);
+	void Draw(sf::RenderWindow& window) override;
+	~ProgressLine() override;
+};
 
 class Title : public UiObject {
 public:

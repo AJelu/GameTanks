@@ -6,7 +6,7 @@ LoadLevel::LoadLevel(std::string const& text) : BaseLevel() {
 	Text_item->SetStartCoorditateCentre();
 	Text_item->SetStartCoorditateBottom();
 	Text_item->SetOffsetSprite(sf::Vector2f(Text_item->GetWidthSprite(true) / 2.0f,
-		Text_item->GetHeightSprite(true)));
+		(float)Text_item->GetHeightSprite(true)));
 	Text_item->SetTextAlign(0);
 	Text_item->SetCharacterSize(50);
 	Text_item->SetText(text);

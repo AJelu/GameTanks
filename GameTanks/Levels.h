@@ -123,8 +123,9 @@ class GameLevel : public BaseLevel {
 private:
 	TankObject* Player_;
 	int player_id_ = 0;
-	UiObject* Text_Border_, * Point_current_, * Life_, * Speed_, * Rotation_speed_, * Speed_shot_,
-		* Shot_distance_, * Time_to_next_shot_, * Shot_life_, * Exit_;
+	TextLine* Stats_, *Point_board;
+	UiObject* Exit_;
+	ProgressLine* Progress_life_, * Progress_Shot_;
 	
 	template <class TypeObject> void SpawnStaticObject(TypeObject* object, int const& quantity,
 		int const& id_object, float const& spawn_x, float const& spawn_y);
@@ -132,9 +133,9 @@ private:
 	template <class TypeObject> void SpawnEnemyObject(TypeObject* object, int const& quantity,
 		int const& id_object, float const& spawn_x, float const& spawn_y);
 
-	template <class TypePlayerObject, class TypeStatValue>
+	template <class TypeStatValue>
 	void StatsOutput(std::string stat_name, TypeStatValue const& stat_base_value,
-		UiObject* stat_object = nullptr, TypePlayerObject* player_object = nullptr,
+		int const& stat_object = nullptr, TankObject* player_object = nullptr,
 		float const& initial_base_value = 0, float const& stat_bonus_value = 0);
 
 public:

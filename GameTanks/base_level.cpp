@@ -303,6 +303,7 @@ void BaseLevel::AddAnchorUiToObject(GameObject* Game_object, std::string text) {
 
 int BaseLevel::AddPlayerFromLan() {
 
+	srand((unsigned int)time(NULL));
 	TankObject* Object = nullptr;
 	switch (rand() % 6) {
 		case 0:	Object = new RedTank(0, 0, 0);
@@ -317,7 +318,7 @@ int BaseLevel::AddPlayerFromLan() {
 			break;
 		case 5:	Object = new TankGreen(0, 0, 0);
 			break;
-		default: Object = new TankYellow(1, 0, 0);
+		default: Object = new TankYellow(0, 0, 0);
 			break;
 	}
 	this->AddPlayerObject(Object);

@@ -55,7 +55,6 @@ void Title::ActionLeave() {
 	this->StartAudioAction("action2");
 }
 
-/*-------example:-----------*/
 Text::Text(sf::Vector2f const& coordinate_centre) : UiObject(
 	coordinate_centre, sf::Vector2f(0, 0),
 	"Data/Ui/text_background.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -78,10 +77,16 @@ void Text::ActionClickUp()
 {
 }
 
+PlayersTextBackground::PlayersTextBackground(sf::Vector2f const& coordinate_centre) 
+	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
+	"Data/Ui/player_text_background.png",
+	1, 1) {
+}
+
 TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
-		int const& line_count,
-		int const& one_line_text_size,
-		int const& one_line_ui_size_px, int const& line_step_px)
+	int const& line_count,
+	int const& one_line_text_size,
+	int const& one_line_ui_size_px, int const& line_step_px)
 	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
 		"Data/Ui/text_background_.png",
 		1, 1) {
@@ -93,7 +98,7 @@ TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
 	this->SetFocusable(false);
 }
 
-void TextLine::TextAlign(int const& align) {
+void TextLine::TextAlign(float const& align) {
 	for (int i = 0; i < (int)Lines_.size(); i++) {
 		Lines_[i]->SetTextAlign(align);
 	}
@@ -103,7 +108,7 @@ void TextLine::ChangeCounLine(int const& line_count) {
 	if (line_count > 0) {
 		if (line_count > (int)Lines_.size()) {
 			for (int i = (int)Lines_.size(); i < line_count; i++) {
-				Lines_.push_back(new Text(sf::Vector2f(0, line_step_px_ * i)));
+				Lines_.push_back(new Text(sf::Vector2f(0.f, (float)line_step_px_ * i)));
 				Lines_.back()->SetText("");
 				Lines_.back()->SetTexture("Data/Ui/text_background_.png", 1, 1);
 				Lines_.back()->SetCharacterSize(one_line_text_size_);
@@ -148,4 +153,40 @@ TextLine::~TextLine() {
 		delete Lines_[i];
 }
 
-/*--------------------------*/
+ProgressLine::ProgressLine(sf::Vector2f const& coordinate_centre) :
+	UiObject(coordinate_centre, sf::Vector2f(0, 0),
+		"",
+		1, 1) {
+	Fon_ = new UiObject(sf::Vector2f(0, 0), sf::Vector2f(0, 0),
+		"Data/Ui/HPbar_fon.png", 1, 1);
+	Progress_ = new UiObject(sf::Vector2f(0, 0), sf::Vector2f(0, 0),
+		"Data/Ui/HPbar_progress.png", 1, 1);
+	Border_ = new UiObject(sf::Vector2f(0, 0), sf::Vector2f(0, 0),
+		"Data/Ui/HPbar_border.png", 1, 1);
+	Fon_->SetAnchorObject(this);
+	Progress_->SetAnchorObject(this);
+	Border_->SetAnchorObject(this);
+	this->SetProgress(1);
+}
+
+void ProgressLine::SetProgress(float const& progress) {
+
+	Scale_ = sf::Vector2f(0.032f + ((1.f - 0.032f) * progress), 1);
+}
+
+void ProgressLine::Draw(sf::RenderWindow& window) {
+	UiObject::Draw(window); 
+	Fon_->SetScale(this->GetScale());
+	Progress_->SetScale(sf::Vector2f(this->GetScale().x * Scale_.x,
+									this->GetScale().y * Scale_.y));
+	Border_->SetScale(this->GetScale());
+	Fon_->Draw(window);
+	Progress_->Draw(window);
+	Border_->Draw(window);
+}
+
+ProgressLine::~ProgressLine() {
+	delete Fon_;
+	delete Progress_;
+	delete Border_;
+}

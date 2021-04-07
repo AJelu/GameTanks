@@ -117,80 +117,44 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	}
 	else player_id_ = id_watch_object;
 
-	float a = 10, m = 4;
-	//Text_Border_		= new TextLine(sf::Vector2f(6, 78), 0, 10, 3);
-	
-	Point_current_		= new Text(sf::Vector2f(a, a + a * m * 1));
-	Life_				= new Text(sf::Vector2f(a, a + a * m * 2));
-	Shot_life_			= new Text(sf::Vector2f(a, a + a * m * 3));
-	Shot_distance_		= new Text(sf::Vector2f(a, a + a * m * 4));
-	Speed_shot_			= new Text(sf::Vector2f(a, a + a * m * 5));
-	Time_to_next_shot_	= new Text(sf::Vector2f(a, a + a * m * 6));
-	Rotation_speed_		= new Text(sf::Vector2f(a, a + a * m * 7));
-	Speed_				= new Text(sf::Vector2f(a, a + a * m * 8));
-	
-	//Text_Border_->SetScale(sf::Vector2f(0.5f, 0.74f));
+	Stats_ = new TextLine(sf::Vector2f(20, 20), 250, 8, 21, 40, 43);
+	Stats_->SetStartCoorditateTop();
+	Stats_->SetStartCoorditateLeft();
+	Stats_->TextAlign(0);
+	this->AddUiObject(Stats_);	
 
-	sf::Vector2f scale = sf::Vector2f(1, 1);
-	Point_current_->SetScale(scale);
-	Life_->SetScale(scale);
-	Speed_->SetScale(scale);
-	Rotation_speed_->SetScale(scale);
-	Speed_shot_->SetScale(scale);
-	Shot_distance_->SetScale(scale);
-	Time_to_next_shot_->SetScale(scale);
-	Shot_life_->SetScale(scale);
-
-	int text_size = 21;
-	Point_current_->SetCharacterSize(text_size);
-	Life_->SetCharacterSize(text_size);
-	Speed_->SetCharacterSize(text_size);
-	Rotation_speed_->SetCharacterSize(text_size);
-	Speed_shot_->SetCharacterSize(text_size);
-	Shot_distance_->SetCharacterSize(text_size);
-	Time_to_next_shot_->SetCharacterSize(text_size);
-	Shot_life_->SetCharacterSize(text_size);
-
-	float text_align = 0;
-	Point_current_->SetTextAlign(text_align);
-	Life_->SetTextAlign(text_align);
-	Speed_->SetTextAlign(text_align);
-	Rotation_speed_->SetTextAlign(text_align);
-	Speed_shot_->SetTextAlign(text_align);
-	Shot_distance_->SetTextAlign(text_align);
-	Time_to_next_shot_->SetTextAlign(text_align);
-	Shot_life_->SetTextAlign(text_align);
-
-	//this->AddUiObject(Text_Border_);
-	this->AddUiObject(Point_current_);
-	this->AddUiObject(Life_);
-	this->AddUiObject(Speed_);
-	this->AddUiObject(Rotation_speed_);
-	this->AddUiObject(Speed_shot_);
-	this->AddUiObject(Shot_distance_);
-	this->AddUiObject(Time_to_next_shot_);
-	this->AddUiObject(Shot_life_);
-	
-
-	Exit_ = new Button(sf::Vector2f(5, 2), sf::Vector2f(0, 0));
+	Exit_ = new Button(sf::Vector2f(20, 20), sf::Vector2f(0, 0));
 	Exit_->SetScale(sf::Vector2f(0.25f, 0.2f));
+	Exit_->SetOffsetSprite(sf::Vector2f((float)Exit_->GetWidthSprite(), 
+		(float)Exit_->GetHeightSprite()));
 	Exit_->SetCharacterSize(30);
 	Exit_->SetTextAlign(0);
 	Exit_->SetText("EXIT");
+	Exit_->SetStartCoorditateRight();
+	Exit_->SetStartCoorditateBottom();
 	this->AddUiObject(Exit_);
 
-	/*----------test---------*/
-	TextLine* ui = new TextLine(sf::Vector2f(0, 0), 150, 5, 40, 45, 50);
-	ui->SetStartCoorditateMiddle();
-	ui->SetStartCoorditateCentre();
-	ui->TextAlign(0);
-	ui->SetTextLine("1", 0);
-	ui->SetTextLine("2", 1);
-	ui->SetTextLine("3", 2);
-	ui->SetTextLine("4", 3);
-	ui->SetTextLine("5", 4);
-	this->AddUiObject(ui);
-	/*-----------------*/
+	Point_board = new TextLine(sf::Vector2f(220, 20), 200, 5, 25, 30, 33);
+	Point_board->SetStartCoorditateTop();
+	Point_board->SetStartCoorditateRight();
+	Point_board->TextAlign(0);
+	this->AddUiObject(Point_board);
+
+	Progress_life_ = new ProgressLine(sf::Vector2f(20, 50));
+	Progress_life_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_life_->SetStartCoorditateLeft();
+	Progress_life_->SetStartCoorditateBottom();
+	/*Progress_life_->SetTextAlign(0.f);
+	Progress_life_->SetCharacterSize(20);*/
+	this->AddUiObject(Progress_life_);
+
+	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 100));
+	Progress_Shot_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_Shot_->SetStartCoorditateLeft();
+	Progress_Shot_->SetStartCoorditateBottom();
+	/*Progress_Shot_->SetTextAlign(0.f);
+	Progress_Shot_->SetCharacterSize(20);*/
+	this->AddUiObject(Progress_Shot_);
 }
 
 template <class TypeObject>
@@ -221,44 +185,52 @@ bool GameLevel::UpdateState(float& game_timer) {
 		this->SetWatchObject(Player_);
 	}
 
+
 	//other manipulation on game level:
-	StatsOutput("SCORE POINT: ", Player_->GetCurrentPoint(), Point_current_, Player_);
-	StatsOutput("HIT POINT: ", Player_->GetLifeLevel(), Life_, Player_, 
+	Progress_life_->SetProgress(Player_->GetLifeLevel() / 
+		float(Player_->GetMaxLifeLevel()));
+	//Progress_life_->SetText("LIFE");
+	Progress_Shot_->SetProgress(1.f - Player_->GetTimeToNextShot() /
+		(Player_->GetTimeFreezeShot()));
+	//Progress_Shot_->SetText("Shot");
+
+	StatsOutput("SCORE POINT: ", Player_->GetCurrentPoint(), 0, Player_);
+	StatsOutput("HIT POINT: ", Player_->GetLifeLevel(), 1, Player_, 
 		float(Player_->GetMaxLifeLevel()));
 	if (Player_->GetBonus() != nullptr) {
-		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), Shot_life_, Player_,
+		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 2, Player_,
 			float(Player_->GetBonus()->GetOriginalShotLife()), 
 			float(Player_->GetBonus()->GetShotLife()));
-		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), Shot_distance_, Player_,
+		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 3, Player_,
 			Player_->GetBonus()->GetOriginalShotDistance(), 
 			Player_->GetBonus()->GetShotDistance());
-		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), Speed_shot_, Player_,
+		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 4, Player_,
 			Player_->GetBonus()->GetOriginalSpeedShot(), 
 			Player_->GetBonus()->GetSpeedShot());
-		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), Time_to_next_shot_, Player_,
+		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 5, Player_,
 			Player_->GetBonus()->GetOriginalTimeFreezeShot(), 
 			Player_->GetBonus()->GetTimeFreezeShot());
-		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), Rotation_speed_, Player_,
+		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 6, Player_,
 			Player_->GetBonus()->GetOriginalRotationSpeed(), 
 			Player_->GetBonus()->GetRotationSpeed());
-		StatsOutput("SPEED: ", Player_->GetSpeedMove(), Speed_, Player_,
+		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 7, Player_,
 			Player_->GetBonus()->GetOriginalSpeedMove(), 
 			Player_->GetBonus()->GetSpeedMove());
 	}
 	else {
-		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), Shot_life_, Player_);
-		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), Shot_distance_, Player_);
-		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), Speed_shot_, Player_);
-		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), Time_to_next_shot_, Player_);
-		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), Rotation_speed_, Player_);
-		StatsOutput("SPEED: ", Player_->GetSpeedMove(), Speed_, Player_);
+		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 2, Player_);
+		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 3, Player_);
+		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 4, Player_);
+		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 5, Player_);
+		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 6, Player_);
+		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 7, Player_);
 	}
 	return result;
 }
 
-template <class TypePlayerObject,  class TypeStatValue>
+template <class TypeStatValue>
 void GameLevel::StatsOutput(std::string stat_name, TypeStatValue const& stat_base_value,
-	UiObject* stat_object, TypePlayerObject* player_object,
+	int const& stat_object, TankObject* player_object,
 	float const& initial_base_value, float const& stat_bonus_value) {
 
 	std::stringstream stream;
@@ -268,7 +240,7 @@ void GameLevel::StatsOutput(std::string stat_name, TypeStatValue const& stat_bas
 	else if (player_object->GetBonus() != nullptr)
 		stream << stat_name << initial_base_value << " > " << int(stat_bonus_value);
 	else stream << stat_name  << stat_base_value;
-	stat_object->SetText(stream.str());
+	Stats_->SetTextLine(stream.str(), stat_object);
 	stream.str("");
 }
 
