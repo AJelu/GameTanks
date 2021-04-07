@@ -159,6 +159,7 @@ public:
 
 	void ChangeCounLine(int const& line_count);
 	void SetTextLine(std::string str, int const& line_number);
+	std::string GetTextLine(int const& line_number);
 	void Draw(sf::RenderWindow& window) override;
 
 	~TextLine() override;

@@ -137,6 +137,12 @@ void TextLine::ChangeCounLine(int const& line_count) {
 	}
 }
 
+std::string TextLine::GetTextLine(int const& line_number) {
+	if (line_number >= 0 && line_number < (int)Lines_.size())
+		 return Lines_[line_number]->GetText();
+	return "";
+}
+
 void TextLine::SetTextLine(std::string str, int const& line_number) {
 	if (line_number >= 0 && line_number < (int)Lines_.size())
 		Lines_[line_number]->SetText(str);
@@ -176,13 +182,24 @@ void ProgressLine::SetProgress(float const& progress) {
 
 void ProgressLine::Draw(sf::RenderWindow& window) {
 	UiObject::Draw(window); 
-	Fon_->SetScale(this->GetScale());
-	Progress_->SetScale(sf::Vector2f(this->GetScale().x * Scale_.x,
-									this->GetScale().y * Scale_.y));
-	Border_->SetScale(this->GetScale());
+	Fon_->SetScale(sf::Vector2f(this->GetScale().x * 
+		((float)this->GetWidthSprite() / (float)Fon_->GetWidthSprite()),
+								this->GetScale().y * 
+		((float)this->GetHeightSprite() / (float)Fon_->GetHeightSprite())));
+	Progress_->SetScale(sf::Vector2f(this->GetScale().x * 
+		((float)this->GetWidthSprite() / (float)Progress_->GetWidthSprite())
+		* Scale_.x,
+									 this->GetScale().y *
+		((float)this->GetHeightSprite() / (float)Progress_->GetHeightSprite())
+		* Scale_.y));
+	Border_->SetScale(sf::Vector2f(this->GetScale().x *
+		((float)this->GetWidthSprite() / (float)Border_->GetWidthSprite()),
+								   this->GetScale().y *
+		((float)this->GetHeightSprite() / (float)Border_->GetHeightSprite())));
 	Fon_->Draw(window);
 	Progress_->Draw(window);
 	Border_->Draw(window);
+	UiObject::Draw(window);
 }
 
 ProgressLine::~ProgressLine() {

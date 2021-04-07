@@ -141,19 +141,20 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	this->AddUiObject(Point_board);
 
 	Progress_life_ = new ProgressLine(sf::Vector2f(20, 50));
-	Progress_life_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_life_->SetScale(sf::Vector2f(250.f, 40.f));
 	Progress_life_->SetStartCoorditateLeft();
 	Progress_life_->SetStartCoorditateBottom();
-	/*Progress_life_->SetTextAlign(0.f);
-	Progress_life_->SetCharacterSize(20);*/
+	Progress_life_->SetTextAlign(0.f);
+	Progress_life_->SetCharacterSize(18);
 	this->AddUiObject(Progress_life_);
 
 	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 100));
-	Progress_Shot_->SetScale(sf::Vector2f(0.2f, 0.2f));
+	Progress_Shot_->SetScale(sf::Vector2f(250.f, 40.f));
 	Progress_Shot_->SetStartCoorditateLeft();
 	Progress_Shot_->SetStartCoorditateBottom();
-	/*Progress_Shot_->SetTextAlign(0.f);
-	Progress_Shot_->SetCharacterSize(20);*/
+	Progress_Shot_->SetTextAlign(0.f);
+	Progress_Shot_->SetCharacterSize(18);
+	Progress_Shot_->SetText("Shot");
 	this->AddUiObject(Progress_Shot_);
 }
 
@@ -189,10 +190,9 @@ bool GameLevel::UpdateState(float& game_timer) {
 	//other manipulation on game level:
 	Progress_life_->SetProgress(Player_->GetLifeLevel() / 
 		float(Player_->GetMaxLifeLevel()));
-	//Progress_life_->SetText("LIFE");
+	Progress_life_->SetText("LIFE");
 	Progress_Shot_->SetProgress(1.f - Player_->GetTimeToNextShot() /
 		(Player_->GetTimeFreezeShot()));
-	//Progress_Shot_->SetText("Shot");
 
 	StatsOutput("SCORE POINT: ", Player_->GetCurrentPoint(), 0, Player_);
 	StatsOutput("HIT POINT: ", Player_->GetLifeLevel(), 1, Player_, 
@@ -225,6 +225,9 @@ bool GameLevel::UpdateState(float& game_timer) {
 		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 6, Player_);
 		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 7, Player_);
 	}
+
+	Progress_life_->SetText(Stats_->GetTextLine(1));
+
 	return result;
 }
 
