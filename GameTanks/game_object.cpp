@@ -1,6 +1,8 @@
 #include "objects.h"
 #include <cmath>
 
+bool GameObject::display_collision_;
+
 GameObject::GameObject() : AudioObject() {
 	this->SetMaxLifeLevel(1);
 	this->SetLifeLevel(1);
@@ -68,6 +70,11 @@ float GameObject::GetSafeDistance(){
 }
 
 GameObject* GameObject::GetPerrent() { return Parrent_; }
+
+bool GameObject::DisplayCollision(bool const& display_collision) {
+	display_collision_ = display_collision;
+	return display_collision_;
+}
 
 void GameObject::SetBasePoint(int const& base_point) { 
 	base_point_ = base_point;
@@ -214,6 +221,25 @@ bool GameObject::SetDataFromPacket(sf::Packet& Packet) {
 		return true;
 	}
 	return false;
+}
+
+void GameObject::Draw(sf::RenderWindow& window) {
+	AudioObject::Draw(window);
+	if (display_collision_) {
+		for (int i = 0; i < (int)Collisions_.size(); i++) {
+			sf::CircleShape shape(Collisions_[i]->GetRadius());
+			shape.setFillColor(sf::Color::Transparent);
+			shape.setOutlineThickness(1);
+			shape.setOutlineColor(sf::Color::Red);
+			point_1 = this->Collisions_[i]->
+				GetCoordinateByRotation(this->CalculateGradus());
+			point_1.x += this->GetCoordinateCentre().x - Collisions_[i]->GetRadius();
+			point_1.y *= -1;
+			point_1.y += this->GetCoordinateCentre().y - Collisions_[i]->GetRadius();
+			shape.setPosition(point_1);
+			window.draw(shape);
+		}
+	}
 }
 
 GameObject::~GameObject() {

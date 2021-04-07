@@ -11,7 +11,7 @@ int main() {
 void RunGame() {
     std::cout << "Address local: " << sf::IpAddress::getLocalAddress()
         << "; Address public: " << sf::IpAddress::getPublicAddress() << std::endl;
-
+    GameObject::DisplayCollision(true); //showing collisions
     srand((unsigned int)time(NULL));
 
     Engine* engine = new Engine();;

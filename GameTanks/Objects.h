@@ -295,6 +295,7 @@ private:
 		base_point_, current_point_;
 	float max_collision_distance_;
 	bool collision_off_;
+	static bool display_collision_;
 	
 	int game_type_ = 0;
 
@@ -328,6 +329,8 @@ public:
 	float GetSafeDistance();
 	GameObject* GetPerrent();
 
+	static bool DisplayCollision(bool const& display_collision);
+
 	void RestoreLife();
 
 	//for recalculate time to respawn
@@ -355,6 +358,7 @@ public:
 	bool CreatePacket(sf::Packet& Packet) override;
 	bool SetDataFromPacket(sf::Packet& Packet) override;
 
+	void Draw(sf::RenderWindow& window) override;
 	~GameObject() override;
 };
 

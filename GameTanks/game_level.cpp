@@ -3,7 +3,7 @@
 GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	/* Initialization tile map and border: */
 	this->SetBackgroundTexture("Data/Maps/Map.png");
-	this->SetBorderTexture("Data/Maps/Map_border.png", 50);
+	this->SetBorderTexture("Data/Maps/Map_border.png", 20);
 	this->SetBackgroundMusic("Data/Audio/music/music_in_game.ogg", 10);
 	
 	Player_ = nullptr;
@@ -141,20 +141,20 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	this->AddUiObject(Point_board);
 
 	Progress_life_ = new ProgressLine(sf::Vector2f(20, 50));
-	Progress_life_->SetScale(sf::Vector2f(250.f, 40.f));
+	Progress_life_->SetScale(sf::Vector2f(318.f, 28.f));
 	Progress_life_->SetStartCoorditateLeft();
 	Progress_life_->SetStartCoorditateBottom();
 	Progress_life_->SetTextAlign(0.f);
-	Progress_life_->SetCharacterSize(18);
+	Progress_life_->SetCharacterSize(15);
 	this->AddUiObject(Progress_life_);
 
 	Progress_Shot_ = new ProgressLine(sf::Vector2f(20, 73));
-	Progress_Shot_->SetScale(sf::Vector2f(250.f, 40.f));
+	Progress_Shot_->SetScale(sf::Vector2f(230.f, 20.f));
 	Progress_Shot_->SetStartCoorditateLeft();
 	Progress_Shot_->SetStartCoorditateBottom();
 	Progress_Shot_->SetTextAlign(0.f);
-	Progress_Shot_->SetCharacterSize(18);
-	Progress_Shot_->SetText("Shot");
+	Progress_Shot_->SetCharacterSize(14);
+	Progress_Shot_->SetText("");
 	this->AddUiObject(Progress_Shot_);
 }
 
