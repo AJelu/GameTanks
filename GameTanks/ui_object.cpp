@@ -293,23 +293,23 @@ void UiObject::Draw(sf::RenderWindow& window) {
 	
 	if (text_centre_ == 0) {
 		Text_in_ui_.setOrigin(sf::Vector2f(//centre
-			GetOffsetSprite().x - (this->GetWidthSprite(true) / 2 -
-								Text_in_ui_.getLocalBounds().width / 2),
-			GetOffsetSprite().y - ((this->GetHeightSprite(true)/2 -
-								Text_in_ui_.getLocalBounds().height*1.15f))));
+			this->GetOffsetSprite().x - (this->GetWidthSprite(true) / 2 -
+				Text_in_ui_.getLocalBounds().width / 2),
+			this->GetOffsetSprite().y - ((this->GetHeightSprite(true) / 2.0f -
+				(int)character_size_ * 0.70f))));
 	}
 	else if (text_centre_ < 0) {
 		Text_in_ui_.setOrigin(sf::Vector2f(//left
-			GetOffsetSprite().x - cursor_size_ + text_centre_,
-			GetOffsetSprite().y - ((this->GetHeightSprite(true) / 2 -
-				Text_in_ui_.getLocalBounds().height * 1.15f))));
+			this->GetOffsetSprite().x - cursor_size_ + text_centre_,
+			this->GetOffsetSprite().y - ((this->GetHeightSprite(true) / 2.0f -
+				(int)character_size_ * 0.70f))));
 	}
 	else {
 		Text_in_ui_.setOrigin(sf::Vector2f(//right
-			GetOffsetSprite().x - (this->GetWidthSprite(true) -
+			this->GetOffsetSprite().x - (this->GetWidthSprite(true) -
 				Text_in_ui_.getLocalBounds().width) + cursor_size_ + text_centre_,
-			GetOffsetSprite().y - ((this->GetHeightSprite(true) / 2 -
-				Text_in_ui_.getLocalBounds().height * 1.15f))));
+			this->GetOffsetSprite().y - ((this->GetHeightSprite(true) / 2.0f -
+				(int)character_size_ * 0.70f))));
 	}
 	window.draw(Text_in_ui_);
 
@@ -325,23 +325,23 @@ void UiObject::Draw(sf::RenderWindow& window) {
 		
 		if (text_centre_ == 0) {
 			rectangle.setOrigin(sf::Vector2f(//centre
-				GetOffsetSprite().x - (this->GetWidthSprite(true) / 2) -
+				this->GetOffsetSprite().x - (this->GetWidthSprite(true) / 2) -
 				(Text_in_ui_.getLocalBounds().width / 2) - rectangle.getLocalBounds().width,
-				GetOffsetSprite().y - ((this->GetHeightSprite(true) -
+				this->GetOffsetSprite().y - ((this->GetHeightSprite(true) -
 					rectangle.getLocalBounds().height) / 2)));
 		}
 		else if (text_centre_ < 0) {
 			rectangle.setOrigin(sf::Vector2f(//left
-				GetOffsetSprite().x - Text_in_ui_.getLocalBounds().width -
+				this->GetOffsetSprite().x - Text_in_ui_.getLocalBounds().width -
 				rectangle.getLocalBounds().width + text_centre_,
-				GetOffsetSprite().y - ((this->GetHeightSprite(true) -
+				this->GetOffsetSprite().y - ((this->GetHeightSprite(true) -
 					rectangle.getLocalBounds().height) / 2)));
 		}
 		else {
 			rectangle.setOrigin(sf::Vector2f(//right
-				GetOffsetSprite().x - (this->GetWidthSprite(true))
+				this->GetOffsetSprite().x - (this->GetWidthSprite(true))
 					+ cursor_size_ + text_centre_,
-				GetOffsetSprite().y - ((this->GetHeightSprite(true) -
+				this->GetOffsetSprite().y - ((this->GetHeightSprite(true) -
 					rectangle.getLocalBounds().height) / 2)));
 		}
 		window.draw(rectangle);

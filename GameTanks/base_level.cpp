@@ -567,11 +567,11 @@ void BaseLevel::CalculateCollisionOnLevel() {
 										(*it2)->GetGameType() != SHOT) {
 									(*it)->RestorePreviousState();
 									if ((*it)->GetGameType() == ENEMY) {
-										((MovebleObject*)(*it))->SetDistanceMove(0);
+										((MovebleObject*)(*it))->SetDistanceMove(-40);
 									}
 									(*it2)->RestorePreviousState();
 									if ((*it2)->GetGameType() == ENEMY) {
-										((MovebleObject*)(*it2))->SetDistanceMove(0);
+										((MovebleObject*)(*it2))->SetDistanceMove(-40);
 									}
 									(*it)->StartAudioAction("collision");
 									(*it2)->StartAudioAction("collision");
