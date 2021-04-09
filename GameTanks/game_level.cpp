@@ -9,19 +9,19 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	Player_ = nullptr;
 	if (id_watch_object == 0) {
 		switch (rand() % 6) {
-			case 0:	Player_ = new RedTank(1, 0, 0);
+			case 0:	Player_ = new RedTank(1, 220, 220);
 				break;
-			case 1:	Player_ = new TankBrown(1, 0, 0);
+			case 1:	Player_ = new TankBrown(1, 220, 220);
 				break;
-			case 2:	Player_ = new TankWhite(1, 0, 0);
+			case 2:	Player_ = new TankWhite(1, 220, 220);
 				break;
-			case 3:	Player_ = new TankBlack(1, 0, 0);
+			case 3:	Player_ = new TankBlack(1, 220, 220);
 				break;
-			case 4:	Player_ = new TankYellow(1, 0, 0);
+			case 4:	Player_ = new TankYellow(1, 220, 220);
 				break;
-			case 5:	Player_ = new TankGreen(1, 0, 0);
+			case 5:	Player_ = new TankGreen(1, 220, 220);
 				break;
-			default: Player_ = new TankYellow(1, 0, 0);
+			default: Player_ = new TankYellow(1, 220, 220);
 				break;
 		}
 		this->AddPlayerObject(Player_);
@@ -30,7 +30,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 
 
 		/* Respawn test bonus: */
-		this->SetBonusObject(new Star(1, 0, 0));
+		this->SetBonusObject(new Star(1, 300, 300));
 
 
 		/* Respawn enemy: */

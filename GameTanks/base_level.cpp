@@ -128,12 +128,13 @@ bool BaseLevel::SetWatchObject(VisibleObject* Watch_object) {
 	return false;
 }
 
-bool BaseLevel::SetBonusObject(GameObject* Bonus_object) {
-	if (Bonus_object != nullptr) {
+bool BaseLevel::SetBonusObject(GameObject* Bonus_object,
+		bool const& ignore_random_spawn) {
+	if (Bonus_object != nullptr
+			&& (ignore_random_spawn || this->RespawnObject(Bonus_object))) {
 		Bonus_object_ = Bonus_object;
 		Bonus_object_->SetGameType(BONUS);
 		Bonus_object_->SetIdObject(count_id_objects_);
-		this->RespawnObject(Bonus_object_);
 		count_id_objects_++;
 		return true;
 	}
@@ -555,7 +556,11 @@ void BaseLevel::CalculateCollisionOnLevel() {
 			if ((*it)->GetGameType() == PLAYER &&
 				!(*it)->Collision(Bonus_object_)) {
 				((TankObject*)(*it))->AddBonus(new Bonuses());
+				Bonus_object_->ClearAnimarionList(true);
+				Bonus_object_->SetLifeLevel(0);
 				this->RespawnObject(Bonus_object_);
+				Bonus_object_->CollisionOn();
+				Bonus_object_->SetLifeLevel(1);
 			}
 
 			if ((*it)->GetGameType() == SHOT || (*it)->ObjectInRangeLevel(

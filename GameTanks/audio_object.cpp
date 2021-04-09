@@ -135,8 +135,9 @@ sf::View* AudioObject::GetCamera() { return Camera_; }
 void AudioObject::RecalculateState(float const& game_time) {
 	VisibleObject::RecalculateState(game_time);
 
-	bool in_range = false;
+	bool in_range = true;
 	if ((Camera_ != nullptr)) {
+		in_range = false;
 		if (((Camera_->getCenter().x - Camera_->getSize().x / 2)
 				< this->GetCoordinateCentre().x + this->GetWidthSprite(true)) && 
 			((Camera_->getCenter().x + Camera_->getSize().x / 2)

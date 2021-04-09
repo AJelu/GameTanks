@@ -75,7 +75,8 @@ public:
 	bool AddShotObject(MovebleObject* Shot_objects);
 	bool AddDieObject(GameObject* Dies_objects);
 	bool SetWatchObject(VisibleObject* Watch_object);
-	bool SetBonusObject(GameObject* Bonus_object);
+	bool SetBonusObject(GameObject* Bonus_object,
+		bool const& ignore_random_spawn = false);
 
 	void DeleteClientPlayer(int const& number);
 
