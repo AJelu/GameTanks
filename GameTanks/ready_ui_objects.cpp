@@ -6,6 +6,7 @@ Button::Button(sf::Vector2f const& coordinate_centre,
 			"Data/Ui/Button.png", //texture
 			3, 1){ //frame count
 	this->SetFocusable(false);
+	this->SetTextColor(sf::Color::Black);
 	this->AddAudioAction("action1","Data/Audio/button_click/Button_click.ogg");
 	this->AddAudioAction("action2", "Data/Audio/button_click/Button_pressed.ogg");
 }
@@ -113,6 +114,7 @@ void TextLine::ChangeCounLine(int const& line_count) {
 				Lines_.back()->SetTexture("Data/Ui/text_background_.png", 1, 1);
 				Lines_.back()->SetCharacterSize(one_line_text_size_);
 				Lines_.back()->SetAnchorObject(this);
+				Lines_.back()->SetTextColor(sf::Color::White);
 				Lines_.back()->SetScale(sf::Vector2f(
 					width_ / (float)Lines_.back()->GetWidthSprite(),
 					one_line_ui_size_px_ / (float)Lines_.back()->GetHeightSprite()));
@@ -172,6 +174,7 @@ ProgressLine::ProgressLine(sf::Vector2f const& coordinate_centre) :
 	Fon_->SetAnchorObject(this);
 	Progress_->SetAnchorObject(this);
 	Border_->SetAnchorObject(this);
+	this->SetTextColor(sf::Color::Black);
 	this->SetProgress(1);
 }
 

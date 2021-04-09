@@ -71,7 +71,7 @@ public:
 	bool AddEnemyObject(TankObject* Enemy_objects,
 		bool const& ignore_random_spawn = false);
 	bool AddPlayerObject(TankObject* Player_objects,
-		bool const& ignore_random_spawn = false, bool need_add_ui = false);
+		bool const& ignore_random_spawn = false, int need_add_ui_id = 0);
 	bool AddShotObject(MovebleObject* Shot_objects);
 	bool AddDieObject(GameObject* Dies_objects);
 	bool SetWatchObject(VisibleObject* Watch_object);
@@ -80,6 +80,7 @@ public:
 	void DeleteClientPlayer(int const& number);
 
 	TankObject* GetPlayer(int const& player_number);
+	int GetPlayerCount();
 	GameObject* GetObjectById(int const& id_object);
 
 	void SetBackgroundTexture(std::string texture_address);

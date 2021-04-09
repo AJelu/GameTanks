@@ -68,7 +68,7 @@ bool BaseLevel::AddEnemyObject(TankObject* Enemy_objects,
 }
 
 bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
-		bool const& ignore_random_spawn, bool need_add_ui) {
+		bool const& ignore_random_spawn, int need_add_ui_id) {
 	if (Player_objects != nullptr
 			&& (ignore_random_spawn || this->RespawnObject(Player_objects))) {
 		Players_objects_.push_back(Player_objects);
@@ -82,9 +82,10 @@ bool BaseLevel::AddPlayerObject(TankObject* Player_objects,
 		Packet_send_all_data_.push_back(sf::Packet());
 		Packet_send_changes_.push_back(sf::Packet());
 		std::stringstream stream;
-		stream << "Player " << Players_objects_.size();
-		if (need_add_ui)
+		if (need_add_ui_id > 0) {
+			stream << "Player " << need_add_ui_id;
 			this->AddAnchorUiToObject(Player_objects, stream.str());
+		}
 		stream.str("");
 		return true;
 	}
@@ -147,6 +148,10 @@ TankObject* BaseLevel::GetPlayer(int const& player_number) {
 	if (player_number >= 0 && player_number < (int)Players_objects_.size())
 		return Players_objects_[player_number];
 	return nullptr;
+}
+
+int BaseLevel::GetPlayerCount() {
+	return Players_objects_.size();
 }
 
 GameObject* BaseLevel::GetObjectById(int const& id_object) {
@@ -233,6 +238,12 @@ void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
 			}
 		}
 		if (!finded_id) {
+			if (Bonus_object_ != nullptr && Bonus_object_->GetIdObject() == id) {
+				finded_id = true;
+				Bonus_object_->SetDataFromPacket(Packet);
+			}
+		}
+		if (!finded_id) {
 			GameObject* object = nullptr;
 			if (class_name == "Bullet") object = new Bullet(0);
 			else if (class_name == "DoubleBullet") object = new DoubleBullet(0);
@@ -272,7 +283,8 @@ void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
 				else if (object->GetGameType() == ENEMY)
 					this->AddEnemyObject((TankObject*)object, true);
 				else if (object->GetGameType() == PLAYER)
-					this->AddPlayerObject((TankObject*)object, true, player_id != id);
+					this->AddPlayerObject((TankObject*)object, true, 
+						player_id != id ? id : 0);
 				else if (object->GetGameType() == SHOT)
 					this->AddShotObject((MovebleObject*)object);
 				else if (object->GetGameType() == BONUS)
@@ -324,7 +336,7 @@ int BaseLevel::AddPlayerFromLan() {
 	this->AddPlayerObject(Object);
 
 	std::stringstream stream;
-	stream << "Player " << Players_objects_.size();
+	stream << "Player " << Object->GetIdObject();
 	this->AddAnchorUiToObject(Object, stream.str());
 	stream.str("");
 	return Object->GetIdObject();
@@ -475,7 +487,7 @@ bool BaseLevel::UpdateState(float& game_timer) {
 	}
 	for (auto item : All_objects_) {
 		for (i = 0; i < (int)Players_objects_.size(); i++) {
-			if (item->GetCoordinateCentre().x + item->GetWidthSprite() > 
+			if ((item->GetCoordinateCentre().x + item->GetWidthSprite() > 
 					Players_objects_[i]->GetCoordinateCentre().x 
 						- SCREEN_RESOLUTION_X &&
 				item->GetCoordinateCentre().x - item->GetWidthSprite() < 
@@ -486,7 +498,8 @@ bool BaseLevel::UpdateState(float& game_timer) {
 						- SCREEN_RESOLUTION_Y &&
 				item->GetCoordinateCentre().y - item->GetHeightSprite() < 
 					Players_objects_[i]->GetCoordinateCentre().y 
-						+ SCREEN_RESOLUTION_Y) {
+						+ SCREEN_RESOLUTION_Y) 
+				|| Players_objects_[i]->GetGameType() == PLAYER) {
 				item->CreatePacket(Packet_send_all_data_[i]);
 				if (item->GetNeedSynchByLan())
 					item->CreatePacket(Packet_send_changes_[i]);

@@ -117,7 +117,7 @@ GameLevel::GameLevel(int const& id_watch_object) : BaseLevel() {
 	}
 	else player_id_ = id_watch_object;
 
-	Stats_ = new TextLine(sf::Vector2f(20, 20), 250, 8, 21, 40, 43);
+	Stats_ = new TextLine(sf::Vector2f(20, 20), 250, 6, 21, 40, 43);
 	Stats_->SetStartCoorditateTop();
 	Stats_->SetStartCoorditateLeft();
 	Stats_->TextAlign(0);
@@ -190,43 +190,54 @@ bool GameLevel::UpdateState(float& game_timer) {
 	//other manipulation on game level:
 	Progress_life_->SetProgress(Player_->GetLifeLevel() / 
 		float(Player_->GetMaxLifeLevel()));
-	Progress_life_->SetText("LIFE");
 	Progress_Shot_->SetProgress(1.f - Player_->GetTimeToNextShot() /
 		(Player_->GetTimeFreezeShot()));
 
-	StatsOutput("SCORE POINT: ", Player_->GetCurrentPoint(), 0, Player_);
-	StatsOutput("HIT POINT: ", Player_->GetLifeLevel(), 1, Player_, 
-		float(Player_->GetMaxLifeLevel()));
 	if (Player_->GetBonus() != nullptr) {
-		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 2, Player_,
+		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 0, Player_,
 			float(Player_->GetBonus()->GetOriginalShotLife()), 
 			float(Player_->GetBonus()->GetShotLife()));
-		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 3, Player_,
+		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 1, Player_,
 			Player_->GetBonus()->GetOriginalShotDistance(), 
 			Player_->GetBonus()->GetShotDistance());
-		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 4, Player_,
+		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 2, Player_,
 			Player_->GetBonus()->GetOriginalSpeedShot(), 
 			Player_->GetBonus()->GetSpeedShot());
-		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 5, Player_,
+		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 3, Player_,
 			Player_->GetBonus()->GetOriginalTimeFreezeShot(), 
 			Player_->GetBonus()->GetTimeFreezeShot());
-		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 6, Player_,
+		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 4, Player_,
 			Player_->GetBonus()->GetOriginalRotationSpeed(), 
 			Player_->GetBonus()->GetRotationSpeed());
-		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 7, Player_,
+		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 5, Player_,
 			Player_->GetBonus()->GetOriginalSpeedMove(), 
 			Player_->GetBonus()->GetSpeedMove());
 	}
 	else {
-		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 2, Player_);
-		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 3, Player_);
-		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 4, Player_);
-		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 5, Player_);
-		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 6, Player_);
-		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 7, Player_);
+		StatsOutput("DAMAGE: ", Player_->GetLifeShot(), 0, Player_);
+		StatsOutput("ATTACK RANGE: ", Player_->GetShotDistance(), 1, Player_);
+		StatsOutput("ATTACK SPEED: ", Player_->GetSpeedShot(), 2, Player_);
+		StatsOutput("RECHARGE: ", Player_->GetTimeFreezeShot(), 3, Player_);
+		StatsOutput("MOBILITY: ", Player_->GetRotationSpeed(), 4, Player_);
+		StatsOutput("SPEED: ", Player_->GetSpeedMove(), 5, Player_);
 	}
 
-	Progress_life_->SetText(Stats_->GetTextLine(1));
+	Progress_life_->SetText("HIT POINT: " + 
+		std::to_string(Player_->GetLifeLevel()) + "\\" +
+		std::to_string(Player_->GetMaxLifeLevel()));
+
+	Point_board->ChangeCounLine(this->GetPlayerCount());
+
+	for (int i = 0; i < this->GetPlayerCount(); i++) {
+		TankObject* Player = this->GetPlayer(i);
+		if (Player != nullptr) {
+			Point_board->SetTextLine((Player != Player_ ?
+				"Player " + std::to_string(Player->GetIdObject()) + ": " :
+				"My: ") +
+				std::to_string(Player->GetCurrentPoint()), i
+			);
+		}
+	}
 
 	return result;
 }
