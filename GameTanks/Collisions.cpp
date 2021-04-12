@@ -2,9 +2,7 @@
 #include <cmath>
 #include "collisions.h"
 
-BaseCollision::BaseCollision() { 
-    SetCoordinate(sf::Vector2f(0, 0));
-}
+BaseCollision::BaseCollision() { SetCoordinate(sf::Vector2f(0, 0)); }
 
 BaseCollision::BaseCollision(sf::Vector2f const& coordinate) { 
     SetCoordinate(coordinate);
@@ -12,8 +10,7 @@ BaseCollision::BaseCollision(sf::Vector2f const& coordinate) {
 
 sf::Vector2f BaseCollision::GetCoordinate() { return coordinate_; }
 
-sf::Vector2f BaseCollision::GetCoordinateByRotation(float const& rotation_degree)
-{
+sf::Vector2f BaseCollision::GetCoordinateByRotation(float const& rotation_degree) {
     if (rotation_degree != rotation_degree_) {
 		float to_radian = (-rotation_degree) * (float)M_PI / 180.0f;
 		coordinate_by_rotation_.x = (coordinate_.x * cos(to_radian) -
@@ -33,7 +30,7 @@ void BaseCollision::SetCoordinate(sf::Vector2f const& coordinate) {
 RoundCollision::RoundCollision() : BaseCollision() { r_ = 1; }
 
 RoundCollision::RoundCollision(sf::Vector2f const& coordinate, float const& radius) 
-    : BaseCollision(coordinate) { 
+        : BaseCollision(coordinate) { 
     r_ = radius; 
 }
 
@@ -41,4 +38,6 @@ float RoundCollision::GetRadius() { return r_; }
 
 void RoundCollision::SetRadius(float const& radius) { r_ = radius; }
 
-bool RoundCollision::CoordinatesInFigure(sf::Vector2f const& coordinate) { return false; }
+bool RoundCollision::CoordinatesInFigure(sf::Vector2f const& coordinate) { 
+    return false; 
+}

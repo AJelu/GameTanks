@@ -6,9 +6,9 @@ std::vector<sf::SoundBuffer*> AudioObject::Sounds_buffer_;
 
 sf::SoundBuffer* AudioObject::GetSoundsBuffer(std::string audio_file) {
 
-	for (int i = 0; i < (int)Audio_file_name_.size(); i++) {
-		if (Audio_file_name_[i] == audio_file) { return Sounds_buffer_[i]; }
-	}
+	for (int i = 0; i < (int)Audio_file_name_.size(); i++) 
+		if (Audio_file_name_[i] == audio_file) return Sounds_buffer_[i];
+
 	sf::SoundBuffer* Sound_buffer = new sf::SoundBuffer();
 	if (Sound_buffer->loadFromFile(audio_file)) {
 		Audio_file_name_.push_back(audio_file);
@@ -54,8 +54,7 @@ bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 	bool result = false;
 	for (int i = 0; i < (int)Audio_action_playing_name_.size(); i++) {
 		if (Audio_action_playing_name_[i] == audio_action || 
-			(Sounds_file_[i]->getStatus() != sf::Sound::Status::Playing)) {
-			//stop and delete audio
+				(Sounds_file_[i]->getStatus() != sf::Sound::Status::Playing)) {
 			Sounds_file_[i]->setLoop(false);
 			Sounds_file_[i]->stop();
 			delete Sounds_file_[i];
@@ -65,7 +64,7 @@ bool AudioObject::StopPlayingAudioAction(std::string const& audio_action) {
 			result = true;
 		}
 	}
-	//for lan synchronize
+	//For lan synchronize:
 	for (int j = 0; j < (int)Audio_action_name_.size(); j++)
 		if (Audio_action_name_[j] == audio_action) {
 			Need_send_stop_to_lan_.push_back(j);
@@ -81,22 +80,19 @@ void AudioObject::DestroyCreatedStaticVectors() {
 	Sounds_buffer_.clear();
 }
 
-AudioObject::AudioObject() : VisibleObject() {
-	Camera_ = nullptr;
-}
+AudioObject::AudioObject() : VisibleObject() { Camera_ = nullptr; }
 
 AudioObject::AudioObject(int const& id_object,
-	sf::Vector2f const& coordinate_centre,
-	sf::Vector2f const& offset_sprite_coordinate,
-	std::string const& texture, int const& frame_count_x, int const& frame_count_y) : 
-	VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
-		texture, frame_count_x, frame_count_y) {
+		sf::Vector2f const& coordinate_centre,
+		sf::Vector2f const& offset_sprite_coordinate,
+		std::string const& texture, int const& frame_count_x, int const& frame_count_y) : 
+		VisibleObject(id_object, coordinate_centre, offset_sprite_coordinate,
+			texture, frame_count_x, frame_count_y) {
 	Camera_ = nullptr;
 }
 
 void AudioObject::AddAudioAction(std::string const& audio_action_name,
-									std::string const& audio_file, 
-									bool looped, float const& volume){
+		std::string const& audio_file, bool looped, float const& volume) {
 	Audio_action_name_.push_back(audio_action_name);
 	Audio_action_file_name_.push_back(audio_file);
 	Audio_action_looped_.push_back(looped);
@@ -113,13 +109,10 @@ bool AudioObject::StopAudioAction(std::string const& audio_action){
 	return true;
 }
 
-bool AudioObject::PlaysSounds() {
-	return Sounds_file_.size() > 0;
-}
+bool AudioObject::PlaysSounds() { return Sounds_file_.size() > 0; }
 
 void AudioObject::StopAllSounds() {
 	for (int i = 0; i < (int)Sounds_file_.size(); i++) {
-		//stop and delete audio
 		Sounds_file_[i]->setLoop(false);
 		Sounds_file_[i]->stop();
 		delete Sounds_file_[i];
@@ -149,11 +142,10 @@ void AudioObject::RecalculateState(float const& game_time) {
 			in_range = true;
 	}
 	while (!Start_audio_action_.empty()) {
-		this->PlayAudioAction(in_range, 
-			Start_audio_action_.front());
+		this->PlayAudioAction(in_range, Start_audio_action_.front());
 		Start_audio_action_.pop();
 	}
-	this->StopPlayingAudioAction(""); //for deleting ended sound objects
+	this->StopPlayingAudioAction(""); //For deleting ended sound objects
 	while (!Stop_audio_action_.empty()) {
 		this->StopPlayingAudioAction(Stop_audio_action_.front());
 		Stop_audio_action_.pop();
@@ -169,13 +161,9 @@ std::string AudioObject::ClassName() { return "AudioObject"; }
 bool AudioObject::CreatePacket(sf::Packet& Packet) {
 	bool result = VisibleObject::CreatePacket(Packet);
 	Packet << (int)Need_send_start_to_lan_.size();
-	for (auto item : Need_send_start_to_lan_) {
-		Packet << item;
-	}
+	for (auto const& item : Need_send_start_to_lan_) Packet << item;
 	Packet << (int)Need_send_stop_to_lan_.size();
-	for (auto item : Need_send_stop_to_lan_) {
-		Packet << item;
-	}
+	for (auto const& item : Need_send_stop_to_lan_) Packet << item;
 	return result;
 }
 
@@ -218,7 +206,5 @@ void AudioObject::SetNeedSynchByLan(bool const& need_synch_by_lan) {
 }
 
 AudioObject::~AudioObject(){
-	for (int i = 0; i < (int)Sounds_file_.size(); i++) {
-		if (Sounds_file_.at(i)) delete Sounds_file_[i]; //test mode of access verification
-	}
+	for (int i = 0; i < (int)Sounds_file_.size(); i++) delete Sounds_file_[i];
 }

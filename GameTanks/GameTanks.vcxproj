@@ -146,7 +146,6 @@
     <ClCompile Include="base_object.cpp" />
     <ClCompile Include="bonuses.cpp" />
     <ClCompile Include="collisions.cpp" />
-    <ClCompile Include="connect_level.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="engine_draw.cpp" />
     <ClCompile Include="engine_input.cpp" />

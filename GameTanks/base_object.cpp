@@ -1,7 +1,7 @@
 #include "objects.h"
 
-
-BaseObject::BaseObject() { id_object_ = 0; }
+BaseObject::BaseObject() 
+    : id_object_{ 0 }, need_synch_by_lan_{ true } {}
 
 BaseObject::BaseObject(int const& id_object) { this->SetIdObject(id_object); }
 
@@ -16,9 +16,7 @@ bool BaseObject::CreatePacket(sf::Packet& Packet) {
     return true;
 }
 
-bool BaseObject::SetDataFromPacket(sf::Packet& Packet) {
-    return true;
-}
+bool BaseObject::SetDataFromPacket(sf::Packet& Packet) { return true; }
 
 bool BaseObject::GetNeedSynchByLan() { return need_synch_by_lan_; }
 

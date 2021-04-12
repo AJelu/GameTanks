@@ -46,12 +46,14 @@ void GameObject::SetLifeLevel(int const& life_level, bool const& add_to_previous
 void GameObject::SetMaxLifeLevel(int const& max_life_level) {
 	if (max_life_level > 0) {
 		max_life_level_ = max_life_level;
-		if (max_life_level_ < this->GetLifeLevel()) this->SetLifeLevel(max_life_level_);
+		if (max_life_level_ < this->GetLifeLevel()) 
+			this->SetLifeLevel(max_life_level_);
 		this->SetNeedSynchByLan(true);
 	}
 }
 
-void GameObject::SetTimeToRespawn(float const& time_to_respawn, bool const& add_to_previous) {
+void GameObject::SetTimeToRespawn(float const& time_to_respawn, 
+		bool const& add_to_previous) {
 	float new_time_to_respawn;
 	if (add_to_previous)	new_time_to_respawn = time_to_respawn_ + time_to_respawn;
 	else					new_time_to_respawn = time_to_respawn;
@@ -81,7 +83,8 @@ void GameObject::SetBasePoint(int const& base_point) {
 	this->SetNeedSynchByLan(true);
 }
 
-void GameObject::SetCurrentPoint(int const& current_point, bool const& add_to_previous) {
+void GameObject::SetCurrentPoint(int const& current_point, 
+		bool const& add_to_previous) {
 	if (add_to_previous)	current_point_ += current_point;
 	else					current_point_ = current_point;
 	if (current_point_ < 0) current_point_ = 0;
@@ -118,7 +121,8 @@ void GameObject::AddCollision(RoundCollision* New_colision) {
 	}
 }
 
-bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int level_size_border){
+bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, 
+		int level_size_border) {
 	if (this->GetCoordinateCentre().x - this->GetSafeDistance()
 		> level_size_border &&
 		this->GetCoordinateCentre().y - this->GetSafeDistance()
@@ -130,18 +134,18 @@ bool GameObject::ObjectInRangeLevel(int level_size_x, int level_size_y, int leve
 		return true;
 
 	for (int i = 0; i < (int)this->Collisions_.size(); i++) {
-		point_1 = this->Collisions_[i]->
+		Point_1_ = this->Collisions_[i]->
 			GetCoordinateByRotation(this->CalculateGradus());
-		point_1.x += this->GetCoordinateCentre().x;
-		point_1.y *= -1;
-		point_1.y += this->GetCoordinateCentre().y;
-		if (point_1.x - this->Collisions_[i]->GetRadius()
+		Point_1_.x += this->GetCoordinateCentre().x;
+		Point_1_.y *= -1;
+		Point_1_.y += this->GetCoordinateCentre().y;
+		if (Point_1_.x - this->Collisions_[i]->GetRadius()
 				< level_size_border ||
-			point_1.y - this->Collisions_[i]->GetRadius()
+			Point_1_.y - this->Collisions_[i]->GetRadius()
 				< level_size_border ||
-			point_1.x + this->Collisions_[i]->GetRadius()
+			Point_1_.x + this->Collisions_[i]->GetRadius()
 				> level_size_x - level_size_border ||
-			point_1.y + this->Collisions_[i]->GetRadius()
+			Point_1_.y + this->Collisions_[i]->GetRadius()
 				> level_size_y - level_size_border) 
 			return false;
 	}
@@ -155,27 +159,27 @@ float GameObject::SafeDistanceToCollision(GameObject* Game_object) {
 		this->GetSafeDistance() - Game_object->GetSafeDistance();
 }
 
-//not have collision - return true
+//If dont have collision - return true
 bool GameObject::Collision(GameObject* Game_object) {
 	if (Game_object != nullptr) {
 		if (collision_off_ || Game_object->collision_off_) return true;
 		float distance;
 		if (Game_object != nullptr) {
 			for (int i = 0; i < (int)this->Collisions_.size(); i++) {
-				point_1 = this->Collisions_[i]->
+				Point_1_ = this->Collisions_[i]->
 					GetCoordinateByRotation(this->CalculateGradus());
-				point_1.x += this->GetCoordinateCentre().x;
-				point_1.y *= -1;
-				point_1.y += this->GetCoordinateCentre().y;
+				Point_1_.x += this->GetCoordinateCentre().x;
+				Point_1_.y *= -1;
+				Point_1_.y += this->GetCoordinateCentre().y;
 				for (int j = 0; j < (int)Game_object->Collisions_.size(); j++) {
-					point_2 = Game_object->Collisions_[j]->
+					Point_2_ = Game_object->Collisions_[j]->
 						GetCoordinateByRotation(Game_object->CalculateGradus());
-					point_2.x += Game_object->GetCoordinateCentre().x;
-					point_2.y *= -1;
-					point_2.y += Game_object->GetCoordinateCentre().y;
+					Point_2_.x += Game_object->GetCoordinateCentre().x;
+					Point_2_.y *= -1;
+					Point_2_.y += Game_object->GetCoordinateCentre().y;
 
-					distance = sqrtf(powf(point_1.x - point_2.x, 2) +
-						powf(point_1.y - point_2.y, 2));
+					distance = sqrtf(powf(Point_1_.x - Point_2_.x, 2) +
+						powf(Point_1_.y - Point_2_.y, 2));
 					if ((distance - this->Collisions_[i]->GetRadius() -
 						Game_object->Collisions_[j]->GetRadius()) < 0) {
 						return false;
@@ -214,9 +218,7 @@ bool GameObject::SetDataFromPacket(sf::Packet& Packet) {
 			life_level_ = max_life_level_;
 			return false;
 		}
-		if (life_level_ < 0 || max_life_level_ < 0) {
-			return false;
-		}
+		if (life_level_ < 0 || max_life_level_ < 0) return false;
 		Packet >> game_type_;
 		return true;
 	}
@@ -231,21 +233,17 @@ void GameObject::Draw(sf::RenderWindow& window) {
 			shape.setFillColor(sf::Color::Transparent);
 			shape.setOutlineThickness(1);
 			shape.setOutlineColor(sf::Color::Red);
-			point_1 = this->Collisions_[i]->
+			Point_1_ = this->Collisions_[i]->
 				GetCoordinateByRotation(this->CalculateGradus());
-			point_1.x += this->GetCoordinateCentre().x - Collisions_[i]->GetRadius();
-			point_1.y *= -1;
-			point_1.y += this->GetCoordinateCentre().y - Collisions_[i]->GetRadius();
-			shape.setPosition(point_1);
+			Point_1_.x += this->GetCoordinateCentre().x - Collisions_[i]->GetRadius();
+			Point_1_.y *= -1;
+			Point_1_.y += this->GetCoordinateCentre().y - Collisions_[i]->GetRadius();
+			shape.setPosition(Point_1_);
 			window.draw(shape);
 		}
 	}
 }
 
 GameObject::~GameObject() {
-	for (int i = 0; i < (int)Collisions_.size(); i++) {
-		if (Collisions_.at(i)) delete Collisions_[i];
-		Collisions_[i] = nullptr;
-	}
-	Parrent_ = nullptr;
+	for (int i = 0; i < (int)Collisions_.size(); i++) delete Collisions_[i];
 }

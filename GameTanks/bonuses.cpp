@@ -1,29 +1,29 @@
 #include "bonuses.h"
 #include "settings.h"
 
-void Bonuses::GenerateSpeed() { // Speed +20-50% / Rotation -20-50%
+void Bonuses::GenerateSpeed() { //Speed +20-50% / Rotation -20-50%
 	speed_move_ = (rand() % 3 + 2) * 0.1f;
 	rotation_speed_ = -speed_move_;
 }
 
-void Bonuses::GenerateRotation() { // Rotation +20-50% / Speed -20-50%
+void Bonuses::GenerateRotation() { //Rotation +20-50% / Speed -20-50%
 	rotation_speed_ = (rand() % 3 + 2) * 0.1f;
 	speed_move_ = -rotation_speed_;
 }
 
-void Bonuses::GenerateShotPower() { // Damage +50-100% / Range -25-50% / Recharge -10%
+void Bonuses::GenerateShotPower() { //Damage +50-100% / Range -25-50% / Recharge -10%
 	shot_life_ = (rand() % 10 + 5) * 0.1f;
 	shot_distance_ = shot_life_ / 2;
 	time_freeze_shot_ = 0.1f;
 }
 
-void Bonuses::GenerateShotSpeed() { // Range +20-50% / Recharge +10% / Damage -20-50%
+void Bonuses::GenerateShotSpeed() { //Range +20-50% / Recharge +10% / Damage -20-50%
 	shot_distance_ = (rand() % 3 + 2) * 0.1f;
 	time_freeze_shot_ = -0.1f;
 	shot_life_ = -shot_distance_;
 }
 
-void Bonuses::GenerateLife() { // HP Regen +200% / Bonus HP +2
+void Bonuses::GenerateLife() { //HP Regen +200% / Bonus HP +2
 	life_level_ = 2;
 	max_life_level_ = 0.02f;
 }
@@ -40,16 +40,15 @@ Bonuses::Bonuses() {
 	life_level_			= 0.00;
 	max_life_level_		= 0.00;
 
-	switch (rand() % 4)
-	{
-	case 0: this->GenerateSpeed();
-		break;
-	case 1: this->GenerateRotation();
-		break;
-	case 2: this->GenerateShotPower();
-		break;
-	case 3: this->GenerateShotSpeed();
-		break;
+	switch (rand() % 4) {
+		case 0: this->GenerateSpeed();
+			break;
+		case 1: this->GenerateRotation();
+			break;
+		case 2: this->GenerateShotPower();
+			break;
+		case 3: this->GenerateShotSpeed();
+			break;
 	}
 	this->GenerateLife();
 }
@@ -66,16 +65,15 @@ Bonuses::Bonuses(float bonus_duration) {
 	life_level_			= 0.00;
 	max_life_level_		= 0.00;
 
-	switch (rand() % 4)
-	{
-	case 0: this->GenerateSpeed();
-		break;
-	case 1: this->GenerateRotation();
-		break;
-	case 2: this->GenerateShotPower();
-		break;
-	case 3: this->GenerateShotSpeed();
-		break;
+	switch (rand() % 4) {
+		case 0: this->GenerateSpeed();
+			break;
+		case 1: this->GenerateRotation();
+			break;
+		case 2: this->GenerateShotPower();
+			break;
+		case 3: this->GenerateShotSpeed();
+			break;
 	}
 	this->GenerateLife();
 }
@@ -121,7 +119,8 @@ float Bonuses::GetShotDistance() {
 }
 
 float Bonuses::GetTimeFreezeShot() {
-	if ((o_time_freeze_shot_ + o_time_freeze_shot_ * time_freeze_shot_) < 0) return 0.0f;
+	if ((o_time_freeze_shot_ + o_time_freeze_shot_ * time_freeze_shot_) < 0) 
+		return 0.0f;
 	return o_time_freeze_shot_ + o_time_freeze_shot_ * time_freeze_shot_; 
 }
 
@@ -140,7 +139,6 @@ int Bonuses::GetMaxLifeLevel() {
 	return int(o_max_life_level_ + o_max_life_level_ * max_life_level_); 
 }
 
-
 float Bonuses::GetOriginalSpeedMove() { return o_speed_move_; }
 
 float Bonuses::GetOriginalRotationSpeed() { return o_rotation_speed_; }
@@ -156,7 +154,6 @@ int Bonuses::GetOriginalShotLife() { return o_shot_life_; }
 int Bonuses::GetOriginalLifeLevel() { return o_life_level_; }
 
 int Bonuses::GetOriginalMaxLifeLevel() { return o_max_life_level_; }
-
 
 void Bonuses::SetOriginalSpeedMove(float const& o_speed_move) {
 	o_speed_move_ = o_speed_move; }

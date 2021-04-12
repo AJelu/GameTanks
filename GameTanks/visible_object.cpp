@@ -41,7 +41,7 @@ sf::Texture* VisibleObject::GetTexture(std::string texture_name)
 	return nullptr;
 }
 
-//rotate vector be lengh 1 
+//Rotate vector be lengh 1:
 bool VisibleObject::RecalculateVector() {
 	float length_vector = 
 		  vector_rotate_x_ * vector_rotate_x_ 
@@ -54,7 +54,7 @@ bool VisibleObject::RecalculateVector() {
 	return true;
 }
 
-//just showing current tile 
+//Just showing current tile:
 bool VisibleObject::ShowTile() {
 	int x1, y1;
 	x1 = this->GetWidthSprite() * (tile_frame_current_ - 1);
@@ -66,7 +66,7 @@ bool VisibleObject::ShowTile() {
 	return true;
 }
 
-//set position (choosed frame texture) and show choosed frame; return true if chenge position
+//Set position (choosed frame texture) and show choosed frame; return true if change position:
 bool VisibleObject::SetTile(int const& tile_level, int const& tile_number) {
 	if (tile_level > frame_count_y_ || tile_level < 1) return false;
 	if (tile_number > frame_count_x_ || tile_number < 1) return false;
@@ -83,9 +83,7 @@ void VisibleObject::DestroyCreatedStaticVectors() {
 	Texture_objects_.clear();
 }
 
-float VisibleObject::CalculateGradus() {
-	return gradus_;
-}
+float VisibleObject::CalculateGradus() { return gradus_; }
 
 void VisibleObject::ClearAnimarionList(bool const& all) {
 	q_tile_level_.clear();
@@ -103,18 +101,15 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 		int const& frame_start, int const& frame_end,
 		float const& animation_speed_for_frame, bool const& looped) {
 	
-	
 	if ((tile_level == tile_level_) && (frame_start == animation_frame_start_) 
 		&& (frame_end == animation_frame_end_) && !AnimationEnd())
 		return;
 
 	looped_ = looped and (frame_start != frame_end);
 
-	if (looped_) {
-		this->ClearAnimarionList();
-	}
-	//check is no out of range and write new parameter for animate
+	if (looped_) this->ClearAnimarionList();
 
+	//Check is no out of range and write new parameter for animations:
 	int t_tile_level_;
 	if (tile_level > frame_count_y_)	t_tile_level_ = frame_count_y_;
 	else if (tile_level < 1)			t_tile_level_ = 1;
@@ -143,19 +138,18 @@ void VisibleObject::StartPlayAnimation(int const& tile_level,
 	q_animation_speed_for_frame_.push_back(animation_speed_for_frame);
 }
 
-bool VisibleObject::AnimationEnd(bool const& all_list){
+bool VisibleObject::AnimationEnd(bool const& all_list) {
 	if (all_list && !q_tile_level_.empty()) return false;
 	if ((tile_frame_current_ == animation_frame_end_) &&
 		(current_frame_animation_time_ > animation_speed_for_frame_)) return true;
 	return false;
 }
 
-//counting current frame
+//Counting current frame:
 void VisibleObject::RecalculateState(float const& game_time){
 	if (!this->AnimationEnd()) {
 		current_frame_animation_time_ += game_time; // add time "one screen frame"
 		while (current_frame_animation_time_ > animation_speed_for_frame_) {
-
 			if (!this->AnimationEnd()) {
 				current_frame_animation_time_ -= animation_speed_for_frame_;
 				this->SetTile(tile_level_, tile_frame_current_ +
@@ -166,40 +160,41 @@ void VisibleObject::RecalculateState(float const& game_time){
 	}
 	if (this->AnimationEnd()) {
 		if (!q_tile_level_.empty()) {
-			//get new animate from queue
+			//Get new animate from queue:
 			tile_level_ = q_tile_level_.front();
 			animation_frame_start_ = q_animation_frame_start_.front();
 			animation_frame_end_ = q_animation_frame_end_.front();
 			animation_speed_for_frame_ = q_animation_speed_for_frame_.front();
-			//delete new animate in queue
+			//Delete new animate in queue:
 			q_tile_level_.erase(q_tile_level_.begin());
 			q_animation_frame_start_.erase(q_animation_frame_start_.begin());
 			q_animation_frame_end_.erase(q_animation_frame_end_.begin());
 			q_animation_speed_for_frame_.erase(q_animation_speed_for_frame_.begin());
-			//set first tile animation
+			//Set first tile animation:
 			current_frame_animation_time_ = 0;
 			this->SetTile(tile_level_, animation_frame_start_);
 			this->SetNeedSynchByLan(true);
 		}
-		else if (looped_) {//restart animation
+		else if (looped_) { //Restart animation
 			current_frame_animation_time_ = 0;
 			this->SetTile(tile_level_, animation_frame_start_);
 		}
 	}
 }
 
-//get object parameters
-const sf::Vector2f& VisibleObject::GetCoordinateCentre() { return Sprite_object_.getPosition(); }
+const sf::Vector2f& VisibleObject::GetCoordinateCentre() { 
+	return Sprite_object_.getPosition(); 
+}
 
 int VisibleObject::GetHeightSprite(bool get_scale_size) {
-	if (frame_count_y_ > 0) return (int)(Texture_object_->getSize().y / frame_count_y_ *
-		(get_scale_size ? Sprite_object_.getScale().y : 1));
+	if (frame_count_y_ > 0) return (int)(Texture_object_->getSize().y 
+		/ frame_count_y_ * (get_scale_size ? Sprite_object_.getScale().y : 1));
 	return 0;
 }
 
 int VisibleObject::GetWidthSprite(bool get_scale_size) {
-	if (frame_count_x_ > 0) return (int)(Texture_object_->getSize().x / frame_count_x_ *
-		(get_scale_size ? Sprite_object_.getScale().x : 1));
+	if (frame_count_x_ > 0) return (int)(Texture_object_->getSize().x 
+		/ frame_count_x_ * (get_scale_size ? Sprite_object_.getScale().x : 1));
 	return 0;
 }
 
@@ -251,26 +246,18 @@ std::string VisibleObject::ClassName() { return "VisibleObject"; }
 
 bool VisibleObject::CreatePacket(sf::Packet& Packet) {
 	bool result = BaseObject::CreatePacket(Packet);
-	//Packet << offset_sprite_coordinate_.x << offset_sprite_coordinate_.y;
 	Packet << this->GetCoordinateCentre().x << this->GetCoordinateCentre().y;
-
 	Packet << tile_level_ << tile_frame_current_;
 	Packet << animation_frame_start_ << animation_frame_end_;
 	Packet << looped_;
 	Packet << animation_speed_for_frame_;
 	Packet << current_frame_animation_time_;
-	//
-	//queue?
-	//
 	Packet << vector_rotate_x_ << vector_rotate_y_;
-
 	return result;
 }
 
 bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
 	if (BaseObject::SetDataFromPacket(Packet)) {
-		//Packet >> offset_sprite_coordinate_.x >> offset_sprite_coordinate_.y;
-		//this->SetOffsetSprite(offset_sprite_coordinate_);
 		float t_coordinate_x_, t_coordinate_y_;
 		Packet >> t_coordinate_x_ >> t_coordinate_y_;
 		this->SetCoordinate(sf::Vector2f(t_coordinate_x_, t_coordinate_y_));
@@ -294,7 +281,6 @@ bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
 			tile_frame_current_ = frame_count_x_;
 			return false;
 		}
-
 
 		Packet >> animation_frame_start_;
 		if (animation_frame_start_ < 1) {
@@ -339,9 +325,7 @@ bool VisibleObject::SetDataFromPacket(sf::Packet& Packet) {
 		Packet >> current_frame_animation_time_;
 		this->ClearAnimarionList();
 		this->ShowTile();
-		//
-		//queue?
-		//
+
 		t_coordinate_x_, t_coordinate_y_;
 		Packet >> t_coordinate_x_ >> t_coordinate_y_;
 		this->SetRotationVector(t_coordinate_x_, t_coordinate_y_);
@@ -356,23 +340,27 @@ void VisibleObject::SetRotationVector(float const& vector_x, float const& vector
 	vector_rotate_x_ = vector_x;
 	vector_rotate_y_ = vector_y;
 	this->RecalculateVector(); 
-	float temp_vector_x = 0.0f;//create and set temp vector
+	float temp_vector_x = 0.0f; //Create and set temp vector
 	float temp_vector_y = 1.0f;
 	float rotation_by_gradus =
 		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
 			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
-	rotation_by_gradus = (rotation_by_gradus * 180.0f) / (float)M_PI; //calculate temp gradus1
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * 
+					vector_rotate_y_)));
+	//Calculate temp gradus1:
+	rotation_by_gradus = (rotation_by_gradus * 180.0f) / (float)M_PI; 
 
-	temp_vector_x = 1.0f;//set temp vector
+	temp_vector_x = 1.0f; //Set temp vector
 	temp_vector_y = 0.0f;
 	float rotation_by_gradus_buffer =
 		acosf((temp_vector_x * vector_rotate_x_ + temp_vector_y * vector_rotate_y_) /
 			(sqrtf(temp_vector_x * temp_vector_x + temp_vector_y * temp_vector_y) *
-				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * vector_rotate_y_)));
-	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180.0f) / (float)M_PI;//calculate temp gradus2
+				sqrtf(vector_rotate_x_ * vector_rotate_x_ + vector_rotate_y_ * 
+					vector_rotate_y_)));
+	//Calculate temp gradus2:
+	rotation_by_gradus_buffer = (rotation_by_gradus_buffer * 180.0f) / (float)M_PI; 
 
-	//calculete new gradus
+	//Calculete new gradus:
 	if (rotation_by_gradus_buffer > 90.0f) rotation_by_gradus = 360.0f - rotation_by_gradus;
 	gradus_ = rotation_by_gradus;
 	Sprite_object_.setRotation(this->CalculateGradus());
@@ -441,6 +429,4 @@ void VisibleObject::Draw(sf::RenderWindow& window) {
 	window.draw(Sprite_object_);
 }
 
-VisibleObject::~VisibleObject() {
-	Texture_object_ = nullptr;
-}
+VisibleObject::~VisibleObject() { Texture_object_ = nullptr; }

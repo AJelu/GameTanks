@@ -2,7 +2,7 @@
 
 #include "objects.h"
 
-//move objects:
+//Move objects:
 class Bullet : public MovebleObject {
 private:
 	void ActionDie() override;
@@ -108,7 +108,7 @@ public:
 };
 
 
-//ui objects:
+//UI objects:
 class Button : public UiObject {
 public:
 	Button(sf::Vector2f const& coordinate_centre,
@@ -124,16 +124,6 @@ class Loading : public UiObject {
 public:
 	Loading(sf::Vector2f const& coordinate_centre,
 		sf::Vector2f const& offset_sprite_coordinate);
-};
-
-class Text : public UiObject {
-public:
-	Text(sf::Vector2f const& coordinate_centre);
-
-	void ActionEnter() override;
-	void ActionLeave() override;
-	void ActionClickDown() override;
-	void ActionClickUp() override;
 };
 
 class PlayersTextBackground : public UiObject {
@@ -169,6 +159,7 @@ class ProgressLine : public UiObject {
 private:
 	UiObject *Fon_, *Progress_, *Border_;
 	sf::Vector2f Scale_;
+
 public:
 	ProgressLine(sf::Vector2f const& coordinate_centre);
 	void SetProgress(float const& progress);
@@ -185,7 +176,7 @@ public:
 	void ActionLeave() override;
 };
 
-//game objects:
+//Game objects:
 class CommonGameObject abstract : public GameObject {
 public:
 	CommonGameObject(int const& id_object,

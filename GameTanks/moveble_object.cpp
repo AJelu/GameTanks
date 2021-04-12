@@ -51,7 +51,6 @@ void MovebleObject::SetRotationSpeed(float const& rotation_speed) {
 	this->SetNeedSynchByLan(true);
 }
 
-//get object parameters
 float MovebleObject::GetSpeedMove() { return speed_; }
 
 float MovebleObject::GetDistanceMove() { return distance_; }
@@ -69,7 +68,7 @@ void MovebleObject::MoveTo(float const& move_to_x, float const& move_to_y) {
 	this->SetDistanceMove(length_vector);
 }
 
-//for recalculate position ((speed+distance)*timer), vector rotate
+//For recalculate position: ((speed+distance)*timer), vector rotate
 void MovebleObject::RecalculateState(float const& game_time) {
 	GameObject::RecalculateState(game_time);
 
@@ -80,10 +79,10 @@ void MovebleObject::RecalculateState(float const& game_time) {
 		else							freeze_time_ -= game_time;
 	}
 
-	//move by vector;
+	//move by vector
 	float size;
 	if (distance_ != 0) {
-		size = (game_time / 1000/*1 sec*/) * speed_;
+		size = (game_time / 1000) * speed_; //1000 = 1 sec
 
 		if (distance_ < 0) {
 			distance_ += size;
@@ -113,9 +112,9 @@ void MovebleObject::RecalculateState(float const& game_time) {
 		previously_moveed_ = false;
 	}
 
-	//rotate vector;
+	//rotate vector
 	if (rotation_degree_ != 0) {
-		size = (game_time / 1000/*1 sec*/) * rotation_speed_;
+		size = (game_time / 1000) * rotation_speed_; //1000 = 1 sec
 
 		if (rotation_degree_ < 0) {
 			rotation_degree_ += size;

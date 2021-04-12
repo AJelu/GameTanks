@@ -16,7 +16,7 @@ public:
 
 	void SetCoordinate(sf::Vector2f const& coordinate);
 
-	//check if coordinate is in figure
+	//Check if coordinate is in figure
 	virtual bool CoordinatesInFigure(sf::Vector2f const& coordinate) = 0;
 };
 

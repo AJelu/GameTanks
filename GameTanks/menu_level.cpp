@@ -5,10 +5,10 @@ MenuLevel::MenuLevel() {
 	this->SetBackgroundMusic("Data/Audio/music/Start_fon.ogg", 75);
 
 	float a = 50, m = 3;
-	NewGame_ =				new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
-	ConnectToGameInput_ =	new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
-	ConnectToGame_ =		new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
-	Exit_ =					new Button(sf::Vector2f(a, a + a * m * 3), sf::Vector2f(0, 0));
+	NewGame_ =			new Button(sf::Vector2f(a, a + a * m * 0), sf::Vector2f(0, 0));
+	ConnectToGameInput_ = new Button(sf::Vector2f(a, a + a * m * 2), sf::Vector2f(0, 0));
+	ConnectToGame_ =	new Button(sf::Vector2f(a, a + a * m * 1), sf::Vector2f(0, 0));
+	Exit_ =				new Button(sf::Vector2f(a, a + a * m * 3), sf::Vector2f(0, 0));
 
 	sf::Vector2f button_scale = sf::Vector2f(0.8f, 0.6f);
 	NewGame_->SetScale(button_scale);
@@ -52,24 +52,23 @@ MenuLevel::MenuLevel() {
 
 bool MenuLevel::UpdateState(float& game_timer) {
 	bool result = BaseLevel::UpdateState(game_timer);
-
 	return result;
 }
 
-bool MenuLevel::ExitLevel(sf::Packet& Result_level) {
-	bool result = BaseLevel::ExitLevel(Result_level);
+bool MenuLevel::CheckExitLevel(sf::Packet& Result_level) {
+	bool result = BaseLevel::CheckExitLevel(Result_level);
 	if (NewGame_->GetMouseUpOnThis(true)) {
-		Result_level << Level_type::GAME_LEVEL;
+		Result_level << int(Level_type::GAME_LEVEL);
 		Result_level << "";
 		return true;
 	}
 	else if (ConnectToGame_->GetMouseUpOnThis(true)) {
-		Result_level << Level_type::GAME_LEVEL;
+		Result_level << int(Level_type::GAME_LEVEL);
 		Result_level << ConnectToGameInput_->GetText();
 		return true;
 	}
 	else if (Exit_->GetMouseUpOnThis(true)) {
-		Result_level << Level_type::EXIT;
+		Result_level << int(Level_type::EXIT);
 		return true;
 	}
 	return result;

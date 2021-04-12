@@ -56,33 +56,10 @@ void Title::ActionLeave() {
 	this->StartAudioAction("action2");
 }
 
-Text::Text(sf::Vector2f const& coordinate_centre) : UiObject(
-	coordinate_centre, sf::Vector2f(0, 0),
-	"Data/Ui/text_background.png", //texture<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	1, 1) {
-}
-
-void Text::ActionEnter()
-{
-}
-
-void Text::ActionLeave()
-{
-}
-
-void Text::ActionClickDown()
-{
-}
-
-void Text::ActionClickUp()
-{
-}
-
 PlayersTextBackground::PlayersTextBackground(sf::Vector2f const& coordinate_centre) 
 	: UiObject(coordinate_centre, sf::Vector2f(0, 0),
 	"Data/Ui/player_text_background.png",
-	1, 1) {
-}
+	1, 1) {}
 
 TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
 	int const& line_count,
@@ -100,18 +77,16 @@ TextLine::TextLine(sf::Vector2f const& coordinate_centre, int const& width,
 }
 
 void TextLine::TextAlign(float const& align) {
-	for (int i = 0; i < (int)Lines_.size(); i++) {
-		Lines_[i]->SetTextAlign(align);
-	}
+	for (int i = 0; i < (int)Lines_.size(); i++) Lines_[i]->SetTextAlign(align);
 }
 
 void TextLine::ChangeCounLine(int const& line_count) {
 	if (line_count > 0) {
 		if (line_count > (int)Lines_.size()) {
 			for (int i = (int)Lines_.size(); i < line_count; i++) {
-				Lines_.push_back(new Text(sf::Vector2f(0.f, (float)line_step_px_ * i)));
-				Lines_.back()->SetText("");
-				Lines_.back()->SetTexture("Data/Ui/text_background_.png", 1, 1);
+				Lines_.push_back(new UiObject(
+					sf::Vector2f(0.f, (float)line_step_px_ * i), sf::Vector2f(0, 0), 
+					"Data/Ui/text_background_.png", 1, 1));
 				Lines_.back()->SetCharacterSize(one_line_text_size_);
 				Lines_.back()->SetAnchorObject(this);
 				Lines_.back()->SetTextColor(sf::Color::White);
@@ -119,10 +94,8 @@ void TextLine::ChangeCounLine(int const& line_count) {
 					width_ / (float)Lines_.back()->GetWidthSprite(),
 					one_line_ui_size_px_ / (float)Lines_.back()->GetHeightSprite()));
 			}
-			this->SetScale(sf::Vector2f(
-				width_ / (float)this->GetWidthSprite(),
-				(line_count * line_step_px_ -
-					(line_step_px_ - one_line_ui_size_px_)) 
+			this->SetScale(sf::Vector2f(width_ / (float)this->GetWidthSprite(),
+				(line_count * line_step_px_ - (line_step_px_ - one_line_ui_size_px_))
 				/ (float)this->GetHeightSprite()));
 		}
 		else if (line_count < (int)Lines_.size()) {
@@ -130,10 +103,8 @@ void TextLine::ChangeCounLine(int const& line_count) {
 				delete Lines_.back();
 				Lines_.pop_back();
 			}
-			this->SetScale(sf::Vector2f(
-				width_ / (float)this->GetWidthSprite(),
-				(line_count* line_step_px_ -
-					(line_step_px_ - one_line_ui_size_px_))
+			this->SetScale(sf::Vector2f(width_ / (float)this->GetWidthSprite(),
+				(line_count* line_step_px_ - (line_step_px_ - one_line_ui_size_px_))
 				/ (float)this->GetHeightSprite()));
 		}
 	}
@@ -152,13 +123,11 @@ void TextLine::SetTextLine(std::string str, int const& line_number) {
 
 void TextLine::Draw(sf::RenderWindow& window) {
 	UiObject::Draw(window);
-	for (int i = 0; i < (int)Lines_.size(); i++)
-		Lines_[i]->Draw(window);
+	for (int i = 0; i < (int)Lines_.size(); i++) Lines_[i]->Draw(window);
 }
 
 TextLine::~TextLine() {
-	for (int i = 0; i < (int)Lines_.size(); i++)
-		delete Lines_[i];
+	for (int i = 0; i < (int)Lines_.size(); i++) delete Lines_[i];
 }
 
 ProgressLine::ProgressLine(sf::Vector2f const& coordinate_centre) :
@@ -179,7 +148,6 @@ ProgressLine::ProgressLine(sf::Vector2f const& coordinate_centre) :
 }
 
 void ProgressLine::SetProgress(float const& progress) {
-
 	Scale_ = sf::Vector2f(0.032f + ((1.f - 0.032f) * progress), 1);
 }
 
@@ -189,12 +157,14 @@ void ProgressLine::Draw(sf::RenderWindow& window) {
 		((float)this->GetWidthSprite() / (float)Fon_->GetWidthSprite()),
 								this->GetScale().y * 
 		((float)this->GetHeightSprite() / (float)Fon_->GetHeightSprite())));
+
 	Progress_->SetScale(sf::Vector2f(this->GetScale().x * 
 		((float)this->GetWidthSprite() / (float)Progress_->GetWidthSprite())
 		* Scale_.x,
 									 this->GetScale().y *
 		((float)this->GetHeightSprite() / (float)Progress_->GetHeightSprite())
 		* Scale_.y));
+
 	Border_->SetScale(sf::Vector2f(this->GetScale().x *
 		((float)this->GetWidthSprite() / (float)Border_->GetWidthSprite()),
 								   this->GetScale().y *

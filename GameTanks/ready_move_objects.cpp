@@ -48,7 +48,8 @@ DoubleBullet::DoubleBullet(int const& id_object, GameObject* Parrent) : MovebleO
 	Parrent) {
 	this->AddAudioAction("Double_Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Double_Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
-	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 12));
+	this->AddCollision(new RoundCollision(sf::Vector2f(-10, 0), 10));
+	this->AddCollision(new RoundCollision(sf::Vector2f(10, 0), 10));
 	this->ActionLife();
 }
 

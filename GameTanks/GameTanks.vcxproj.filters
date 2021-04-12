@@ -63,9 +63,6 @@
     <ClCompile Include="base_level.cpp">
       <Filter>Source Files\LEVELS</Filter>
     </ClCompile>
-    <ClCompile Include="connect_level.cpp">
-      <Filter>Source Files\LEVELS</Filter>
-    </ClCompile>
     <ClCompile Include="game_level.cpp">
       <Filter>Source Files\LEVELS</Filter>
     </ClCompile>

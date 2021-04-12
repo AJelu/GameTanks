@@ -1,27 +1,29 @@
 #pragma once
 #include <iostream>
 
-//class for add temp bonus to tanks (for players)
+//Class for add temp bonus to tanks (for players)
+
 class Bonuses {
 private:
 	float bonus_duration_, //bunus time
-		//% + current stats:
+		//Current stats (%):
 		speed_move_, rotation_speed_,
 		speed_shot_, shot_distance_, time_freeze_shot_,
 		shot_life_, life_level_, max_life_level_;
 
-	//original parametrs^
+	//Original parametrs:
 	float o_bonus_duration_, //bunus time
 		o_speed_move_, o_rotation_speed_,
 		o_speed_shot_, o_shot_distance_, o_time_freeze_shot_;
 	int o_shot_life_, o_life_level_, o_max_life_level_;
 
-	//function generate random stats:
+	//Function generate random stats:
 	void GenerateSpeed();
 	void GenerateRotation();
 	void GenerateShotPower();
 	void GenerateShotSpeed();
 	void GenerateLife();
+
 public:
 	Bonuses();
 	Bonuses(float bonus_duration);
@@ -32,7 +34,7 @@ public:
 
 	float GetBonusDuration(float const& game_time);
 
-	//get new parameters:
+	//Get new parameters:
 	float GetSpeedMove();
 	float GetRotationSpeed();
 
@@ -44,7 +46,7 @@ public:
 	int GetLifeLevel();
 	int GetMaxLifeLevel();
 
-	//get original parameters:
+	//Get original parameters:
 	float GetOriginalSpeedMove();
 	float GetOriginalRotationSpeed();
 

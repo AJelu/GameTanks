@@ -35,8 +35,6 @@ void TankObject::DeleteBonusFromObject(Bonuses * bonus) {
 	this->SetShotDistance(	bonus->GetOriginalShotDistance());
 	this->SetTimeFreezeShot(bonus->GetOriginalTimeFreezeShot());
 	this->SetLifeShot(		bonus->GetOriginalShotLife());
-	//this->SetLifeLevel(	bonus->GetOriginalLifeLevel());
-	//this->SetMaxLifeLevel(	bonus->GetOriginalMaxLifeLevel());
 	this->SetNeedSynchByLan(true);
 }
 
@@ -47,7 +45,7 @@ void TankObject::AddBonusToObject(Bonuses* bonus) {
 		Bonus_ = nullptr;
 	}
 	
-	//save original parameters
+	//Save original parameters
 	bonus->SetOriginalSpeedMove(		this->GetSpeedMove());
 	bonus->SetOriginalRotationSpeed(	this->GetRotationSpeed());
 	bonus->SetOriginalSpeedShot(		this->GetSpeedShot());
@@ -57,7 +55,7 @@ void TankObject::AddBonusToObject(Bonuses* bonus) {
 	bonus->SetOriginalLifeLevel(		this->GetLifeLevel());
 	bonus->SetOriginalMaxLifeLevel(		this->GetMaxLifeLevel());
 
-	//apply new parameters
+	//Apply new parameters
 	this->SetSpeedMove(		bonus->GetSpeedMove());
 	this->SetRotationSpeed(	bonus->GetRotationSpeed());
 	this->SetSpeedShot(		bonus->GetSpeedShot());
@@ -80,7 +78,7 @@ MovebleObject* TankObject::Shot() { return nullptr; }
 
 bool TankObject::CanCreateShot() { return time_to_next_shot_ <= 0; }
 
-//return null. no shot. overriding in daughter classes
+//Always return null if shot() not overriding in daughter classes
 MovebleObject* TankObject::CreateShot(bool const& forcibly_shot) { 
 	if ((time_to_next_shot_ <= 0 && this->GetFreezeTime() <= 0) || forcibly_shot) {
 		time_to_next_shot_ = time_freeze_shot_;
@@ -100,10 +98,9 @@ MovebleObject* TankObject::CreateShot(bool const& forcibly_shot) {
 	return nullptr; 
 }
 
-//+recalculate time_to_next_shot 
+// +Recalculate time_to_next_shot 
 void TankObject::RecalculateState(float const& game_time) {
-	MovebleObject::RecalculateState(game_time);
-	
+		MovebleObject::RecalculateState(game_time);
 	if (time_to_next_shot_ < 0.0f)		time_to_next_shot_ = 0.0f;
 	else if (time_to_next_shot_ > 0.0f) time_to_next_shot_ -= game_time;
 
@@ -122,8 +119,7 @@ void TankObject::MoveRight(float const& value) { SetRotationDegree(value); }
 
 void TankObject::MoveLeft(float const& value) { SetRotationDegree(-value); }
 
-
-sf::Vector2f TankObject::GetPointCreateShot() { return point_create_shot_; }
+sf::Vector2f TankObject::GetPointCreateShot() { return Point_create_shot_; }
 
 float TankObject::GetSpeedShot() { return speed_shot_; }
 
@@ -135,16 +131,17 @@ float TankObject::GetTimeToNextShot() { return time_to_next_shot_; }
 
 float TankObject::GetTimeFreezeShot() { return time_freeze_shot_; }
 
-
 void TankObject::SetPointCreateShot(sf::Vector2f const& point_create_shot) {
-	point_create_shot_ = point_create_shot;
+	Point_create_shot_ = point_create_shot;
 }
 
 void TankObject::SetSpeedShot(float const& speed_shot) { speed_shot_ = speed_shot; }
 
 void TankObject::SetLifeShot(int const& shot_life) { shot_life_ = shot_life; }
 
-void TankObject::SetShotDistance(float const& shot_distance) { shot_distance_ = shot_distance; }
+void TankObject::SetShotDistance(float const& shot_distance) { 
+	shot_distance_ = shot_distance; 
+}
 
 void TankObject::SetTimeToNextShot(float const& time_to_next_shot) { 
 	time_to_next_shot_ = time_to_next_shot; 
@@ -158,21 +155,17 @@ std::string TankObject::ClassName() { return "TankObject"; }
 
 bool TankObject::CreatePacket(sf::Packet& Packet) {
 	bool result = MovebleObject::CreatePacket(Packet);
-	Packet << speed_shot_ << shot_distance_ << time_to_next_shot_ << time_freeze_shot_;
+	Packet << speed_shot_ << shot_distance_;
+	Packet << time_to_next_shot_ << time_freeze_shot_;
 	Packet << shot_life_;
-	//
-	//Bonus_
-	//
 	return result;
 }
 
 bool TankObject::SetDataFromPacket(sf::Packet& Packet) {
 	if (MovebleObject::SetDataFromPacket(Packet)) {
-		Packet >> speed_shot_ >> shot_distance_ >> time_to_next_shot_ >> time_freeze_shot_;
+		Packet >> speed_shot_ >> shot_distance_;
+		Packet >> time_to_next_shot_ >> time_freeze_shot_;
 		Packet >> shot_life_;
-		//
-		//Bonus_
-		//
 		return true;
 	}
 	return false;
