@@ -12,7 +12,7 @@ void Engine::EngineInpute() {
         if (event.type == sf::Event::KeyPressed 
                 || event.type == sf::Event::KeyReleased) {
             Point_level_->InputKeyboard(0, event.key.code, event.type);
-            if (Status_server_ != StatusServer::SERVER) {
+            if (Status_server_ == StatusServer::CLIENT) {
                 Send_packet_ << event.key.code;
                 Send_packet_ << event.type;
             }

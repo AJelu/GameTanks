@@ -266,22 +266,22 @@ void BaseLevel::UnpackingPacket(sf::Packet& Packet) {
 			else if (class_name == "Well") object = new Well(0, 0, 0);
 			
 			if (object != nullptr) {
-				if (!object->SetDataFromPacket(Packet))
-					/*std::cout << "unpacked bad packet: Packed size: " 
-						<< Packet.getDataSize() << std::endl;*/
-				if (object->GetGameType() == int(Object_type::STATIC))
-					this->AddStaticObject(object, true);
-				else if (object->GetGameType() == int(Object_type::ENEMY))
-					this->AddEnemyObject((TankObject*)object, true);
-				else if (object->GetGameType() == int(Object_type::PLAYER))
-					this->AddPlayerObject((TankObject*)object, true, 
-						player_id != id ? id : 0);
-				else if (object->GetGameType() == int(Object_type::SHOT))
-					this->AddShotObject((MovebleObject*)object);
-				else if (object->GetGameType() == int(Object_type::BONUS))
-					this->SetBonusObject(object);
+				if (object->SetDataFromPacket(Packet)) {
+					if (object->GetGameType() == int(Object_type::STATIC))
+						this->AddStaticObject(object, true);
+					else if (object->GetGameType() == int(Object_type::ENEMY))
+						this->AddEnemyObject((TankObject*)object, true);
+					else if (object->GetGameType() == int(Object_type::PLAYER))
+						this->AddPlayerObject((TankObject*)object, true,
+							player_id != id ? id : 0);
+					else if (object->GetGameType() == int(Object_type::SHOT))
+						this->AddShotObject((MovebleObject*)object);
+					else if (object->GetGameType() == int(Object_type::BONUS))
+						this->SetBonusObject(object);
 
-				object->SetIdObject(id);
+					object->SetIdObject(id);
+				}
+				else delete object;
 			}
 			else break;
 		}
@@ -361,7 +361,8 @@ bool BaseLevel::InputKeyboard(int const& player_number, sf::Keyboard::Key Key,
 				this->AddShotObject(Players_objects_[player_number]->CreateShot());
 		}
 	}
-	if (Focused_object != nullptr && player_number == 0)
+	if (Focused_object != nullptr && player_number == 0 
+			&& event_type == sf::Event::EventType::KeyReleased)
 		Focused_object->InputKey(Key);
 	return true;
 }
