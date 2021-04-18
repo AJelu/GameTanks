@@ -13,3 +13,14 @@ On the basis of the specified engine the game is realized Tanks:
    7. For control, use the movement keys (arrows) and the space bar for shooting;
 
 Demonstration of game: 
+![alt text](image/game_0.png "Menu")
+
+![alt text](image/game_1.png)
+
+![alt text](image/game_2.png)
+
+![alt text](image/game_3.png)
+
+![alt text](image/game_4.png)
+
+![alt text](image/game_5.png)
