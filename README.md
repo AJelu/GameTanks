@@ -1,8 +1,4 @@
 # GameTanks
-Title of Project:
-My second training 2D game project (platformer) based on SFML, written in a team with my friend Volodymyr: https://github.com/vovk-vovk 
-The assembly version can be downloaded here: https://drive.google.com/file/d/159metN1Ef1XYrRBiSTki6CxVqzSx2dBJ/view?usp=sharing
-
 Description of Project:
 Simple implementation of 2d engine in C ++ programming language using SFML.
 
