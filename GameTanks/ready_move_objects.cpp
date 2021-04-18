@@ -2,14 +2,14 @@
 
 Bullet::Bullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	id_object,
-	sf::Vector2f(0, 0),						//coordinate centr
-	sf::Vector2f(96, 96),					//offset
+	sf::Vector2f(0, 0),				//coordinate centr
+	sf::Vector2f(96, 96),				//offset
 	"Data/Bullet/tank_attack.png",			//texture
-	9, 3,									//frame count
-	1000000,								//max life level
-	500,									//speed move
-	0,										//freeze time
-	100,									//rotation speed
+	9, 3,						//frame count
+	1000000,					//max life level
+	500,						//speed move
+	0,						//freeze time
+	100,						//rotation speed
 	Parrent) {
 	this->AddAudioAction("Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
@@ -37,14 +37,14 @@ void Bullet::ActionMoving(float const& distance) {
 
 DoubleBullet::DoubleBullet(int const& id_object, GameObject* Parrent) : MovebleObject(
 	id_object,
-	sf::Vector2f(0, 0),						//coordinate centr
-	sf::Vector2f(96, 96),					//offset
+	sf::Vector2f(0, 0),				//coordinate centr
+	sf::Vector2f(96, 96),				//offset
 	"Data/Bullet/tank_attack.png",			//texture
-	9, 3,									//frame count
-	1000000,								//max life level
-	500,									//speed move
-	0,										//freeze time
-	100,									//rotation speed
+	9, 3,						//frame count
+	1000000,					//max life level
+	500,						//speed move
+	0,						//freeze time
+	100,						//rotation speed
 	Parrent) {
 	this->AddAudioAction("Double_Bullet_shot", "Data/Audio/explosion/bullet_shot.ogg", false, 50);
 	this->AddAudioAction("Double_Bullet_explosion", "Data/Audio/explosion/bullet_explosion.ogg");
@@ -140,18 +140,18 @@ void TypedTank::ActionEndRotate() {
 RedTank::RedTank(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 158),					//offset
-		"Data/Unit/Tank1.png",					//texture
-		125,									//max life level
-		160,									//speed move
-		0,										//freeze time
-		70,										//rotation speed
-		sf::Vector2f(-1,150),					//create point shot
-		60,										//shot life
-		320,									//speed shot
-		500,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 158),			//offset
+		"Data/Unit/Tank1.png",			//texture
+		125,					//max life level
+		160,					//speed move
+		0,					//freeze time
+		70,					//rotation speed
+		sf::Vector2f(-1,150),			//create point shot
+		60,					//shot life
+		320,					//speed shot
+		500,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 20), 48));
@@ -169,18 +169,18 @@ MovebleObject* RedTank::Shot() {
 TankBrown::TankBrown(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 137),					//offset
-		"Data/Unit/Tank2.png",					//texture
-		100,									//max life level
-		160,									//speed move
-		0,										//freeze time
-		80,										//rotation speed
-		sf::Vector2f(-6, 129),					//create point shot
-		60,										//shot life
-		400,									//speed shot
-		450,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 137),			//offset
+		"Data/Unit/Tank2.png",			//texture
+		100,					//max life level
+		160,					//speed move
+		0,					//freeze time
+		80,					//rotation speed
+		sf::Vector2f(-6, 129),			//create point shot
+		60,					//shot life
+		400,					//speed shot
+		450,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 15), 48));
@@ -198,18 +198,18 @@ MovebleObject* TankBrown::Shot() {
 TankWhite::TankWhite(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 84),					//offset
-		"Data/Unit/Tank3.png",					//texture
-		80,										//max life level
-		200,									//speed move
-		0,										//freeze time
-		120,									//rotation speed
-		sf::Vector2f(0, 77),					//create point shot
-		75,										//shot life
-		320,									//speed shot
-		400,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 84),			//offset
+		"Data/Unit/Tank3.png",			//texture
+		80,					//max life level
+		200,					//speed move
+		0,					//freeze time
+		120,					//rotation speed
+		sf::Vector2f(0, 77),			//create point shot
+		75,					//shot life
+		320,					//speed shot
+		400,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, -10), 48));
@@ -227,18 +227,18 @@ MovebleObject* TankWhite::Shot() {
 TankBlack::TankBlack(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 76),					//offset
-		"Data/Unit/Tank4.png",					//texture
-		70,										//max life level
-		230,									//speed move
-		0,										//freeze time
-		140,									//rotation speed
-		sf::Vector2f(0, 68),					//create point shot
-		35,										//shot life
-		360,									//speed shot
-		400,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 76),			//offset
+		"Data/Unit/Tank4.png",			//texture
+		70,					//max life level
+		230,					//speed move
+		0,					//freeze time
+		140,					//rotation speed
+		sf::Vector2f(0, 68),			//create point shot
+		35,					//shot life
+		360,					//speed shot
+		400,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 }
@@ -255,18 +255,18 @@ MovebleObject* TankBlack::Shot() {
 TankYellow::TankYellow(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 130),					//offset
-		"Data/Unit/Tank5.png",					//texture
-		70,										//max life level
-		220,									//speed move
-		0,										//freeze time
-		100,									//rotation speed
-		sf::Vector2f(0, 121),					//create point shot
-		50,										//shot life
-		360,									//speed shot
-		450,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 130),			//offset
+		"Data/Unit/Tank5.png",			//texture
+		70,					//max life level
+		220,					//speed move
+		0,					//freeze time
+		100,					//rotation speed
+		sf::Vector2f(0, 121),			//create point shot
+		50,					//shot life
+		360,					//speed shot
+		450,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 50));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 35), 18));
@@ -284,18 +284,18 @@ MovebleObject* TankYellow::Shot() {
 TankGreen::TankGreen(int const& id_object, float const& spawn_x, float const& spawn_y,
 	GameObject* Parrent) : TypedTank(
 		id_object,
-		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(60, 88),					//offset
-		"Data/Unit/Tank6.png",					//texture
-		145,									//max life level
-		140,									//speed move
-		0,										//freeze time
-		60,										//rotation speed
-		sf::Vector2f(0, 80),					//create point shot
-		90,										//shot life
-		285,									//speed shot
-		350,									//shot distance
-		700,									//time freeze shot (to next shot)
+		sf::Vector2f(spawn_x, spawn_y),		//coordinate centr
+		sf::Vector2f(60, 88),			//offset
+		"Data/Unit/Tank6.png",			//texture
+		145,					//max life level
+		140,					//speed move
+		0,					//freeze time
+		60,					//rotation speed
+		sf::Vector2f(0, 80),			//create point shot
+		90,					//shot life
+		285,					//speed shot
+		350,					//shot distance
+		700,					//time freeze shot (to next shot)
 		Parrent) {
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 48));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 18), 46));
