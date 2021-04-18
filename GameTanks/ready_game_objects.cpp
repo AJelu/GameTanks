@@ -28,9 +28,9 @@ BarellBrown::BarellBrown(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Barell_01.png",			//texture
-		30) {									//max life level
+		30) {						//max life level
 	
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
@@ -43,9 +43,9 @@ BarellBroken::BarellBroken(int const& id_object, float const& spawn_x, float con
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Barell_02.png",			//texture
-		30) {									//max life level
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
@@ -58,9 +58,9 @@ BarellGreen::BarellGreen(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Barell_03.png",			//texture
-		30) {									//max life level
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.35f, 0.35f));
@@ -73,9 +73,9 @@ BlockGround::BlockGround(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(64, 64),					//offset
-		"Data/Static/Block_01.png",				//texture
-		150) {									//max life level
+		sf::Vector2f(64, 64),				//offset
+		"Data/Static/Block_01.png",			//texture
+		150) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
 	this->SetScale(sf::Vector2f(1, 1));
@@ -89,9 +89,9 @@ BlockGrass::BlockGrass(int const& id_object, float const& spawn_x, float const& 
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(64, 64),					//offset
-		"Data/Static/Block_02.png",				//texture
-		150) {									//max life level
+		sf::Vector2f(64, 64),				//offset
+		"Data/Static/Block_02.png",			//texture
+		150) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 60));
 	this->SetScale(sf::Vector2f(1, 1));
@@ -105,9 +105,9 @@ CactusTypeOne::CactusTypeOne(int const& id_object, float const& spawn_x, float c
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Cactus_01.png",			//texture
-		25) {									//max life level
+		25) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 20));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
@@ -121,9 +121,9 @@ CactusTypeTwo::CactusTypeTwo(int const& id_object, float const& spawn_x, float c
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Cactus_02.png",			//texture
-		25) {									//max life level
+		25) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
@@ -137,9 +137,9 @@ CactusTypeThree::CactusTypeThree(int const& id_object, float const& spawn_x, flo
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
+		sf::Vector2f(128, 128),				//offset
 		"Data/Static/Cactus_03.png",			//texture
-		25) {									//max life level
+		25) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
@@ -153,9 +153,9 @@ Log::Log(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Log.png",					//texture
-		25) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Log.png",				//texture
+		25) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(-33, 0), 15));
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 15));
@@ -170,9 +170,9 @@ Star::Star(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Star.png",					//texture
-		1) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Star.png",				//texture
+		1) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 10));
 	this->SetScale(sf::Vector2f(0.4f, 0.4f));
@@ -191,9 +191,9 @@ Stump::Stump(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Stump.png",				//texture
-		25) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Stump.png",			//texture
+		25) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
@@ -206,9 +206,9 @@ TreeTypeOne::TreeTypeOne(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_01.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_01.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -222,9 +222,9 @@ TreeTypeTwo::TreeTypeTwo(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_02.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_02.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 33));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -238,9 +238,9 @@ TreeTypeThree::TreeTypeThree(int const& id_object, float const& spawn_x, float c
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_03.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_03.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -254,9 +254,9 @@ TreeTypeFour::TreeTypeFour(int const& id_object, float const& spawn_x, float con
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_04.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_04.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -270,9 +270,9 @@ TreeTypeFive::TreeTypeFive(int const& id_object, float const& spawn_x, float con
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_05.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_05.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -286,9 +286,9 @@ TreeTypeSix::TreeTypeSix(int const& id_object, float const& spawn_x, float const
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_06.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_06.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 30));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -302,9 +302,9 @@ TreeTypeSeven::TreeTypeSeven(int const& id_object, float const& spawn_x, float c
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_07.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_07.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -318,9 +318,9 @@ TreeTypeEight::TreeTypeEight(int const& id_object, float const& spawn_x, float c
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_08.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_08.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -334,9 +334,9 @@ TreeTypeNine::TreeTypeNine(int const& id_object, float const& spawn_x, float con
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Tree_09.png",				//texture
-		30) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Tree_09.png",			//texture
+		30) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.75f, 0.75f));
@@ -350,9 +350,9 @@ Well::Well(int const& id_object, float const& spawn_x, float const& spawn_y)
 	: CommonGameObject(
 		id_object,
 		sf::Vector2f(spawn_x, spawn_y),			//coordinate centr
-		sf::Vector2f(128, 128),					//offset
-		"Data/Static/Well.png",					//texture
-		70) {									//max life level
+		sf::Vector2f(128, 128),				//offset
+		"Data/Static/Well.png",				//texture
+		70) {						//max life level
 
 	this->AddCollision(new RoundCollision(sf::Vector2f(0, 0), 25));
 	this->SetScale(sf::Vector2f(0.5f, 0.5f));
