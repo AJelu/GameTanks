@@ -43,83 +43,83 @@ void GameLevel::CreateGameObjects() {
 
 	/* Create enemy: */
 	RedTank* red_tank_enemy = nullptr;
-	this->SpawnEnemyObject(red_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(red_tank_enemy, 8, 1, 300, 400);
 
 	TankBrown* brown_tank_enemy = nullptr;
-	this->SpawnEnemyObject(brown_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(brown_tank_enemy, 9, 1, 300, 400);
 
 	TankWhite* white_tank_enemy = nullptr;
-	this->SpawnEnemyObject(white_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(white_tank_enemy, 8, 1, 300, 400);
 
 	TankBlack* black_tank_enemy = nullptr;
-	this->SpawnEnemyObject(black_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(black_tank_enemy, 8, 1, 300, 400);
 
 	TankYellow* yellow_tank_enemy = nullptr;
-	this->SpawnEnemyObject(yellow_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(yellow_tank_enemy, 8, 1, 300, 400);
 
 	TankGreen* green_tank_enemy = nullptr;
-	this->SpawnEnemyObject(green_tank_enemy, 10, 1, 300, 400);
+	this->SpawnEnemyObject(green_tank_enemy, 9, 1, 300, 400);
 
 	/* Create static objects: */
 	BarellBrown* static_barell_brown = nullptr;
-	this->SpawnStaticObject(static_barell_brown, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_brown, 40, 1, 200, 200);
 
 	BarellBroken* static_barell_broken = nullptr;
-	this->SpawnStaticObject(static_barell_broken, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_broken, 40, 1, 200, 200);
 
 	BarellGreen* static_barell_green = nullptr;
-	this->SpawnStaticObject(static_barell_green, 60, 1, 200, 200);
+	this->SpawnStaticObject(static_barell_green, 40, 1, 200, 200);
 
 	BlockGround* static_block_ground = nullptr;
-	this->SpawnStaticObject(static_block_ground, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_block_ground, 40, 1, 200, 200);
 
 	BlockGrass* static_block_grass = nullptr;
-	this->SpawnStaticObject(static_block_grass, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_block_grass, 40, 1, 200, 200);
 
 	CactusTypeOne* static_cactus_type_one = nullptr;
 	this->SpawnStaticObject(static_cactus_type_one, 20, 1, 200, 200);
 
 	CactusTypeTwo* static_cactus_type_two = nullptr;
-	this->SpawnStaticObject(static_cactus_type_two, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_cactus_type_two, 25, 1, 200, 200);
 
 	CactusTypeThree* static_cactus_type_three = nullptr;
-	this->SpawnStaticObject(static_cactus_type_three, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_cactus_type_three, 25, 1, 200, 200);
 
 	Log* static_log = nullptr;
-	this->SpawnStaticObject(static_log, 50, 1, 200, 200);
+	this->SpawnStaticObject(static_log, 30, 1, 200, 200);
 
 	Stump* static_stump = nullptr;
-	this->SpawnStaticObject(static_stump, 40, 1, 200, 200);
+	this->SpawnStaticObject(static_stump, 30, 1, 200, 200);
 
 	TreeTypeOne* static_tree_type_one = nullptr;
-	this->SpawnStaticObject(static_tree_type_one, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_one, 60, 1, 200, 200);
 
 	TreeTypeTwo* static_tree_type_two = nullptr;
-	this->SpawnStaticObject(static_tree_type_two, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_two, 60, 1, 200, 200);
 
 	TreeTypeThree* static_tree_type_three = nullptr;
-	this->SpawnStaticObject(static_tree_type_three, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_three, 60, 1, 200, 200);
 
 	TreeTypeFour* static_tree_type_four = nullptr;
-	this->SpawnStaticObject(static_tree_type_four, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_four, 60, 1, 200, 200);
 
 	TreeTypeFive* static_tree_type_five = nullptr;
-	this->SpawnStaticObject(static_tree_type_five, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_five, 60, 1, 200, 200);
 
 	TreeTypeSix* static_tree_type_six = nullptr;
-	this->SpawnStaticObject(static_tree_type_six, 80, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_six, 60, 1, 200, 200);
 
 	TreeTypeSeven* static_tree_type_seven = nullptr;
-	this->SpawnStaticObject(static_tree_type_seven, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_seven, 25, 1, 200, 200);
 
 	TreeTypeEight* static_tree_type_eight = nullptr;
-	this->SpawnStaticObject(static_tree_type_eight, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_eight, 25, 1, 200, 200);
 
 	TreeTypeNine* static_tree_type_nine = nullptr;
-	this->SpawnStaticObject(static_tree_type_nine, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_tree_type_nine, 25, 1, 200, 200);
 
 	Well* static_well = nullptr;
-	this->SpawnStaticObject(static_well, 30, 1, 200, 200);
+	this->SpawnStaticObject(static_well, 25, 1, 200, 200);
 }
 
 template <class TypeObject>
