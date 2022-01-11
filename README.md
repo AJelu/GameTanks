@@ -1,7 +1,7 @@
 # GameTanks
 Simple implementation of 2d engine in C ++ programming language using SFML.
 
-Video demo of the game behind the link: https://www.youtube.com/watch?v=cDVQp7bYkVU
+Video demo of the game behind the link: https://www.youtube.com/watch?v=riPzX5F_3dE
 
 On the basis of the specified engine the game is realized Tanks:
 
